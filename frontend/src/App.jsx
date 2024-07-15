@@ -2,7 +2,7 @@ function App() {
 
   return (
     <>
-      <div>mega around</div>
+      <div>mega-around</div>
     </>
   )
 }
