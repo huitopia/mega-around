@@ -1,16 +1,18 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Home } from "./Home.jsx";
-
-function MainProduct() {
-  return null;
-}
+import { ProductUpload } from "./product/ProductUpload.jsx";
+import { MainProduct } from "./MainProduct.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
-    children: [{ index: true, element: <MainProduct /> }],
+    children: [
+      // product
+      { index: true, element: <MainProduct /> },
+      { path: "product", element: <ProductUpload /> },
+    ],
   },
 ]);
 
