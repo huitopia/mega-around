@@ -1,12 +1,25 @@
-import { Box, Center, Flex } from "@chakra-ui/react";
+import { Box, Center, Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 export function Navbar() {
   const navigate = useNavigate();
   return (
-    <Flex>
+    <Flex
+      h={"30px"}
+      fontSize={"lg"}
+      align={"center"}
+      justifyContent={"space-between"}
+      backgroundColor={"gray"}
+    >
       <Box>
-        <Center backgroundColor={"yellow"}>Home</Center>
+        <Center onClick={() => navigate("/")} cursor={"pointer"}>
+          <Text>Home</Text>
+        </Center>
+      </Box>
+      <Box>
+        <Center onClick={() => navigate("/product")} cursor={"pointer"}>
+          <Text>상품등록</Text>
+        </Center>
       </Box>
     </Flex>
   );
