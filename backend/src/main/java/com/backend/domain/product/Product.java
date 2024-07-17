@@ -13,6 +13,7 @@ public class Product {
     private String subCategory;
     private String content;
     private Integer price;
-    private List<Integer> options;
+    private List<Integer> option;
+    private String options;
     private LocalDateTime createdAt;
 }
