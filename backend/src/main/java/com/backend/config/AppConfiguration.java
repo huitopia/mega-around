@@ -6,18 +6,15 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
-import org.springframework.security.web.SecurityFilterChain;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -28,8 +25,9 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
 @Configuration
-@EnableMethodSecurity
+@RequiredArgsConstructor
 public class AppConfiguration {
+
     @Value("${jwt.public.key}")
     RSAPublicKey key;
 
@@ -44,13 +42,11 @@ public class AppConfiguration {
 
     @Bean
     public S3Client s3Client() {
-        // AWS 자격 증명 생성
         AwsBasicCredentials credentials = AwsBasicCredentials.create(accessKey, secretKey);
-        // 자격 증명 제공자 생성
         AwsCredentialsProvider provider = StaticCredentialsProvider.create(credentials);
         S3Client s3Client = S3Client.builder()
-                .region(Region.AP_NORTHEAST_2) // 위치 설정
-                .credentialsProvider(provider) // 자격 증명 제공자 설정
+                .region(Region.AP_NORTHEAST_2)
+                .credentialsProvider(provider)
                 .build();
         return s3Client;
     }
@@ -65,6 +61,7 @@ public class AppConfiguration {
         JWK jwk = new RSAKey.Builder(this.key)
                 .privateKey(this.priv)
                 .build();
+
         JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwks);
     }
@@ -72,14 +69,5 @@ public class AppConfiguration {
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable());
-        http.oauth2ResourceServer(
-                configurer -> configurer.jwt(Customizer.withDefaults())
-        );
-        return http.build();
     }
 }
