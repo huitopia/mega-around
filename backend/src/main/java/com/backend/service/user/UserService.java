@@ -1,8 +1,10 @@
 package com.backend.service.user;
 
+import com.backend.domain.user.Branch;
 import com.backend.domain.user.Customer;
 import com.backend.mapper.user.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserMapper userMapper;
-//    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public boolean validate(String email, String password) {
         if (email == null || email.isBlank()) {
@@ -28,7 +30,12 @@ public class UserService {
     }
 
     public void addCustomer(Customer customer) {
-//        customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+        customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         userMapper.insertCustomer(customer);
+    }
+
+    public void addBranch(Branch branch) {
+        branch.setPassword(passwordEncoder.encode(branch.getPassword()));
+        userMapper.insertBranch(branch);
     }
 }

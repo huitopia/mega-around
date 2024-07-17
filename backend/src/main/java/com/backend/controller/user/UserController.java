@@ -26,7 +26,11 @@ public class UserController {
     }
 
     @PostMapping("/user/branch")
-    public void signupBranch(@RequestBody Branch branch) {
-        service.validate(branch.getEmail(), branch.getPassword());
+    public ResponseEntity<Object> signupBranch(@RequestBody Branch branch) {
+        if (service.validate(branch.getEmail(), branch.getPassword())) {
+            service.addBranch(branch);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
 }

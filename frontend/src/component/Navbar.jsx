@@ -1,4 +1,4 @@
-import { Box, Center, Flex } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 export function Navbar() {
@@ -6,7 +6,14 @@ export function Navbar() {
   return (
     <Flex>
       <Box>
-        <Center backgroundColor={"yellow"}>Home</Center>
+        <Box backgroundColor={"yellow"}>Home</Box>
+        <Box
+          backgroundColor={"beige"}
+          onClick={() => navigate("/signup")}
+          cursor={"pointer"}
+        >
+          Sign up/login
+        </Box>
       </Box>
     </Flex>
   );
