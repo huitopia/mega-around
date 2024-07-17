@@ -1,10 +1,27 @@
-function App() {
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ChakraProvider } from "@chakra-ui/react";
+import { Home } from "./Home.jsx";
 
-  return (
-    <>
-      <div>mega-around</div>
-    </>
-  )
+function MainProduct() {
+  return null;
 }
 
-export default App
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home />,
+    children: [{ index: true, element: <MainProduct /> }],
+  },
+]);
+
+function App() {
+  return (
+    <>
+      <ChakraProvider>
+        <RouterProvider router={router} />
+      </ChakraProvider>
+    </>
+  );
+}
+
+export default App;
