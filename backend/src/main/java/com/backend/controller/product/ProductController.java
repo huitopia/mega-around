@@ -4,7 +4,10 @@ import com.backend.domain.product.Product;
 import com.backend.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Description;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -14,13 +17,16 @@ public class ProductController {
 
     private final ProductService service;
 
-    @PostMapping
+
+    @PostMapping("/add")
     @Description("상품 업로드")
     // TODO : admin 권한만 등록 가능하게
-    public void createProduct(@RequestBody Product product,
-                              @RequestParam(value = "file", required = false) MultipartFile file)
+    public void createProduct(
+            Product product,
+            @RequestParam(value = "files[]", required = false) MultipartFile[] files)
             throws Exception {
         // TODO : validate method 생성
-        service.insertProduct(product, file);
+        System.out.println("########## controller ##########");
+        service.insertProduct(product, files);
     }
 }

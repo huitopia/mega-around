@@ -13,6 +13,6 @@ public class ProductFile {
     private String filePath;
 
     public void setFilePath(String tag) {
-        this.filePath = STR."\{tag}\{this.productId}/\{fileName}";
+        this.filePath = STR."\{tag}/\{this.productId}/\{fileName}";
     }
 }
