@@ -26,9 +26,11 @@ export function CategoryTabComp(props) {
     switch (mainCategory) {
       case "커피":
       case "디카페인":
+        setSelectSubCategory("에스프레소");
         setSubCategoryOption(["에스프레소", "라떼", "콜드브루"]);
         break;
       case "음료":
+        setSelectSubCategory("에이드");
         setSubCategoryOption([
           "에이드",
           "프라페",
@@ -37,19 +39,21 @@ export function CategoryTabComp(props) {
         ]);
         break;
       case "티":
+        setSelectSubCategory("티플레저");
         setSubCategoryOption(["티플레저", "클래식"]);
         break;
       case "푸드":
+        setSelectSubCategory("디저트");
         setSubCategoryOption(["디저트", "베이커리", "케이크"]);
         break;
       case "상품":
+        setSelectSubCategory("병음료");
         setSubCategoryOption(["병음료", "홈카페", "굿즈"]);
         break;
       default:
         setSubCategoryOption([]);
         break;
     }
-    setSelectSubCategory("");
   }, [mainCategory]);
 
   return (
