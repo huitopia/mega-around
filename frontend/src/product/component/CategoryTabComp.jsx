@@ -7,20 +7,15 @@ export function CategoryTabComp(props) {
   let [mainCategory, setMainCategory] = useState("커피");
   let [selectSubCategory, setSelectSubCategory] = useState("에스프레소");
 
-  const handleMainCategory = (category) => {
-    setMainCategory(category);
-  };
-
-  const handleSubCategory = (event) => {
-    setSelectSubCategory(event.target.value);
-  };
+  const [processing, setProcessing] = useState(false);
 
   useEffect(() => {
     props.category({
       mainCategory,
       subCategory: selectSubCategory,
     });
-  }, [selectSubCategory]);
+    setProcessing(false);
+  }, [selectSubCategory, processing]);
 
   useEffect(() => {
     switch (mainCategory) {
@@ -28,6 +23,7 @@ export function CategoryTabComp(props) {
       case "디카페인":
         setSelectSubCategory("에스프레소");
         setSubCategoryOption(["에스프레소", "라떼", "콜드브루"]);
+        setProcessing(true);
         break;
       case "음료":
         setSelectSubCategory("에이드");
@@ -55,6 +51,14 @@ export function CategoryTabComp(props) {
         break;
     }
   }, [mainCategory]);
+
+  const handleMainCategory = (category) => {
+    setMainCategory(category);
+  };
+
+  const handleSubCategory = (event) => {
+    setSelectSubCategory(event.target.value);
+  };
 
   return (
     <Tabs isFitted variant="enclosed">
