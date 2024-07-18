@@ -25,7 +25,7 @@ export const OptionComp = (props) => {
   return (
     <FormControl>
       <FormLabel>퍼스널 옵션</FormLabel>
-      <CheckboxGroup colorScheme={"yellow"}>
+      <CheckboxGroup colorScheme={"green"}>
         <Stack spacing={3} direction="row" flexWrap="wrap">
           <Checkbox onChange={() => handleOptionChange(1)}>
             개인 텀블러 사용
