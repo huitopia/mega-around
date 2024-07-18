@@ -4,19 +4,26 @@ import {
   CardBody,
   Image,
   SimpleGrid,
+  Spinner,
   Text,
+  useDisclosure,
   useToast,
   VStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ProductDetailModal } from "./ProductDetailModal.jsx";
 
 // TODO : 품절 체크
 export function ProductBodyComp({ mainCategory, subCategory }) {
   const [data, setData] = useState([]);
+  const [productId, setProductId] = useState(0);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const navigate = useNavigate();
+  const [main, setMain] = useState("");
+  const [sub, setSub] = useState("");
   useEffect(() => {
     axios
       .get(`/api/products/list?main=${mainCategory}&sub=${subCategory}`)
@@ -24,7 +31,6 @@ export function ProductBodyComp({ mainCategory, subCategory }) {
         if (response.data != null) {
           setData(response.data);
         }
-        console.log("Response:", response.data);
       })
       .catch((error) => {
         toast({
@@ -37,6 +43,12 @@ export function ProductBodyComp({ mainCategory, subCategory }) {
       })
       .finally();
   }, [mainCategory, subCategory]);
+
+  // -- spinner
+  if (data == null) {
+    return <Spinner />;
+  }
+
   return (
     <Box mt={"50px"}>
       <SimpleGrid
@@ -45,10 +57,14 @@ export function ProductBodyComp({ mainCategory, subCategory }) {
       >
         {data.map((product) => (
           <Card
+            value={product.id}
             key={product.id}
             height={"330px"}
-            onClick={() => navigate(`/product/${product.id}`)}
             cursor={"pointer"}
+            onClick={() => {
+              setProductId(product.id);
+              onOpen();
+            }}
           >
             <CardBody>
               <VStack spacing={4}>
@@ -74,6 +90,11 @@ export function ProductBodyComp({ mainCategory, subCategory }) {
           </Card>
         ))}
       </SimpleGrid>
+      <ProductDetailModal
+        isOpen={isOpen}
+        onClose={onClose}
+        productId={productId}
+      />
     </Box>
   );
 }
