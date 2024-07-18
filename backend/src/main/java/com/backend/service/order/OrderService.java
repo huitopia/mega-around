@@ -22,6 +22,7 @@ public class OrderService {
         orderMapper.insertOrderItem(orderItem);
         List<OrderProduct> orderProductList = orderItem.getOrderProduct();
         for (OrderProduct orderProduct : orderProductList) {
+            orderProduct.setOrderItemId(orderItem.getId());
             orderProduct.setOptions(objectMapper.writeValueAsString(orderProduct.getOption()));
             orderMapper.insertOrderProduct(orderProduct);
         }
@@ -30,7 +31,12 @@ public class OrderService {
     public List<OrderItem> getOrderItemList(Integer customerId) throws JsonProcessingException {
         List<OrderItem> orderItemList = orderMapper.selectOrderItemList(customerId);
         for (OrderItem orderItem : orderItemList) {
-            getOrderItem(orderItem.getId());
+            List<OrderProduct> orderProductList = orderMapper.selectOrderProductByOrderId(orderItem.getId());
+            for (OrderProduct orderProduct : orderProductList) {
+                orderProduct.setOption(objectMapper.readValue(orderProduct.getOptions(), List.class));
+            }
+
+            orderItem.setOrderProduct(orderProductList);
         }
 
         return orderItemList;

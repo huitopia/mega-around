@@ -35,9 +35,9 @@ public interface CartMapper {
     Cart selectCartByCustomerId(Integer customerId);
 
     @Select("""
-    SELECT *
-    FROM cart_product
-    WHERE cart_id = #{cartId}
+    SELECT cp.cart_id, cp.product_id, cp.count, cp.total_price, cp.options, ci.file_path
+    FROM cart_product cp JOIN product_img pi ON cp.product_id = pi.product_id
+    WHERE cp.cart_id = #{cartId}
 """)
     List<CartProduct> selectCartProductListByCartId(Integer cartId);
 }

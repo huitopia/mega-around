@@ -17,4 +17,5 @@ public class OrderProduct {
     private List<Integer> option;
     // 옵션 리스트 JSON 객체로 변환
     private String options;
+    private String filePath;
 }

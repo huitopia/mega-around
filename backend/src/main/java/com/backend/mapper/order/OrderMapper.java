@@ -39,9 +39,9 @@ public interface OrderMapper {
     OrderItem selectOrderItemByOrderId(Integer id);
 
     @Select("""
-                SELECT *
-                FROM order_product
-                WHERE order_item_id = #{orderItemId}
+                SELECT op.id, op.order_item_id, op.product_id, op.count, op.options, op.total_price, pi.file_path
+                FROM order_product op JOIN product_img pi ON op.product_id = pi.product_id
+                WHERE op.order_item_id = #{orderItemId}
             """)
     List<OrderProduct> selectOrderProductByOrderId(Integer orderItemId);
 
