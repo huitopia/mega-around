@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+// TODO : 품절 체크
 export function ProductBodyComp({ mainCategory, subCategory }) {
   const [data, setData] = useState([]);
   const toast = useToast();
