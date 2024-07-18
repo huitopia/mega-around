@@ -73,6 +73,7 @@ public class AppConfiguration {
         return new BCryptPasswordEncoder();
     }
 
+    // TODO : postman 테스용 CSRF 보호를 비활성화
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable());
