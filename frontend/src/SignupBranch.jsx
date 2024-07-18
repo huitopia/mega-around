@@ -6,18 +6,16 @@ export function SignUpBranch() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [branchName, setBranchName] = useState("");
-  const [address, setAddress] = useState("");
   const toast = useToast();
 
   const [postcode, setPostcode] = useState("");
   const [roadAddress, setRoadAddress] = useState("");
-  const [jibunAddress, setJibunAddress] = useState("");
   const [extraAddress, setExtraAddress] = useState("");
   const [guide, setGuide] = useState("");
 
   function handleSignup() {
     axios
-      .post("/api/user/branch", { email, password, branchName, address })
+      .post("/api/user/branch", { email, password, branchName, roadAddress })
       .then(() =>
         toast({
           description: "지점 가입이 성공하였습니다.",
@@ -71,15 +69,15 @@ export function SignUpBranch() {
 
         setPostcode(data.zonecode);
         setRoadAddress(roadAddr);
-        setJibunAddress(data.jibunAddress);
-        setExtraAddress(roadAddr !== "" ? extraRoadAddr : "");
+        // setJibunAddress(data.jibunAddress);
+        // setExtraAddress(roadAddr !== "" ? extraRoadAddr : "");
 
         if (data.autoRoadAddress) {
           setGuide(
             "(예상 도로명 주소 : " + data.autoRoadAddress + extraRoadAddr + ")",
           );
-        } else if (data.autoJibunAddress) {
-          setGuide("(예상 지번 주소 : " + data.autoJibunAddress + ")");
+          // } else if (data.autoJibunAddress) {
+          //   setGuide("(예상 지번 주소 : " + data.autoJibunAddress + ")");
         } else {
           setGuide("");
         }
@@ -101,7 +99,6 @@ export function SignUpBranch() {
       <Input onChange={(e) => setBranchName(e.target.value)} />
       주소
       <br />
-      <Input onChange={(e) => setAddress(e.target.value)} />
       <input
         type="text"
         id="sample4_postcode"
@@ -123,13 +120,13 @@ export function SignUpBranch() {
         style={{ width: "100px" }}
         readOnly
       />
-      <input
-        type="text"
-        id="sample4_jibunAddress"
-        placeholder="지번주소"
-        value={jibunAddress}
-        readOnly
-      />
+      {/*<input*/}
+      {/*  type="text"*/}
+      {/*  id="sample4_jibunAddress"*/}
+      {/*  placeholder="지번주소"*/}
+      {/*  value={jibunAddress}*/}
+      {/*  readOnly*/}
+      {/*/>*/}
       <span
         id="guide"
         style={{ color: "#999", display: guide ? "block" : "none" }}
@@ -137,13 +134,13 @@ export function SignUpBranch() {
         {guide}
       </span>
       <input type="text" id="sample4_detailAddress" placeholder="상세주소" />
-      <input
-        type="text"
-        id="sample4_extraAddress"
-        placeholder="참고항목"
-        value={extraAddress}
-        readOnly
-      />
+      {/*<input*/}
+      {/*  type="text"*/}
+      {/*  id="sample4_extraAddress"*/}
+      {/*  placeholder="참고항목"*/}
+      {/*  value={extraAddress}*/}
+      {/*  readOnly*/}
+      {/*/>*/}
       <Button onClick={handleSignup} colorScheme={"blue"} mt={5}>
         지점 회원가입
       </Button>
