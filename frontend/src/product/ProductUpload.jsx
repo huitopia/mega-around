@@ -174,11 +174,11 @@ export function ProductUpload() {
         </Box>
         <Box>
           <Center>
-            <ButtonGroup variant="outline">
+            <ButtonGroup variant="solid">
               <VStack>
                 <Button
                   isLoading={loading}
-                  colorScheme={"orange"}
+                  colorScheme={"blue"}
                   width={"200px"}
                   onClick={handleSaveClick}
                 >
