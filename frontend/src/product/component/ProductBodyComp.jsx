@@ -22,8 +22,6 @@ export function ProductBodyComp({ mainCategory, subCategory }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const navigate = useNavigate();
-  const [main, setMain] = useState("");
-  const [sub, setSub] = useState("");
   useEffect(() => {
     axios
       .get(`/api/products/list?main=${mainCategory}&sub=${subCategory}`)
