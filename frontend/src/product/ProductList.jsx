@@ -1,7 +1,7 @@
 import { Box, Divider, Heading } from "@chakra-ui/react";
 import { CategoryTabComp } from "./component/CategoryTabComp.jsx";
 import { useState } from "react";
-import { ProductBodyComp } from "./ProductBodyComp.jsx";
+import { ProductBodyComp } from "./component/ProductBodyComp.jsx";
 
 export function ProductList() {
   const [mainCategory, setMainCategory] = useState("");
