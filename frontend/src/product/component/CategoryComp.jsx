@@ -16,7 +16,7 @@ export const CategoryComp = (props) => {
         setSubCategoryOption([
           "에이드",
           "프라페",
-          "스무드&주스",
+          "스무디&주스",
           "논-커피 라떼",
         ]);
         break;
