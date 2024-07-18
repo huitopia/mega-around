@@ -123,6 +123,7 @@ export function ProductUpload() {
       <Box maxWidth="700px" mx={"auto"}>
         <Box>
           <FormControl>
+            {/* TODO : 썸네일 크기 수정 */}
             <FormLabel>썸네일</FormLabel>
             <Img src={imageSrc}></Img>
             <Input
