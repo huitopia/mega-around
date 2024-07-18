@@ -58,7 +58,7 @@ export function CategoryTabComp(props) {
 
   return (
     <Tabs isFitted variant="enclosed">
-      <TabList mb="1em">
+      <TabList mb="3em">
         {mainCategoryOption.map((category) => (
           <Tab key={category} onClick={() => handleMainCategory(category)}>
             {category}
