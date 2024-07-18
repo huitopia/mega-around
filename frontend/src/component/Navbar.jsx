@@ -9,7 +9,7 @@ export function Navbar() {
       fontSize={"lg"}
       align={"center"}
       justifyContent={"space-between"}
-      backgroundColor={"gray"}
+      backgroundColor={"yellow"}
     >
       <Box>
         <Center onClick={() => navigate("/")} cursor={"pointer"}>
