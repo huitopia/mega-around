@@ -151,7 +151,7 @@ export function ProductUpload() {
         </Box>
         <Box>
           <FormControl>
-            <FormLabel>퍼스널 옵션</FormLabel>
+            <FormLabel>상세 내용</FormLabel>
             <Textarea
               type="text"
               placeholder={"100자 이내 작성"}
