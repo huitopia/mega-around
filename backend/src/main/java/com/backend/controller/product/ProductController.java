@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +38,14 @@ public class ProductController {
             @RequestParam(value = "main", required = false) String mainCategory,
             @RequestParam(value = "sub", required = false) String subCategory) {
         List<Map<String, Object>> result = service.selectProductListByCategory(mainCategory, subCategory);
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("{id}")
+    @Description("상품 디테일 조회")
+    public ResponseEntity getProductDetail(@PathVariable Integer id) throws IOException {
+        System.out.println("id = " + id);
+        Map<String, Object> result = service.selectProductDetailById(id);
         return ResponseEntity.ok().body(result);
     }
 }

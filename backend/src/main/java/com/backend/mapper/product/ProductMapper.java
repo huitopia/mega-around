@@ -33,4 +33,12 @@ public interface ProductMapper {
                 AND p.sub_category = #{subCategory}
             """)
     List<Map<String, Object>> selectProductListByCategory(String mainCategory, String subCategory);
+
+    @Select("""
+            SELECT *
+            FROM product p
+                LEFT JOIN product_img i ON p.id = i.product_id
+            WHERE p.id = #{id}
+            """)
+    Map<String, Object> selectProductDetailById(Integer id);
 }
