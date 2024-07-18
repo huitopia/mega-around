@@ -2,10 +2,7 @@ package com.backend.mapper.order;
 
 import com.backend.domain.order.OrderItem;
 import com.backend.domain.order.OrderProduct;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -47,4 +44,11 @@ public interface OrderMapper {
                 WHERE order_item_id = #{orderItemId}
             """)
     List<OrderProduct> selectOrderProductByOrderId(Integer orderItemId);
+
+    @Update("""
+            UPDATE order
+            SET state_id = #{stateId}
+            WHERE id = #{id}
+            """)
+    int updateOrderItemState(Integer id, Integer stateId);
 }

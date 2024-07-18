@@ -11,5 +11,8 @@ FROM order_item;
 SELECT *
 FROM order_state;
 
+SELECT *
+FROM notice;
+
 ALTER TABLE order_product
     ADD COLUMN total_price INT NOT NULL;

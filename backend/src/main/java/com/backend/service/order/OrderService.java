@@ -30,17 +30,30 @@ public class OrderService {
     public List<OrderItem> getOrderItemList(Integer customerId) throws JsonProcessingException {
         List<OrderItem> orderItemList = orderMapper.selectOrderItemList(customerId);
         for (OrderItem orderItem : orderItemList) {
-            // 주문내역 하나 가져옴
-            orderMapper.selectOrderItemByOrderId(orderItem.getId());
-
-            List<OrderProduct> orderProductList = orderMapper.selectOrderProductByOrderId(orderItem.getId());
-            for (OrderProduct orderProduct : orderProductList) {
-                orderProduct.setOption(objectMapper.readValue(orderProduct.getOptions(), List.class));
-            }
-
-            orderItem.setOrderProduct(orderProductList);
+            getOrderItem(orderItem.getId());
         }
 
         return orderItemList;
+    }
+
+    public OrderItem getOrderItem(Integer id) throws JsonProcessingException {
+
+        OrderItem orderItem = orderMapper.selectOrderItemByOrderId(id);
+
+        // 주문 정보에 주문 상품 담기
+        List<OrderProduct> orderProductList = orderMapper.selectOrderProductByOrderId(orderItem.getId());
+        for (OrderProduct orderProduct : orderProductList) {
+            orderProduct.setOption(objectMapper.readValue(orderProduct.getOptions(), List.class));
+        }
+
+        orderItem.setOrderProduct(orderProductList);
+
+        return orderItem;
+    }
+
+    public void modifyOrderItemState(Integer id, Integer stateId) {
+        orderMapper.updateOrderItemState(id, stateId);
+        // 상태 변경 알림 추가
+//        orderMapper.insertNotice();
     }
 }
