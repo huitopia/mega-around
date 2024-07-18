@@ -91,9 +91,11 @@ CREATE TABLE product
 # 상품 이미지
 CREATE TABLE product_img
 (
-    product_id INT          NOT NULL REFERENCES product (id),
+    product_id INT          NOT NULL,
     file_name  VARCHAR(200) NOT NULL,
-    PRIMARY KEY (product_id)
+    file_path  VARCHAR(200) NOT NULL,
+    PRIMARY KEY (product_id, file_name),
+    CONSTRAINT fk_product FOREIGN KEY (product_id) REFERENCES product (id)
 );
 
 # 상품 옵션
