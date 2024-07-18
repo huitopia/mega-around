@@ -10,8 +10,8 @@ import {
   Heading,
   Img,
   Input,
-  InputGroup,
-  InputRightAddon,
+  NumberInput,
+  NumberInputField,
   Textarea,
   useToast,
   VStack,
@@ -166,10 +166,9 @@ export function ProductUpload() {
         <Box maxWidth="60%">
           <FormControl>
             <FormLabel>가격</FormLabel>
-            <InputGroup size="sm">
-              <Input type="number" onChange={handlePriceChange} />
-              <InputRightAddon>원</InputRightAddon>
-            </InputGroup>
+            <NumberInput defaultValue={0} min={0} max={100000}>
+              <NumberInputField onChange={handlePriceChange} />
+            </NumberInput>
             <FormHelperText>가격은 0원 이상부터 가능합니다.</FormHelperText>
           </FormControl>
         </Box>
