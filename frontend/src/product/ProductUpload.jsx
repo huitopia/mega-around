@@ -44,6 +44,8 @@ export function ProductUpload() {
   const toast = useToast();
 
   // TODO : admin 권한만 접근 가능하게 수정
+  //  빈 값 전송 금지
+  //  가격 0원 이하 전송 금지
   const handleSaveClick = () => {
     setLoading(true);
     axios
@@ -149,13 +151,16 @@ export function ProductUpload() {
         </Box>
         <Box>
           <FormControl>
-            <FormLabel>상세내용</FormLabel>
+            <FormLabel>퍼스널 옵션</FormLabel>
             <Textarea
               type="text"
               placeholder={"100자 이내 작성"}
               onChange={handleContentChange}
             />
           </FormControl>
+        </Box>
+        <Box>
+          <OptionComp options={options} />
         </Box>
         <Box maxWidth="60%">
           <FormControl>
@@ -164,10 +169,8 @@ export function ProductUpload() {
               <Input type="number" onChange={handlePriceChange} />
               <InputRightAddon>원</InputRightAddon>
             </InputGroup>
+            <FormHelperText>가격은 0원 이상부터 가능합니다.</FormHelperText>
           </FormControl>
-        </Box>
-        <Box>
-          <OptionComp options={options} />
         </Box>
         <Box>
           <Center>
