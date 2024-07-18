@@ -1,6 +1,7 @@
 import { Box, Divider, Heading } from "@chakra-ui/react";
 import { CategoryTabComp } from "./component/CategoryTabComp.jsx";
 import { useState } from "react";
+import { ProductBodyComp } from "./ProductBodyComp.jsx";
 
 export function ProductList() {
   const [mainCategory, setMainCategory] = useState("");
@@ -18,6 +19,7 @@ export function ProductList() {
       </Box>
       <Divider border={"1px solid black"} my={4} />
       <CategoryTabComp category={category} />
+      <ProductBodyComp mainCategory={mainCategory} subCategory={subCategory} />
     </Box>
   );
 }
