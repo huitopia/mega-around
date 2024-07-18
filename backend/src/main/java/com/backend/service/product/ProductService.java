@@ -14,6 +14,9 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
+import java.util.List;
+import java.util.Map;
+
 @Service
 @Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
@@ -55,5 +58,11 @@ public class ProductService {
                             files[0].getInputStream(), files[0].getSize()
                     ));
         }
+    }
+
+
+    public List<Map<String, Object>> selectProductListByCategory(String mainCategory, String subCategory) {
+        List<Map<String, Object>> result = mapper.selectProductListByCategory(mainCategory, subCategory);
+        return result;
     }
 }
