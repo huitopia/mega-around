@@ -21,6 +21,11 @@ export function Navbar() {
           <Text>상품등록</Text>
         </Center>
       </Box>
+      <Box>
+        <Center onClick={() => navigate("/product/list")} cursor={"pointer"}>
+          <Text>상품리스트</Text>
+        </Center>
+      </Box>
     </Flex>
   );
 }
