@@ -4,8 +4,8 @@ import { useState } from "react";
 import { ProductBodyComp } from "./component/ProductBodyComp.jsx";
 
 export function ProductList() {
-  const [mainCategory, setMainCategory] = useState("");
-  const [subCategory, setSubCategory] = useState("");
+  const [mainCategory, setMainCategory] = useState("커피");
+  const [subCategory, setSubCategory] = useState("에스프레소");
 
   const category = (category) => {
     setMainCategory(category.mainCategory);
