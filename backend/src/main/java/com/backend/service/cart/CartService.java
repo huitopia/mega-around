@@ -23,6 +23,7 @@ public class CartService {
         cartMapper.insertCart(cart);
         List<CartProduct> cartProductList = cart.getCartProduct();
         for(CartProduct cartProduct : cartProductList){
+            cartProduct.setCartId(cart.getId());
             cartProduct.setOptions(objectMapper.writeValueAsString(cartProduct.getOption()));
             cartMapper.insertCartProduct(cartProduct);
         }

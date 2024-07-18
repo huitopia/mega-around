@@ -23,7 +23,7 @@ public interface CartMapper {
     @Insert("""
     INSERT INTO cart_product
     (cart_id, product_id, count, total_price, options)
-    VALUES (#{cartId}, #{productId}, #{totalPrice}, #{options})
+    VALUES (#{cartId}, #{productId}, #{count}, #{totalPrice}, #{options})
 """)
     int insertCartProduct(CartProduct cartProduct);
 
@@ -35,7 +35,7 @@ public interface CartMapper {
     Cart selectCartByCustomerId(Integer customerId);
 
     @Select("""
-    SELECT cp.cart_id, cp.product_id, cp.count, cp.total_price, cp.options, ci.file_path
+    SELECT cp.cart_id, cp.product_id, cp.count, cp.total_price, cp.options, pi.file_path
     FROM cart_product cp JOIN product_img pi ON cp.product_id = pi.product_id
     WHERE cp.cart_id = #{cartId}
 """)
