@@ -66,7 +66,7 @@ export function ProductUpload() {
           duration: 1500,
           isClosable: true,
         });
-        navigate("/");
+        navigate("/products/list");
       })
       .catch((error) => {
         toast({
