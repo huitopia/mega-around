@@ -46,7 +46,7 @@ public interface OrderMapper {
     List<OrderProduct> selectOrderProductByOrderId(Integer orderItemId);
 
     @Update("""
-            UPDATE order
+            UPDATE order_item
             SET state_id = #{stateId}
             WHERE id = #{id}
             """)
