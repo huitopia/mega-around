@@ -26,7 +26,6 @@ public class ProductController {
             @RequestParam(value = "files[]", required = false) MultipartFile[] files)
             throws Exception {
         // TODO : validate method 생성
-        System.out.println("########## controller ##########");
         service.insertProduct(product, files);
     }
 }
