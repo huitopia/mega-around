@@ -178,7 +178,7 @@ export function ProductUpload() {
               <VStack>
                 <Button
                   isLoading={loading}
-                  colorScheme={"blue"}
+                  colorScheme={"orange"}
                   width={"200px"}
                   onClick={handleSaveClick}
                 >
