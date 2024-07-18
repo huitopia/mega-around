@@ -16,8 +16,8 @@ public interface ProductMapper {
     int insertProduct(Product product);
 
     @Insert("""
-            INSERT INTO product_img (product_id, file_name)
-            VALUES (#{productId}, #{fileName})
+            INSERT INTO product_img (product_id, file_name, file_path)
+            VALUES (#{productId}, #{fileName}, #{filePath})
             """)
     int insertProductImgById(ProductFile productFile);
 }
