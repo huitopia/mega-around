@@ -10,4 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class EventService {
     private final EventMapper eventMapper;
+
+    public void getEvent(String item) {
+
+    }
 }
