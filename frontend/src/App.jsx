@@ -6,7 +6,6 @@ import { MainProduct } from "./MainProduct.jsx";
 import { ProductList } from "./product/ProductList.jsx";
 import Stamp from "./event/Stamp.jsx";
 import { theme } from "./component/css/Theme.jsx";
-import { ProductDetail } from "./product/ProductDetail.jsx";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +16,6 @@ const router = createBrowserRouter([
       { index: true, element: <MainProduct /> },
       { path: "product", element: <ProductUpload /> },
       { path: "product/list", element: <ProductList /> },
-      { path: "product/:productId", element: <ProductDetail /> },
       // event
       { path: "/stamp", element: <Stamp /> },
     ],
