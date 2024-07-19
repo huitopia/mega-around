@@ -6,6 +6,8 @@ import {
   AccordionPanel,
   Box,
   Button,
+  Checkbox,
+  CheckboxGroup,
   Divider,
   Flex,
   FormControl,
@@ -13,14 +15,21 @@ import {
   Heading,
   Input,
   Radio,
+  RadioGroup,
   Spacer,
-  Stack,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ChevronRightIcon } from "@chakra-ui/icons";
+import { checkBoxStyle } from "../component/css/style.js";
 import axios from "axios";
 
 export function Order() {
+  const [provider, setProvider] = useState("html5_inicis");
+  const [request, setRequest] = useState("");
+  const [isTakeOut, setIsTakeOut] = useState("1");
+  const [option, setOption] = useState([false, false]);
+  const [orderItem, setOrderItem] = useState({});
+
   useEffect(() => {
     const iamport = document.createElement("script");
     iamport.src = "https://cdn.iamport.kr/v1/iamport.js";
@@ -30,13 +39,21 @@ export function Order() {
     };
   }, []);
 
+  useEffect(() => {
+    axios.get(`/api/carts/${6}`).then((res) => setOrderItem(res.data));
+  }, []);
+
+  useEffect(() => {
+    console.log(provider);
+  }, [provider]);
+
   function handlePayment() {
     const { IMP } = window;
     IMP.init("imp07804317");
     //결제시 전달되는 정보
     IMP.request_pay(
       {
-        pg: "html5_inicis",
+        pg: provider,
         pay_method: "card",
         merchant_uid: "merchant_" + new Date().getTime(),
         name: "주문명:결제테스트", // 상품명
@@ -47,7 +64,7 @@ export function Order() {
       },
       function (rsp) {
         if (rsp.success) {
-          axios.post("/api/payments").then().catch();
+          // axios.post("/api/payments").then().catch();
         }
       },
     );
@@ -70,7 +87,7 @@ export function Order() {
               <Box as="span" flex="1" textAlign="left">
                 주문 상품
               </Box>
-              <Box>수박 주스</Box>
+              <Box>수박주스</Box>
               <AccordionIcon />
             </AccordionButton>
           </h2>
@@ -82,17 +99,57 @@ export function Order() {
       <Box>
         <FormControl>
           <FormLabel>매장 요청사항</FormLabel>
-          <Input placeholder={"매장 요청사항이 있으면 적어주세요."} />
+          <Input
+            placeholder={"매장 요청사항이 있으면 적어주세요."}
+            onChange={(e) => setRequest(e.target.value)}
+          />
         </FormControl>
-        <Stack>
+        <RadioGroup onChange={setIsTakeOut} value={isTakeOut}>
           <Box>포장 요청사항</Box>
-          <Radio size="md" name="1" colorScheme="red">
+          <Radio size="md" value={"1"}>
             포장해주세요
           </Radio>
-          <Radio size="md" name="1" colorScheme="green">
+          <Radio size="md" value={"2"}>
             매장에서 먹고 갈게요
           </Radio>
-        </Stack>
+        </RadioGroup>
+        {isTakeOut === "1" && (
+          <CheckboxGroup>
+            <Box>포장옵션</Box>
+            <Checkbox
+              size="md"
+              {...checkBoxStyle}
+              isChecked={option[0]}
+              onChange={(e) => setOption([e.target.checked, option[1]])}
+            >
+              캐리어/봉투 필요해요
+            </Checkbox>
+            <Checkbox
+              size="md"
+              {...checkBoxStyle}
+              isChecked={option[1]}
+              onChange={(e) => setOption([option[0], e.target.checked])}
+            >
+              빨대/스틱 필요해요
+            </Checkbox>
+          </CheckboxGroup>
+        )}
+        <RadioGroup onChange={setProvider} value={provider}>
+          <Box>결제 수단</Box>
+          <Radio size="md" value="html5_inicis" defaultChecked>
+            신용카드
+          </Radio>
+          <Radio size="md" value={"kakaopay"}>
+            카카오페이
+          </Radio>
+          <Radio size="md" value={"naverpay"}>
+            네이버페이
+          </Radio>
+          <Radio size="md" value={"tosspay"}>
+            토스페이
+          </Radio>
+        </RadioGroup>
+
         <Box>
           <Box>쿠폰 적용</Box>
           <Flex>
