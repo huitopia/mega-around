@@ -34,3 +34,7 @@ ALTER TABLE order_item
 
 ALTER TABLE payment
     ADD COLUMN merchant_uid VARCHAR(50) NOT NULL;
+
+
+ALTER TABLE payment
+    CHANGE method provider VARCHAR(50);
