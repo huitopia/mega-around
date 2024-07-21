@@ -40,7 +40,7 @@ export function Order() {
   }, []);
 
   useEffect(() => {
-    axios.get(`/api/carts/${6}`).then((res) => setOrderItem(res.data));
+    axios.get(`/api/carts`).then((res) => setOrderItem(res.data));
   }, []);
 
   useEffect(() => {
@@ -63,8 +63,17 @@ export function Order() {
         buyer_tel: "010-1234-5678" /*구매자 연락처*/,
       },
       function (rsp) {
+        const merchantUid = rsp.merchant_uid;
         if (rsp.success) {
-          // axios.post("/api/payments").then().catch();
+          axios
+            .post("/api/payments", {
+              // orderItem.id,
+              // orderItem.totalPrice,
+              provider,
+              merchantUid,
+            })
+            .then()
+            .catch();
         }
       },
     );
