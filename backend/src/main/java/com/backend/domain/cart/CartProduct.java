@@ -9,6 +9,7 @@ import java.util.List;
 public class CartProduct {
     private Integer cartId;
     private Integer productId;
+    private String productName;
     private Integer count;
     // 옵션 포함한 가격
     private Integer totalPrice;

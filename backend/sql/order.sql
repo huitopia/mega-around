@@ -14,6 +14,9 @@ FROM order_product;
 SELECT *
 FROM order_state;
 
+SELECT *
+FROM branch;
+
 ALTER TABLE order_product
     ADD COLUMN total_price INT NOT NULL;
 
