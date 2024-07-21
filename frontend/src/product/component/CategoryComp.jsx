@@ -5,9 +5,11 @@ export const CategoryComp = (props) => {
   const [mainCategory, setMainCategory] = useState("");
   const mainCategoryOption = ["커피", "디카페인", "음료", "티", "푸드", "상품"];
   const [subCategoryOption, setSubCategoryOption] = useState([]);
+  const checkMain = props.checkMain;
+  const checkSub = props.checkSub;
 
   useEffect(() => {
-    switch (mainCategory) {
+    switch (mainCategory || checkMain) {
       case "커피":
       case "디카페인":
         setSubCategoryOption(["에스프레소", "라떼", "콜드브루"]);
@@ -33,7 +35,7 @@ export const CategoryComp = (props) => {
         setSubCategoryOption([]);
         break;
     }
-  }, [mainCategory]);
+  }, [mainCategory, checkMain]);
 
   const handleMainCategory = (event) => {
     setMainCategory(event.target.value);
@@ -55,7 +57,11 @@ export const CategoryComp = (props) => {
           placeholder={"카테고리를 선택해주세요"}
         >
           {mainCategoryOption.map((category) => (
-            <option key={category} value={category}>
+            <option
+              key={category}
+              value={category}
+              selected={category === checkMain}
+            >
               {category}
             </option>
           ))}
@@ -65,7 +71,11 @@ export const CategoryComp = (props) => {
           placeholder={"카테고리를 선택해주세요"}
         >
           {subCategoryOption.map((category) => (
-            <option key={category} value={category}>
+            <option
+              key={category}
+              value={category}
+              selected={category === checkSub}
+            >
               {category}
             </option>
           ))}
