@@ -25,7 +25,7 @@ public class OrderController {
 
     // 주문 리스트 조회
     @GetMapping("/orders/list")
-    public ResponseEntity getOrderItemList(Authentication authentication) throws JsonProcessingException {
+    public ResponseEntity getOrderItemList(Authentication authentication, String period) throws JsonProcessingException {
 //        return ResponseEntity.ok(orderService.getOrderItemList(Integer.valueOf(authentication.getName())));
         return ResponseEntity.ok(orderService.getOrderItemList(1));
     }
