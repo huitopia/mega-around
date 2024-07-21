@@ -9,8 +9,9 @@ public class Branch {
     private Integer id;
     private String email;
     private String password;
-    private String branch_name;
-    private LocalDateTime created_at;
+    private String branchName;
+    private LocalDateTime createdAt;
     private String address;
+    private String subAddress;
     private Boolean auth;
 }

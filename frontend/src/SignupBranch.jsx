@@ -8,6 +8,7 @@ export function SignUpBranch() {
   const [password, setPassword] = useState("");
   const [branchName, setBranchName] = useState("");
   const [address, setAddress] = useState("");
+  const [subAddress, setSubAddress] = useState("");
   const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
   const toast = useToast();
 
@@ -26,13 +27,20 @@ export function SignUpBranch() {
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
     setAddress(fullAddress);
+    setSubAddress(extraAddress);
     setIsPostcodeOpen(false); // 주소 선택 후 팝업 닫기
     console.log(fullAddress); // e.g. '서울 성동구 왕십리로2길 20 (성수동1가)'
   };
 
   function handleSignup() {
     axios
-      .post("/api/user/branch", { email, password, branchName, address })
+      .post("/api/user/branch", {
+        email,
+        password,
+        branchName,
+        address,
+        subAddress,
+      })
       .then(() =>
         toast({
           description: "지점 가입이 성공하였습니다.",
@@ -63,13 +71,15 @@ export function SignUpBranch() {
       닉네임
       <br />
       <Input onChange={(e) => setBranchName(e.target.value)} />
-      주소
       <br />
-      <Input value={address} readOnly />{" "}
-      {/* 주소 입력 필드를 읽기 전용으로 설정 */}
-      <button type="button" onClick={() => setIsPostcodeOpen(true)}>
+      주소
+      <Button
+        type="button"
+        onClick={() => setIsPostcodeOpen(true)}
+        borderRadius={0}
+      >
         주소 검색
-      </button>
+      </Button>
       {isPostcodeOpen && (
         <DaumPostcode
           onComplete={handleComplete}
@@ -78,6 +88,8 @@ export function SignUpBranch() {
           scriptUrl="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
         />
       )}
+      <br />
+      <Input value={address + subAddress} readOnly />
       <Button onClick={handleSignup} colorScheme={"blue"} mt={5}>
         지점 회원가입
       </Button>

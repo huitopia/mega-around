@@ -13,7 +13,7 @@ public interface UserMapper {
     int insertCustomer(Customer customer);
 
     @Insert("""
-            INSERT INTO customer(email,password,branch_name,address,sub_address) VALUES (#{email},#{password},#{branchName},#{address},#{subAddress})
+            INSERT INTO branch(email,password,branch_name,address,sub_address) VALUES (#{email},#{password},#{branchName},#{address},#{subAddress})
             """)
     int insertBranch(Branch branch);
 }
