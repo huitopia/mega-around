@@ -44,7 +44,6 @@ public class ProductController {
     @GetMapping("{id}")
     @Description("상품 디테일 조회")
     public ResponseEntity getProductDetail(@PathVariable Integer id) throws IOException {
-        System.out.println("id = " + id);
         Map<String, Object> result = service.selectProductDetailById(id);
         return ResponseEntity.ok().body(result);
     }

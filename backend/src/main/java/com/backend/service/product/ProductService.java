@@ -74,7 +74,6 @@ public class ProductService {
 
     public Map<String, Object> selectProductDetailById(Integer id) throws IOException {
         Map<String, Object> product = mapper.selectProductDetailById(id);
-        System.out.println("product = " + product.get("options"));
         String optionId = (String) product.get("options");
         // JSON 문자열 배열로 변환
         List<Integer> optionIdList = (objectMapper.readValue(optionId, List.class));
