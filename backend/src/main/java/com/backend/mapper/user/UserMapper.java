@@ -21,5 +21,10 @@ public interface UserMapper {
     @Select("""
             SELECT email FROM customer WHERE email=#{email}
             """)
-    Customer getEmail(String email);
+    Customer getCustomerEmail(String email);
+
+    @Select("""
+            SELECT email FROM branch WHERE email=#{email}
+            """)
+    Customer getBranchEmail(String email);
 }

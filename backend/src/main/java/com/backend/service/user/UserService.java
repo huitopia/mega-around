@@ -39,7 +39,11 @@ public class UserService {
         userMapper.insertBranch(branch);
     }
 
-    public Customer getEmail(String email) {
-        return userMapper.getEmail(email);
+    public Customer getCustomerEmail(String email) {
+        return userMapper.getCustomerEmail(email);
+    }
+
+    public Customer getBranchEmail(String email) {
+        return userMapper.getBranchEmail(email);
     }
 }

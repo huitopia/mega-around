@@ -34,7 +34,16 @@ public class UserController {
 
     @GetMapping("/user/customer")
     public ResponseEntity<Object> getCustomer(@RequestParam String email) {
-        Customer customer = service.getEmail(email);
+        Customer customer = service.getCustomerEmail(email);
+        if (customer == null) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatusCode.valueOf(409)).build();
+    }
+
+    @GetMapping("/user/branch")
+    public ResponseEntity<Object> getBranch(@RequestParam String email) {
+        Customer customer = service.getBranchEmail(email);
         if (customer == null) {
             return ResponseEntity.ok().build();
         }

@@ -103,7 +103,7 @@ export function SignUpCustomer() {
   return (
     <>
       <Center>
-        <Box w={550}>
+        <Box w={520}>
           <Flex mb={10} justifyContent={"space-between"}>
             <Heading>고객 회원 가입</Heading>
             <Button
