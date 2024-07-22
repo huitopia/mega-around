@@ -28,7 +28,7 @@ public interface CartMapper {
     int insertCartProduct(CartProduct cartProduct);
 
     @Select("""
-                SELECT c.id, c.customer_id, c.branch_id, c.total_price, b.branch_name
+                SELECT c.id, c.customer_id, c.branch_id, c.total_price, b.branch_name, c.created_at
                 FROM cart c JOIN branch b ON c.branch_id = b.id
                 WHERE c.customer_id = #{customerId}
             """)
@@ -38,7 +38,7 @@ public interface CartMapper {
                 SELECT cp.cart_id, cp.product_id, cp.count, cp.total_price, cp.options, pi.file_path, p.title productName
                 FROM cart_product cp
                     JOIN product_img pi ON cp.product_id = pi.product_id
-                    JOIN product p ON cp.id = p.id
+                    JOIN product p ON cp.product_id = p.id
                 WHERE cp.cart_id = #{cartId}
             """)
     List<CartProduct> selectCartProductListByCartId(Integer cartId);
