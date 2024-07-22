@@ -5,15 +5,13 @@ export function Navbar() {
   const navigate = useNavigate();
   return (
     <Flex>
-      <Box>
-        <Box backgroundColor={"yellow"}>Home</Box>
-        <Box
-          backgroundColor={"beige"}
-          onClick={() => navigate("/signup")}
-          cursor={"pointer"}
-        >
-          Sign up/login
-        </Box>
+      <Box backgroundColor={"yellow"}>Home</Box>
+      <Box
+        backgroundColor={"beige"}
+        onClick={() => navigate("/signup")}
+        cursor={"pointer"}
+      >
+        Sign up/login
       </Box>
     </Flex>
   );

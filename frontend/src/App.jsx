@@ -1,8 +1,9 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Home } from "./Home.jsx";
-import { SignUp } from "./SignUp.jsx";
+import { SignUpCustomer } from "./SignUpCustomer.jsx";
 import { SignUpBranch } from "./SignupBranch.jsx";
+import { SignUp } from "./SignUp.jsx";
 
 function MainProduct() {
   return null;
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
 
       // user
       { path: "signup", element: <SignUp /> },
+      { path: "signup/customer", element: <SignUpCustomer /> },
       { path: "signup/branch", element: <SignUpBranch /> },
     ],
   },

@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import DaumPostcode from "react-daum-postcode";
-import { Button, Heading, Input, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Center,
+  Heading,
+  Input,
+  useToast,
+} from "@chakra-ui/react";
 
 export function SignUpBranch() {
   const [email, setEmail] = useState("");
@@ -61,38 +68,47 @@ export function SignUpBranch() {
 
   return (
     <>
-      <Heading>지점 회원가입</Heading>
-      이메일
-      <br />
-      <Input type="email" onChange={(e) => setEmail(e.target.value)} />
-      비밀번호
-      <br />
-      <Input type="password" onChange={(e) => setPassword(e.target.value)} />
-      닉네임
-      <br />
-      <Input onChange={(e) => setBranchName(e.target.value)} />
-      <br />
-      주소
-      <Button
-        type="button"
-        onClick={() => setIsPostcodeOpen(true)}
-        borderRadius={0}
-      >
-        주소 검색
-      </Button>
-      {isPostcodeOpen && (
-        <DaumPostcode
-          onComplete={handleComplete}
-          autoClose={false}
-          style={{ width: "100%", height: "400px" }}
-          scriptUrl="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
-        />
-      )}
-      <br />
-      <Input value={address + subAddress} readOnly />
-      <Button onClick={handleSignup} colorScheme={"blue"} mt={5}>
-        지점 회원가입
-      </Button>
+      <Center>
+        <Box w={500}>
+          <Box mb={10}>
+            <Heading>지점 회원가입</Heading>
+          </Box>
+          이메일
+          <br />
+          <Input type="email" onChange={(e) => setEmail(e.target.value)} />
+          비밀번호
+          <br />
+          <Input
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          지점 이름
+          <br />
+          <Input onChange={(e) => setBranchName(e.target.value)} />
+          <br />
+          주소
+          <Button
+            type="button"
+            onClick={() => setIsPostcodeOpen(true)}
+            borderRadius={0}
+          >
+            주소 검색
+          </Button>
+          {isPostcodeOpen && (
+            <DaumPostcode
+              onComplete={handleComplete}
+              autoClose={false}
+              style={{ width: "100%", height: "400px" }}
+              scriptUrl="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
+            />
+          )}
+          <br />
+          <Input value={address + subAddress} readOnly />
+          <Button onClick={handleSignup} colorScheme={"blue"} mt={5}>
+            지점 회원가입
+          </Button>
+        </Box>
+      </Center>
     </>
   );
 }
