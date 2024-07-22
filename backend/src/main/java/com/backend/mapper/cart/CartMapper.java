@@ -2,10 +2,7 @@ package com.backend.mapper.cart;
 
 import com.backend.domain.cart.Cart;
 import com.backend.domain.cart.CartProduct;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -42,4 +39,24 @@ public interface CartMapper {
                 WHERE cp.cart_id = #{cartId}
             """)
     List<CartProduct> selectCartProductListByCartId(Integer cartId);
+
+    @Select("""
+                SELECT id
+                FROM cart
+                WHERE customer_id = #{customerId}
+            """)
+    Integer selectCartIdByCustomerId(Integer customerId);
+
+    @Delete("""
+                DELETE FROM cart
+                WHERE customer_id = #{customerId}
+            """)
+    int deleteCartByCustomerId(Integer customerId);
+
+
+    @Delete("""
+                DELETE FROM cart_product
+                WHERE cart_id = #{cartId}
+            """)
+    int deleteCartProductByCustomerId(Integer cartId);
 }
