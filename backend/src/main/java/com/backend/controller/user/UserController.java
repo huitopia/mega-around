@@ -4,11 +4,9 @@ import com.backend.domain.user.Branch;
 import com.backend.domain.user.Customer;
 import com.backend.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
@@ -32,5 +30,14 @@ public class UserController {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/user/customer")
+    public ResponseEntity<Object> getCustomer(@RequestParam String email) {
+        Customer customer = service.getEmail(email);
+        if (customer == null) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatusCode.valueOf(409)).build();
     }
 }

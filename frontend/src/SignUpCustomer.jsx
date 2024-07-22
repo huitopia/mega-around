@@ -45,6 +45,36 @@ export function SignUpCustomer() {
       );
   }
 
+  function handleCustomerCheckEmail() {
+    axios
+      .get(`/api/user/customer?email=${email}`, email)
+      .then(() =>
+        toast({
+          description: "회원가입 가능한 이메일입니다.",
+          status: "info",
+          position: "top",
+          duration: "2000",
+        }),
+      )
+      .catch((err) => {
+        if (err.response.status === 409) {
+          toast({
+            description: "이미 존재하는 이메일입니다.",
+            status: "info",
+            position: "top",
+            duration: "2000",
+          });
+        } else {
+          toast({
+            description: "회원가입 가능한 이메일입니다.",
+            status: "info",
+            position: "top",
+            duration: "2000",
+          });
+        }
+      });
+  }
+
   return (
     <>
       <Center>
@@ -75,8 +105,9 @@ export function SignUpCustomer() {
                   />
                   <InputRightElement w={"75px"} mr={1}>
                     <Button
+                      isDisabled={email.trim().length === 0}
                       // isDisabled={!isValidEmail || email.trim().length == 0}
-                      // onClick={handleCheckEmail}
+                      onClick={handleCustomerCheckEmail}
                       size={"sm"}
                     >
                       중복확인

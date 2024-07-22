@@ -38,4 +38,8 @@ public class UserService {
         branch.setPassword(passwordEncoder.encode(branch.getPassword()));
         userMapper.insertBranch(branch);
     }
+
+    public Customer getEmail(String email) {
+        return userMapper.getEmail(email);
+    }
 }
