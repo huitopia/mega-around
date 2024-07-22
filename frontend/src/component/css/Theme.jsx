@@ -2,25 +2,34 @@ import { extendTheme } from "@chakra-ui/react";
 
 const colors = {
   yellow: "#ffde00", // Replace with your desired yellow color
-  orange : "#401F02"
+  orange: "#401F02",
+  red: "#e8e4e0",
 };
 
 const components = {
   Button: {
     variants: {
       solid: (props) => {
-        if (props.colorScheme === 'orange') {
+        if (props.colorScheme === "orange") {
           return {
-            bg: 'orange', // 원하는 새로운 색상
-            color: 'white',
+            bg: "orange", // 원하는 새로운 색상
+            color: "white",
             _hover: {
-              bg: 'orange',
+              bg: "orange",
+            },
+          };
+        } else if (props.colorScheme === "red") {
+          return {
+            bg: "red", // 원하는 새로운 색상
+            color: "orange",
+            _hover: {
+              bg: "red",
             },
           };
         }
-      }
-    }
-  }
-}
+      },
+    },
+  },
+};
 
 export const theme = extendTheme({ colors, components });
