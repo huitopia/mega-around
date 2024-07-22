@@ -26,22 +26,22 @@ export const ProductUpdate = () => {
   const params = useParams();
   const productId = params.productId;
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState({
-    id: 0,
-    title: "",
-    content: "",
-    filePath: "",
-    price: 0,
-    options: [],
-  });
+  // const [data, setData] = useState({
+  //   id: 0,
+  //   title: "",
+  //   content: "",
+  //   filePath: "",
+  //   price: 0,
+  //   options: [],
+  // });
   const [option, setOption] = useState([]);
   const [mainCategory, setMainCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [filePath, setFilePath] = useState("");
   const [price, setPrice] = useState(0);
-  // const [options, setOptions] = useState([]);
+  const [imgSrc, setImgSrc] = useState("");
+  const [files, setFiles] = useState([]);
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -53,13 +53,16 @@ export const ProductUpdate = () => {
         if (response.data != null) {
           setTitle(response.data.title);
           setContent(response.data.content);
-          setFilePath(response.data.file_path);
-          setOption(response.data.options);
+          setImgSrc(
+            "https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/" +
+              response.data.file_path,
+          );
           setPrice(response.data.price);
-          category({
-            mainCategory: response.data.main_category,
-            subCategory: response.data.sub_category,
+          response.data.options.map((option) => {
+            setOption((prevState) => [...prevState, option.id]);
           });
+          setMainCategory(response.data.main_category);
+          setSubCategory(response.data.sub_category);
         }
       })
       .catch((error) => {
@@ -85,10 +88,78 @@ export const ProductUpdate = () => {
     setOption(options);
   };
 
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value);
+  };
+
+  const handleContentChange = (event) => {
+    setContent(event.target.value);
+  };
+
+  const handlePriceChange = (event) => {
+    setPrice(event.target.value);
+  };
+
+  const onUpload = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      setImgSrc(reader.result || null); // 파일의 컨텐츠
+    };
+    setFiles(event.target.files);
+  };
+
+  const handleUpdateClick = () => {
+    console.log(
+      title,
+      content,
+      price,
+      mainCategory,
+      subCategory,
+      option,
+      files,
+    );
+    setLoading(true);
+    axios
+      .putForm(`/api/products/${productId}`, {
+        title,
+        content,
+        mainCategory,
+        subCategory,
+        option,
+        price,
+        files,
+      })
+      .then(() => {
+        toast({
+          title: "상품 수정 성공",
+          status: "success",
+          position: "top",
+          duration: 1500,
+          isClosable: true,
+        });
+        navigate("/products/list");
+      })
+      .catch((error) => {
+        toast({
+          title: "상품 수정 실패",
+          status: "error",
+          position: "top",
+          duration: 1500,
+          isClosable: true,
+        });
+        console.error("Error:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   return (
     <Box maxWidth="1000px" mx={"auto"}>
       <Box>
-        <Heading>Upload</Heading>
+        <Heading>Update</Heading>
       </Box>
       <Divider border={"1px solid black"} my={4} />
       <Box maxWidth="700px" mx={"auto"}>
@@ -100,13 +171,13 @@ export const ProductUpdate = () => {
               height={"300px"}
               border={"1px solid red"}
               objectFit="cover"
-              src={`https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/${filePath}`}
+              src={imgSrc}
             ></Image>
             <Input
               multiple
               type={"file"}
               accept="image/*"
-              // onChange={(event) => onUpload(event)}
+              onChange={(event) => onUpload(event)}
             />
             <FormHelperText>
               총 용량은 10MB, 한 파일은 1MB를 초과할 수 없습니다.
@@ -120,7 +191,7 @@ export const ProductUpdate = () => {
               type="text"
               placeholder={"30자 이내 작성"}
               value={title}
-              // onChange={handleTitleChange}
+              onChange={handleTitleChange}
             />
           </FormControl>
         </Box>
@@ -138,20 +209,18 @@ export const ProductUpdate = () => {
               type="text"
               placeholder={"100자 이내 작성"}
               value={content}
-              // onChange={handleContentChange}
+              onChange={handleContentChange}
             />
           </FormControl>
         </Box>
         <Box>
-          <OptionComp options={options} />
+          <OptionComp options={options} option={option} />
         </Box>
         <Box maxWidth="60%">
           <FormControl>
             <FormLabel>가격</FormLabel>
             <NumberInput value={price} min={0} max={100000}>
-              <NumberInputField
-              // onChange={handlePriceChange}
-              />
+              <NumberInputField onChange={handlePriceChange} />
             </NumberInput>
             <FormHelperText>가격은 0원 이상부터 가능합니다.</FormHelperText>
           </FormControl>
@@ -164,9 +233,9 @@ export const ProductUpdate = () => {
                   isLoading={loading}
                   colorScheme={"blue"}
                   width={"200px"}
-                  // onClick={handleSaveClick}
+                  onClick={handleUpdateClick}
                 >
-                  Save
+                  Update
                 </Button>
                 <Button
                   colorScheme={"gray"}
