@@ -21,7 +21,8 @@ public class OrderItem {
     private String isTakeOut;
     // 쿠폰 사용 횟수
     private Integer couponCount;
-    private List<String> option;
+    // 포장 시 선택하는 옵션
+    private List<Boolean> option;
     // db 저장시 JSON 객체로 변환
     private String options;
     private LocalDateTime createdAt;
