@@ -1,9 +1,9 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Home } from "./Home.jsx";
-import { SignUpCustomer } from "./SignUpCustomer.jsx";
-import { SignUpBranch } from "./SignupBranch.jsx";
-import { SignUp } from "./SignUp.jsx";
+import { SignUpCustomer } from "./user/SignUpCustomer.jsx";
+import { SignUpBranch } from "./user/SignupBranch.jsx";
+import { SignUp } from "./user/SignUp.jsx";
 
 function MainProduct() {
   return null;
