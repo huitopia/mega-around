@@ -2,14 +2,18 @@ import { FormControl, FormLabel, HStack, Select } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 export const CategoryComp = (props) => {
-  const [mainCategory, setMainCategory] = useState("");
+  const [mainCategory, setMainCategory] = useState(props.checkMain || "");
+  const [subCategory, setSubCategory] = useState(props.checkSub || "");
   const mainCategoryOption = ["커피", "디카페인", "음료", "티", "푸드", "상품"];
   const [subCategoryOption, setSubCategoryOption] = useState([]);
-  const checkMain = props.checkMain;
-  const checkSub = props.checkSub;
 
   useEffect(() => {
-    switch (mainCategory || checkMain) {
+    setMainCategory(props.checkMain || "");
+    setSubCategory(props.checkSub || "");
+  }, [props.checkMain, props.checkSub]);
+
+  useEffect(() => {
+    switch (mainCategory) {
       case "커피":
       case "디카페인":
         setSubCategoryOption(["에스프레소", "라떼", "콜드브루"]);
@@ -35,13 +39,14 @@ export const CategoryComp = (props) => {
         setSubCategoryOption([]);
         break;
     }
-  }, [mainCategory, checkMain]);
+  }, [mainCategory]);
 
   const handleMainCategory = (event) => {
     setMainCategory(event.target.value);
   };
 
   const handleSubCategory = (event) => {
+    setSubCategory(event.target.value);
     props.category({
       mainCategory,
       subCategory: event.target.value,
@@ -55,13 +60,10 @@ export const CategoryComp = (props) => {
         <Select
           onChange={handleMainCategory}
           placeholder={"카테고리를 선택해주세요"}
+          value={mainCategory} // 선택된 메인 카테고리
         >
           {mainCategoryOption.map((category) => (
-            <option
-              key={category}
-              value={category}
-              selected={category === checkMain}
-            >
+            <option key={category} value={category}>
               {category}
             </option>
           ))}
@@ -69,13 +71,11 @@ export const CategoryComp = (props) => {
         <Select
           onChange={handleSubCategory}
           placeholder={"카테고리를 선택해주세요"}
+          value={subCategory}
+          disabled={subCategoryOption.length === 0}
         >
           {subCategoryOption.map((category) => (
-            <option
-              key={category}
-              value={category}
-              selected={category === checkSub}
-            >
+            <option key={category} value={category}>
               {category}
             </option>
           ))}
