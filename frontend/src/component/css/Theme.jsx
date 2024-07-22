@@ -5,4 +5,22 @@ const colors = {
   orange : "#401F02"
 };
 
-export const theme = extendTheme({ colors });
+const components = {
+  Button: {
+    variants: {
+      solid: (props) => {
+        if (props.colorScheme === 'orange') {
+          return {
+            bg: 'orange', // 원하는 새로운 색상
+            color: 'white',
+            _hover: {
+              bg: 'orange',
+            },
+          };
+        }
+      }
+    }
+  }
+}
+
+export const theme = extendTheme({ colors, components });
