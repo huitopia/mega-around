@@ -1,7 +1,10 @@
 package com.backend.service.product;
 
+import com.backend.domain.product.Option;
+import com.backend.domain.product.OptionItem;
 import com.backend.domain.product.Product;
 import com.backend.domain.product.ProductFile;
+import com.backend.mapper.product.OptionMapper;
 import com.backend.mapper.product.ProductMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +17,17 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 @Service
 @Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
 public class ProductService {
     final private ProductMapper mapper;
+    final private OptionMapper optionMapper;
     private final ObjectMapper objectMapper;
     final S3Client s3Client;
 
@@ -55,5 +64,29 @@ public class ProductService {
                             files[0].getInputStream(), files[0].getSize()
                     ));
         }
+    }
+
+
+    public List<Map<String, Object>> selectProductListByCategory(String mainCategory, String subCategory) {
+        List<Map<String, Object>> result = mapper.selectProductListByCategory(mainCategory, subCategory);
+        return result;
+    }
+
+    public Map<String, Object> selectProductDetailById(Integer id) throws IOException {
+        Map<String, Object> product = mapper.selectProductDetailById(id);
+        String optionId = (String) product.get("options");
+        // JSON 문자열 배열로 변환
+        List<Integer> optionIdList = (objectMapper.readValue(optionId, List.class));
+
+        List<Option> optionList = new ArrayList<>();
+        for (Integer i : optionIdList) {
+            Option option = optionMapper.selectOptionById(i);
+            List<OptionItem> optionItem = optionMapper.selectOptionItemById(option.getId());
+            option.setOption_item(optionItem);
+            optionList.add(option);
+        }
+
+        product.put("options", optionList);
+        return product;
     }
 }

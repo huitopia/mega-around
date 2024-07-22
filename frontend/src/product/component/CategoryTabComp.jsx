@@ -7,28 +7,26 @@ export function CategoryTabComp(props) {
   let [mainCategory, setMainCategory] = useState("커피");
   let [selectSubCategory, setSelectSubCategory] = useState("에스프레소");
 
-  const handleMainCategory = (category) => {
-    setMainCategory(category);
-  };
-
-  const handleSubCategory = (event) => {
-    setSelectSubCategory(event.target.value);
-  };
+  const [processing, setProcessing] = useState(false);
 
   useEffect(() => {
     props.category({
       mainCategory,
       subCategory: selectSubCategory,
     });
-  }, [selectSubCategory]);
+    setProcessing(false);
+  }, [selectSubCategory, processing]);
 
   useEffect(() => {
     switch (mainCategory) {
       case "커피":
       case "디카페인":
+        setSelectSubCategory("에스프레소");
         setSubCategoryOption(["에스프레소", "라떼", "콜드브루"]);
+        setProcessing(true);
         break;
       case "음료":
+        setSelectSubCategory("에이드");
         setSubCategoryOption([
           "에이드",
           "프라페",
@@ -37,24 +35,34 @@ export function CategoryTabComp(props) {
         ]);
         break;
       case "티":
+        setSelectSubCategory("티플레저");
         setSubCategoryOption(["티플레저", "클래식"]);
         break;
       case "푸드":
+        setSelectSubCategory("디저트");
         setSubCategoryOption(["디저트", "베이커리", "케이크"]);
         break;
       case "상품":
+        setSelectSubCategory("병음료");
         setSubCategoryOption(["병음료", "홈카페", "굿즈"]);
         break;
       default:
         setSubCategoryOption([]);
         break;
     }
-    setSelectSubCategory("");
   }, [mainCategory]);
+
+  const handleMainCategory = (category) => {
+    setMainCategory(category);
+  };
+
+  const handleSubCategory = (event) => {
+    setSelectSubCategory(event.target.value);
+  };
 
   return (
     <Tabs isFitted variant="enclosed">
-      <TabList mb="1em">
+      <TabList mb="3em">
         {mainCategoryOption.map((category) => (
           <Tab key={category} onClick={() => handleMainCategory(category)}>
             {category}

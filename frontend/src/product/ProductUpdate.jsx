@@ -8,7 +8,7 @@ import {
   FormHelperText,
   FormLabel,
   Heading,
-  Img,
+  Image,
   Input,
   NumberInput,
   NumberInputField,
@@ -17,71 +17,67 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { CategoryComp } from "./component/CategoryComp.jsx";
-import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { OptionComp } from "./component/OptionComp.jsx";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
-export function ProductUpload() {
-  // const [product, setProduct] = useState({
+export const ProductUpdate = () => {
+  const params = useParams();
+  const productId = params.productId;
+  const [loading, setLoading] = useState(false);
+  // const [data, setData] = useState({
+  //   id: 0,
   //   title: "",
   //   content: "",
-  //   mainCategory: "",
-  //   subCategory: "",
-  //   option: [],
+  //   filePath: "",
   //   price: 0,
+  //   options: [],
   // });
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [option, setOption] = useState([]);
   const [mainCategory, setMainCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
-  const [option, setOption] = useState([]);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
   const [price, setPrice] = useState(0);
+  const [imgSrc, setImgSrc] = useState("");
   const [files, setFiles] = useState([]);
-  const [imageSrc, setImageSrc] = useState(null);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const toast = useToast();
 
-  // TODO : admin 권한만 접근 가능하게 수정
-  //  빈 값 전송 금지
-  //  가격 0원 이하 전송 금지
-  const handleSaveClick = () => {
-    setLoading(true);
+  useEffect(() => {
     axios
-      .postForm("/api/products/add", {
-        title,
-        content,
-        mainCategory,
-        subCategory,
-        option,
-        price,
-        files,
-      })
-      .then(() => {
-        toast({
-          title: "상품 등록 성공",
-          status: "success",
-          position: "top",
-          duration: 1500,
-          isClosable: true,
-        });
-        navigate("/products/list");
+      .get(`/api/products/${productId}`)
+      .then((response) => {
+        console.log("Response: ", response.data);
+        if (response.data != null) {
+          setTitle(response.data.title);
+          setContent(response.data.content);
+          setImgSrc(
+            "https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/" +
+              response.data.file_path,
+          );
+          setPrice(response.data.price);
+          response.data.options.map((option) => {
+            setOption((prevState) => [...prevState, option.id]);
+          });
+          setMainCategory(response.data.main_category);
+          setSubCategory(response.data.sub_category);
+        }
       })
       .catch((error) => {
         toast({
-          title: "상품 등록 실패",
+          title: "상품 상세 조회 실패",
+          description: "Unable to fetch data.",
           status: "error",
-          position: "top",
           duration: 1500,
+          position: "top",
           isClosable: true,
         });
         console.error("Error:", error);
       })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
+      .finally();
+  }, []);
 
   const category = (category) => {
     setMainCategory(category.mainCategory);
@@ -109,15 +105,61 @@ export function ProductUpload() {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      setImageSrc(reader.result || null); // 파일의 컨텐츠
+      setImgSrc(reader.result || null); // 파일의 컨텐츠
     };
     setFiles(event.target.files);
+  };
+
+  const handleUpdateClick = () => {
+    console.log(
+      title,
+      content,
+      price,
+      mainCategory,
+      subCategory,
+      option,
+      files,
+    );
+    setLoading(true);
+    axios
+      .putForm(`/api/products/${productId}`, {
+        title,
+        content,
+        mainCategory,
+        subCategory,
+        option,
+        price,
+        files,
+      })
+      .then(() => {
+        toast({
+          title: "상품 수정 성공",
+          status: "success",
+          position: "top",
+          duration: 1500,
+          isClosable: true,
+        });
+        navigate("/products/list");
+      })
+      .catch((error) => {
+        toast({
+          title: "상품 수정 실패",
+          status: "error",
+          position: "top",
+          duration: 1500,
+          isClosable: true,
+        });
+        console.error("Error:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
     <Box maxWidth="1000px" mx={"auto"}>
       <Box>
-        <Heading>Upload</Heading>
+        <Heading>Update</Heading>
       </Box>
       <Divider border={"1px solid black"} my={4} />
       <Box maxWidth="700px" mx={"auto"}>
@@ -125,7 +167,12 @@ export function ProductUpload() {
           <FormControl>
             {/* TODO : 썸네일 크기 수정 */}
             <FormLabel>썸네일</FormLabel>
-            <Img src={imageSrc}></Img>
+            <Image
+              height={"300px"}
+              border={"1px solid red"}
+              objectFit="cover"
+              src={imgSrc}
+            ></Image>
             <Input
               multiple
               type={"file"}
@@ -143,12 +190,17 @@ export function ProductUpload() {
             <Input
               type="text"
               placeholder={"30자 이내 작성"}
+              value={title}
               onChange={handleTitleChange}
             />
           </FormControl>
         </Box>
         <Box>
-          <CategoryComp category={category} />
+          <CategoryComp
+            category={category}
+            checkMain={mainCategory}
+            checkSub={subCategory}
+          />
         </Box>
         <Box>
           <FormControl>
@@ -156,17 +208,18 @@ export function ProductUpload() {
             <Textarea
               type="text"
               placeholder={"100자 이내 작성"}
+              value={content}
               onChange={handleContentChange}
             />
           </FormControl>
         </Box>
         <Box>
-          <OptionComp options={options} />
+          <OptionComp options={options} option={option} />
         </Box>
         <Box maxWidth="60%">
           <FormControl>
             <FormLabel>가격</FormLabel>
-            <NumberInput defaultValue={0} min={0} max={100000}>
+            <NumberInput value={price} min={0} max={100000}>
               <NumberInputField onChange={handlePriceChange} />
             </NumberInput>
             <FormHelperText>가격은 0원 이상부터 가능합니다.</FormHelperText>
@@ -180,9 +233,9 @@ export function ProductUpload() {
                   isLoading={loading}
                   colorScheme={"blue"}
                   width={"200px"}
-                  onClick={handleSaveClick}
+                  onClick={handleUpdateClick}
                 >
-                  Save
+                  Update
                 </Button>
                 <Button
                   colorScheme={"gray"}
@@ -198,4 +251,4 @@ export function ProductUpload() {
       </Box>
     </Box>
   );
-}
+};
