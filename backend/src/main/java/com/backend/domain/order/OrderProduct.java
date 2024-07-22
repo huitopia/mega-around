@@ -10,6 +10,7 @@ public class OrderProduct {
     private Integer id;
     private Integer orderItemId;
     private Integer productId;
+    private String productName;
     private Integer count;
     // 옵션 포함한 총 가격
     private Integer totalPrice;
