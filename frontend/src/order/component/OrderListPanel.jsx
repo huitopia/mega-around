@@ -1,9 +1,11 @@
 import { Box, Divider, Flex, Spinner } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export function OrderListPanel(period) {
   const [orderList, setOrderList] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const periodString = period.period;
@@ -32,7 +34,11 @@ export function OrderListPanel(period) {
     <Box>
       <Box>
         {orderList.map((order, index) => (
-          <Box key={index}>
+          <Box
+            key={index}
+            onClick={() => navigate(`/order/${order.id}`)}
+            cursor={"pointer"}
+          >
             <Box>{getStateMessage(order.stateId)}</Box>
             <Box>{order.branchName}</Box>
             <Flex gap={3}>
