@@ -25,11 +25,22 @@ public interface OrderMapper {
     int insertOrderProduct(OrderProduct orderProduct);
 
     @Select("""
+                <script>
                 SELECT oi.id, oi.customer_id, oi.branch_id, oi.total_price, oi.state_id, oi.created_at, oi.is_take_out, b.branch_name
                 FROM order_item oi JOIN branch b ON oi.branch_id = b.id
                 WHERE oi.customer_id = #{customerId}
+                <if test="period == 'week'">
+                    AND oi.created_at >= NOW() - INTERVAL 1 WEEK;
+                </if>
+                <if test="period == 'month'">
+                    AND oi.created_at >= NOW() - INTERVAL 1 MONTH;
+                </if>
+                <if test="period == '3-month'">
+                    AND oi.created_at >= NOW() - INTERVAL 3 MONTH;
+                </if>
+                </script>
             """)
-    List<OrderItem> selectOrderItemList(Integer customerId);
+    List<OrderItem> selectOrderItemList(Integer customerId, String period);
 
     @Select("""
                 SELECT oi.id, oi.customer_id, oi.branch_id, oi.total_price, oi.state_id, oi.created_at, oi.is_take_out, b.branch_name, p.provider, p.coupon_count

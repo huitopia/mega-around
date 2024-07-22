@@ -28,8 +28,8 @@ public class OrderService {
         }
     }
 
-    public List<OrderItem> getOrderItemList(Integer customerId) throws JsonProcessingException {
-        List<OrderItem> orderItemList = orderMapper.selectOrderItemList(customerId);
+    public List<OrderItem> getOrderItemList(Integer customerId, String period) throws JsonProcessingException {
+        List<OrderItem> orderItemList = orderMapper.selectOrderItemList(customerId, period);
         for (OrderItem orderItem : orderItemList) {
             List<OrderProduct> orderProductList = orderMapper.selectOrderProductByOrderId(orderItem.getId());
             for (OrderProduct orderProduct : orderProductList) {
