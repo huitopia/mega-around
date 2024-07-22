@@ -10,7 +10,7 @@ import {
   Stepper, StepSeparator,
   StepStatus,
   Image,
-  Text, useSteps
+  Text, useSteps, Stack, Flex, Spacer
 } from "@chakra-ui/react";
 import {CategoryTabComp} from "../product/component/CategoryTabComp.jsx";
 import {useEffect, useState} from "react";
@@ -25,8 +25,7 @@ export function OrderDetail() {
 
   useEffect(() => {
     axios.get(`/api/orders/${id}`).then((res) => {setOrder(res.data)
-    setProgress(res.data.stateId)});
-    console.log(order);
+    setProgress(res.data.stateId); console.log(res.data)});
   }, []);
 
   const steps = [
@@ -90,8 +89,21 @@ export function OrderDetail() {
       />
       </Box>
       <HStack>
-        <Image src={order.orderProduct.filePath}/>
+        <Image w="50px" h={"50px"} src={"https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/" + order.orderProduct[0].filePath}/>
+        <Box>
+          <Box>{order.orderProduct[0].productName}</Box>
+          <Box>{order.orderProduct[0].count}개</Box>
+        </Box>
+        <Box>
+          {order.totalPrice}
+        </Box>
       </HStack>
+      <Box>
+        <Flex><Box>결제수단</Box><Spacer/><Box></Box></Flex>
+        <Flex><Box>상품금액</Box><Spacer/><Box>{order.totalPrice}원</Box></Flex>
+        <Flex><Box>할인금액</Box><Spacer/><Box>-0원</Box></Flex>
+        <Flex><Box>결제금액</Box><Spacer/><Box>{order.totalPrice}원</Box></Flex>
+      </Box>
     </Box>
   </Box>;
 }
