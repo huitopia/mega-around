@@ -11,6 +11,7 @@ import { OrderList } from "./order/OrderList.jsx";
 import { OrderDetail } from "./order/OrderDetail.jsx";
 import { ProductUpdate } from "./product/ProductUpdate.jsx";
 import { Cart } from "./cart/Cart.jsx";
+import { OrderProvider } from "./order/component/OrderProvider.jsx";
 
 const router = createBrowserRouter([
   {
@@ -37,9 +38,11 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <ChakraProvider theme={theme}>
-        <RouterProvider router={router} />
-      </ChakraProvider>
+      <OrderProvider>
+        <ChakraProvider theme={theme}>
+          <RouterProvider router={router} />
+        </ChakraProvider>
+      </OrderProvider>
     </>
   );
 }
