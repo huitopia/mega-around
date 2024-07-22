@@ -13,11 +13,14 @@ public class OrderItem {
     private Integer customerId;
     private Integer branchId;
     private String branchName;
+    private String provider;
     private Integer totalPrice;
     private Integer stateId;
     private String request;
     // 1 : 포장 , 2 : 매장
     private String isTakeOut;
+    // 쿠폰 사용 횟수
+    private Integer couponCount;
     private List<String> option;
     // db 저장시 JSON 객체로 변환
     private String options;
