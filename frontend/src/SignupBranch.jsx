@@ -69,7 +69,7 @@ export function SignUpBranch() {
   return (
     <>
       <Center>
-        <Box w={500}>
+        <Box w={550}>
           <Box mb={10}>
             <Heading>지점 회원가입</Heading>
           </Box>
