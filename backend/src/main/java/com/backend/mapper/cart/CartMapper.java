@@ -65,4 +65,18 @@ public interface CartMapper {
                 WHERE cart_id = #{cartId} AND product_id = #{productId}
             """)
     int deleteCartProductByProductId(Integer cartId, Integer productId);
+
+    @Select("""
+                SELECT *
+                FROM cart_product
+                WHERE cart_id = #{cartId} AND product_id = #{productId}
+            """)
+    CartProduct selectCartByProductId(Integer cartId, Integer productId);
+
+    @Update("""
+                UPDATE cart_product 
+                SET count = #{count}, total_price = #{totalPrice}, options = #{options}
+                WHERE product_id = #{productId} AND cart_id = #{cartId}
+            """)
+    int updateCartProduct(CartProduct cartProduct);
 }

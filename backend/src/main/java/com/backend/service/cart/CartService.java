@@ -33,7 +33,15 @@ public class CartService {
         for (CartProduct cartProduct : cartProductList) {
             cartProduct.setCartId(cart.getId());
             cartProduct.setOptions(objectMapper.writeValueAsString(cartProduct.getOption()));
-            cartMapper.insertCartProduct(cartProduct);
+            CartProduct existProduct = cartMapper.selectCartByProductId(cartProduct.getCartId(), cartProduct.getProductId());
+            System.out.println(existProduct == null);
+            if (existProduct == null) {
+                System.out.println("null일때 실행됨");
+                cartMapper.insertCartProduct(cartProduct);
+            } else {
+                System.out.println("null일때 실행안됨");
+                cartMapper.updateCartProduct(cartProduct);
+            }
         }
     }
 
