@@ -19,13 +19,12 @@ public interface UserMapper {
     int insertBranch(Branch branch);
 
     @Select("""
-            SELECT email FROM customer WHERE email=#{email}
+            SELECT * FROM customer WHERE email=#{email}
             """)
-    Customer getCustomerEmail(String email);
+    Customer selectCustomerByEmail(String email);
 
     @Select("""
-            SELECT email FROM branch WHERE email=#{email}
+            SELECT * FROM branch WHERE email=#{email}
             """)
-    Customer getBranchEmail(String email);
-
+    Customer selectBranchByEmail(String email);
 }

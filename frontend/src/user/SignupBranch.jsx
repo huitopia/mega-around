@@ -15,6 +15,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { CheckIcon, CloseIcon, Search2Icon } from "@chakra-ui/icons";
+import { useNavigate } from "react-router-dom";
 
 export function SignUpBranch() {
   const [email, setEmail] = useState("");
@@ -29,6 +30,7 @@ export function SignUpBranch() {
   const [subAddress, setSubAddress] = useState("");
   const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
   const toast = useToast();
+  const navigate = useNavigate();
 
   const handleComplete = (data) => {
     let fullAddress = data.address;
@@ -59,13 +61,15 @@ export function SignUpBranch() {
         address,
         subAddress,
       })
-      .then(() =>
-        toast({
-          description: "지점 가입이 성공하였습니다.",
-          status: "success",
-          position: "top",
-          duration: "2000",
-        }),
+      .then(
+        () =>
+          toast({
+            description: "지점 가입이 성공하였습니다.",
+            status: "success",
+            position: "top",
+            duration: "2000",
+          }),
+        navigate("/login"),
       )
       .catch(() =>
         toast({

@@ -4,16 +4,25 @@ import com.backend.domain.user.Branch;
 import com.backend.domain.user.Customer;
 import com.backend.mapper.user.UserMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
 public class UserService {
     private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder;
+    //    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final JwtEncoder jwtEncoder;
 
     public boolean validate(String email, String password) {
         if (email == null || email.isBlank()) {
@@ -39,13 +48,34 @@ public class UserService {
         userMapper.insertBranch(branch);
     }
 
-    public Customer getCustomerEmail(String email) {
-        return userMapper.getCustomerEmail(email);
+    public Customer getCustomerByEmail(String email) {
+        return userMapper.selectCustomerByEmail(email);
     }
 
-    public Customer getBranchEmail(String email) {
-        return userMapper.getBranchEmail(email);
+    public Customer getBranchByEmail(String email) {
+        return userMapper.selectBranchByEmail(email);
     }
 
 
+    public Map<String, Object> getToken(Customer customer) {
+        Map<String, Object> result = new HashMap<>();
+
+        Customer db = userMapper.selectCustomerByEmail(customer.getEmail());
+        if (db != null) {
+            if (passwordEncoder.matches(customer.getPassword(), db.getPassword())) {
+                // 토큰 생성
+                JwtClaimsSet claims = JwtClaimsSet.builder()
+                        .issuer("self")
+                        .issuedAt(Instant.now())
+                        .expiresAt(Instant.now().plusSeconds(60 * 60 * 24 * 7))
+                        .subject(customer.getEmail()) // 사용자를 나타내는 정보
+                        .claim("scope", "") // 권한
+                        .claim("nickName", db.getNickName())
+                        .build();
+                String token = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+                result.put("token", token);
+            }
+        }
+        return result;
+    }
 }

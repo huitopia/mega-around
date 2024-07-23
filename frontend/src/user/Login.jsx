@@ -1,5 +1,4 @@
 import {
-  AbsoluteCenter,
   Box,
   Button,
   Center,
@@ -23,25 +22,24 @@ export function Login() {
 
   function handleCustomerLogin() {
     axios
-      .post("/api/login/customer", email, password)
-      .then(
-        () =>
-          toast({
-            description: "로그인 되었습니다",
-            status: "success",
-            position: "top",
-            duration: "2000",
-          }),
-        navigate("/"),
-      )
-      .catch(() =>
+      .post("/api/login/customer", { email, password })
+      .then(() => {
+        toast({
+          description: "로그인 되었습니다",
+          status: "success",
+          position: "top",
+          duration: 2000,
+        });
+        navigate("/");
+      })
+      .catch(() => {
         toast({
           description: "로그인에 실패하였습니다.",
           status: "error",
           position: "top",
-          duration: "2000",
-        }),
-      );
+          duration: 2000,
+        });
+      });
   }
 
   return (
@@ -93,16 +91,17 @@ export function Login() {
               이메일로 로그인
             </Button>
           </Box>
-          <Box position="relative" padding="10" mt={5}>
-            <Divider />
-            <AbsoluteCenter bg="white" px="4">
-              또는
-            </AbsoluteCenter>
-          </Box>
+          {/*<Box position="relative" padding="10" mt={5}>*/}
+          {/*  <Divider />*/}
+          {/*  <AbsoluteCenter bg="white" px="4">*/}
+          {/*    또는*/}
+          {/*  </AbsoluteCenter>*/}
+          {/*</Box>*/}
+          <Divider mt={10} />
 
           <Center>
             <Button
-              mt={2}
+              mt={10}
               borderColor={"#fdd000"}
               variant={"outline"}
               bg={"white"}
@@ -110,6 +109,7 @@ export function Login() {
               width={"200px"}
               fontSize={"14px"}
               borderRadius={"40"}
+              onClick={() => navigate("/login/branch")}
             >
               지점 로그인 페이지
             </Button>

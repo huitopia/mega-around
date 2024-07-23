@@ -35,13 +35,15 @@ export function SignUpCustomer() {
     } else {
       axios
         .post("/api/user/customer", { email, password, nickName })
-        .then(() =>
-          toast({
-            description: "회원가입이 성공하였습니다.",
-            status: "success",
-            position: "top",
-            duration: "2000",
-          }),
+        .then(
+          () =>
+            toast({
+              description: "회원가입이 성공하였습니다.",
+              status: "success",
+              position: "top",
+              duration: "2000",
+            }),
+          navigate("/login"),
         )
         .catch(() =>
           toast({
