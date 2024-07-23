@@ -52,16 +52,25 @@ public class UserController {
 
     @GetMapping("/user/branch")
     public ResponseEntity<Object> getBranch(@RequestParam String email) {
-        Customer customer = service.getBranchByEmail(email);
-        if (customer == null) {
+        Branch branch = service.getBranchByEmail(email);
+        if (branch == null) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatusCode.valueOf(409)).build();
     }
 
     @PostMapping("/login/customer")
-    public ResponseEntity<Object> token(@RequestBody Customer customer) {
+    public ResponseEntity<Object> tokenCustomer(@RequestBody Customer customer) {
         Map<String, Object> map = service.getToken(customer);
+        if (map == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok(map);
+    }
+
+    @PostMapping("/login/branch")
+    public ResponseEntity<Object> tokenBranch(@RequestBody Branch branch) {
+        Map<String, Object> map = service.getTokenBranch(branch);
         if (map == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

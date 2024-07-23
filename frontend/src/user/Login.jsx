@@ -23,7 +23,8 @@ export function Login() {
   function handleCustomerLogin() {
     axios
       .post("/api/login/customer", { email, password })
-      .then(() => {
+      .then((res) => {
+        localStorage.setItem("token", res.data.token);
         toast({
           description: "로그인 되었습니다",
           status: "success",
@@ -33,6 +34,7 @@ export function Login() {
         navigate("/");
       })
       .catch(() => {
+        localStorage.removeItem("token");
         toast({
           description: "로그인에 실패하였습니다.",
           status: "error",

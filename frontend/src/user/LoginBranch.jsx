@@ -22,7 +22,8 @@ export function LoginBranch() {
   function handleBranchLogin() {
     axios
       .post("/api/login/branch", { email, password })
-      .then(() => {
+      .then((res) => {
+        localStorage.setItem("token", res.data.token);
         toast({
           description: "로그인 되었습니다",
           status: "success",
@@ -32,6 +33,7 @@ export function LoginBranch() {
         navigate("/");
       })
       .catch(() => {
+        localStorage.removeItem("token");
         toast({
           description: "로그인에 실패하였습니다.",
           status: "error",

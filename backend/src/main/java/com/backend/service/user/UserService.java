@@ -52,7 +52,7 @@ public class UserService {
         return userMapper.selectCustomerByEmail(email);
     }
 
-    public Customer getBranchByEmail(String email) {
+    public Branch getBranchByEmail(String email) {
         return userMapper.selectBranchByEmail(email);
     }
 
@@ -71,6 +71,28 @@ public class UserService {
                         .subject(customer.getEmail()) // 사용자를 나타내는 정보
                         .claim("scope", "") // 권한
                         .claim("nickName", db.getNickName())
+                        .build();
+                String token = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+                result.put("token", token);
+            }
+        }
+        return result;
+    }
+
+    public Map<String, Object> getTokenBranch(Branch branch) {
+        Map<String, Object> result = new HashMap<>();
+
+        Branch dbBranch = userMapper.selectBranchByEmail(branch.getEmail());
+        if (dbBranch != null) {
+            if (passwordEncoder.matches(branch.getPassword(), dbBranch.getPassword())) {
+                // 토큰 생성
+                JwtClaimsSet claims = JwtClaimsSet.builder()
+                        .issuer("self")
+                        .issuedAt(Instant.now())
+                        .expiresAt(Instant.now().plusSeconds(60 * 60 * 24 * 7))
+                        .subject(branch.getEmail()) // 사용자를 나타내는 정보
+                        .claim("scope", "") // 권한
+                        .claim("branchName", dbBranch.getBranchName())
                         .build();
                 String token = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
                 result.put("token", token);

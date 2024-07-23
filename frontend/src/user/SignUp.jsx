@@ -8,17 +8,21 @@ export function SignUp() {
       <Center>
         <Flex w={700} justifyContent={"space-between"} m={200}>
           <Button
-            w={300}
+            mx={{
+              base: 100,
+              lg: 50,
+            }}
+            w={250}
             colorScheme={"yellow"}
-            h={100}
+            h={20}
             onClick={() => navigate("/signup/customer")}
           >
             개인 회원가입
           </Button>
           <Button
-            w={300}
+            w={250}
             colorScheme={"orange"}
-            h={100}
+            h={20}
             onClick={() => navigate("/signup/branch")}
           >
             지점 회원가입

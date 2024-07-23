@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Spacer } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 export function Navbar() {
@@ -19,8 +19,16 @@ export function Navbar() {
       >
         회원가입
       </Box>
+      <Spacer />
       <Box onClick={() => navigate("/login")} cursor={"pointer"}>
         로그인
+      </Box>
+      <Box
+        ml={8}
+        onClick={() => localStorage.removeItem("token")}
+        cursor={"pointer"}
+      >
+        로그아웃
       </Box>
     </Flex>
   );
