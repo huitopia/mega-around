@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 
 export const LoginContext = createContext(null);
@@ -12,8 +12,14 @@ export function LoginProvider({ children }) {
   const [subAddress, setSubAddress] = useState("");
   const [expired, setExpired] = useState(0);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      login(token);
+    }
+  }, []);
+
   function isLoggedIn() {
-    // 토큰이 있고 유효하면 로그인
     return Date.now() / 1000 < expired;
   }
 
