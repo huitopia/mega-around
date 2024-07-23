@@ -49,6 +49,6 @@ public class CartService {
 
     public void removeCartProduct(Integer customerId, Integer productId) {
         Integer cartId = cartMapper.selectCartIdByCustomerId(customerId);
-        cartMapper.deleteCartProductByProductId(customerId, productId);
+        cartMapper.deleteCartProductByProductId(cartId, productId);
     }
 }
