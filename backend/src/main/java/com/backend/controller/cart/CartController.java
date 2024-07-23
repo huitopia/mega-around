@@ -19,9 +19,10 @@ public class CartController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("carts")
     @Description("장바구니 추가")
-    public ResponseEntity addCart(@RequestBody Cart cart) throws JsonProcessingException {
+    public ResponseEntity addCart(@RequestBody Cart cart, Authentication authentication) throws JsonProcessingException {
         System.out.println("cart.toString() = " + cart.toString());
-        cartService.addCart(cart);
+//        cartService.addCart(cart, Integer.valueOf(authentication.getName()));
+        cartService.addCart(cart, 1);
         return ResponseEntity.ok().build();
     }
 

@@ -21,8 +21,14 @@ public class CartService {
     private final ObjectMapper objectMapper;
     private final ProductMapper productMapper;
 
-    public void addCart(Cart cart) throws JsonProcessingException {
-        cartMapper.insertCart(cart);
+    public void addCart(Cart cart, Integer customerId) throws JsonProcessingException {
+        cart.setCustomerId(customerId);
+        Integer cartId = cartMapper.selectCartIdByCustomerId(customerId);
+        if (cartId == null) {
+            cartMapper.insertCart(cart);
+        } else {
+            cart.setId(cartId);
+        }
         List<CartProduct> cartProductList = cart.getCartProduct();
         for (CartProduct cartProduct : cartProductList) {
             cartProduct.setCartId(cart.getId());
