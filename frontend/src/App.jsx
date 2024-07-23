@@ -12,6 +12,7 @@ import { OrderDetail } from "./order/OrderDetail.jsx";
 import { ProductUpdate } from "./product/ProductUpdate.jsx";
 import { Cart } from "./cart/Cart.jsx";
 import { OrderProvider } from "./order/component/OrderProvider.jsx";
+import { BranchPage } from "./order/BranchPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,8 @@ const router = createBrowserRouter([
       { path: "/order/:id", element: <OrderDetail /> },
       // cart
       { path: "cart", element: <Cart /> },
+      // branch_order
+      { path: "branch/order", element: <BranchPage /> },
     ],
   },
 ]);
