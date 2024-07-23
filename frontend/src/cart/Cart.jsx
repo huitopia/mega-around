@@ -7,6 +7,7 @@ import {
   Image,
   Spacer,
   Spinner,
+  useToast,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -14,6 +15,7 @@ import axios from "axios";
 export function Cart() {
   const [cart, setCart] = useState(null);
   const [product, setProduct] = useState([]);
+  const toast = useToast();
 
   useEffect(() => {
     axios.get("/api/carts").then((res) => {
@@ -23,25 +25,27 @@ export function Cart() {
     });
   }, []);
 
-  const decreaseCount = (id) => {
-    setProduct((prevCart) =>
-      prevCart.map((item) =>
-        item.id === id ? { ...item, count: Math.max(item.count - 1, 0) } : item,
-      ),
-    );
-    console.log(product);
-  };
-
-  const increaseCount = (id) => {
-    setProduct((prevProduct) =>
-      prevProduct.map((item) =>
-        item.id === id ? { ...item, count: item.count + 1 } : item,
-      ),
-    );
-  };
-
   if (cart === null) {
     return <Spinner />;
+  }
+
+  function handleRemoveProduct(productId) {
+    axios
+      .delete(`/api/carts/${productId}`)
+      .then(() =>
+        toast({
+          description: "삭제되었습니다",
+          duration: 1000,
+          status: "success",
+        }),
+      )
+      .catch(() =>
+        toast({
+          description: "삭제 실패했습니다",
+          duration: 1000,
+          status: "error",
+        }),
+      );
   }
 
   return (
@@ -72,15 +76,21 @@ export function Cart() {
                   <Box key={index}>{item}</Box>
                 ))}
                 <Flex alignItems="center" mt={2}>
-                  <Button onClick={() => decreaseCount(product.id)}>-</Button>
+                  <Button>-</Button>
                   <Box mx={4} textAlign="center">
                     {product.count}개
                   </Box>
-                  <Button onClick={() => increaseCount(product.id)}>+</Button>
+                  <Button>+</Button>
                 </Flex>
               </Box>
               <Box>
-                <Button>X</Button>
+                <Button
+                  onClick={() =>
+                    handleRemoveProduct(cart.cartProduct[index].productId)
+                  }
+                >
+                  X
+                </Button>
                 <Box>{product.totalPrice.toLocaleString("ko-KR")}원</Box>
               </Box>
             </Flex>
@@ -90,9 +100,6 @@ export function Cart() {
       <Flex>
         <Box>상품금액</Box>
         <Spacer />
-        {/*{cartProduct.map((item, index) => (*/}
-        {/*  <Box key={index}>{item.totalPrice * countList[index]}</Box>*/}
-        {/*))}*/}
       </Flex>
     </Box>
   );
