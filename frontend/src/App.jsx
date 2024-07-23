@@ -7,6 +7,7 @@ import { SignUp } from "./user/SignUp.jsx";
 import { Login } from "./user/Login.jsx";
 import { MainProduct } from "./MainProduct.jsx";
 import { LoginBranch } from "./user/LoginBranch.jsx";
+import { LoginProvider } from "./LoginProvider.jsx";
 
 const router = createBrowserRouter([
   {
@@ -28,9 +29,11 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <ChakraProvider>
-        <RouterProvider router={router} />
-      </ChakraProvider>
+      <LoginProvider>
+        <ChakraProvider>
+          <RouterProvider router={router} />
+        </ChakraProvider>
+      </LoginProvider>
     </>
   );
 }

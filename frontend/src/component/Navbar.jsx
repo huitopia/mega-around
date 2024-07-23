@@ -1,35 +1,44 @@
 import { Box, Flex, Spacer } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { LoginContext } from "../LoginProvider.jsx";
 
 export function Navbar() {
+  const account = useContext(LoginContext);
   const navigate = useNavigate();
   return (
-    <Flex>
-      <Box
-        backgroundColor={"yellow"}
-        onClick={() => navigate("/")}
-        cursor={"pointer"}
-      >
+    <Flex
+      h={"50px"}
+      p={4}
+      justifyContent="space-around"
+      align="center"
+      cursor={"pointer"}
+      borderBottom={"1px solid black"}
+    >
+      <Box marginLeft="100px" onClick={() => navigate("/")} cursor={"pointer"}>
         Home
       </Box>
-      <Box
-        backgroundColor={"beige"}
-        onClick={() => navigate("/signup")}
-        cursor={"pointer"}
-      >
+      <Spacer />
+      <Box onClick={() => navigate("/signup")} cursor={"pointer"} mr={"10"}>
         회원가입
       </Box>
-      <Spacer />
-      <Box onClick={() => navigate("/login")} cursor={"pointer"}>
-        로그인
-      </Box>
-      <Box
-        ml={8}
-        onClick={() => localStorage.removeItem("token")}
-        cursor={"pointer"}
-      >
-        로그아웃
-      </Box>
+      {!account.isLoggedIn() ? (
+        <Box
+          marginRight="100px"
+          onClick={() => navigate("/login")}
+          cursor={"pointer"}
+        >
+          로그인
+        </Box>
+      ) : (
+        <Box
+          marginRight="100px"
+          onClick={() => account.logout()}
+          cursor={"pointer"}
+        >
+          로그아웃
+        </Box>
+      )}
     </Flex>
   );
 }

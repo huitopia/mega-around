@@ -93,6 +93,8 @@ public class UserService {
                         .subject(branch.getEmail()) // 사용자를 나타내는 정보
                         .claim("scope", "") // 권한
                         .claim("branchName", dbBranch.getBranchName())
+                        .claim("address", dbBranch.getAddress())
+                        .claim("subAddress", dbBranch.getSubAddress())
                         .build();
                 String token = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
                 result.put("token", token);

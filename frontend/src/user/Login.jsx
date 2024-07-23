@@ -11,20 +11,21 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { LoginContext } from "../LoginProvider.jsx";
 
 export function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const toast = useToast();
   const navigate = useNavigate();
-
+  const account = useContext(LoginContext);
   function handleCustomerLogin() {
     axios
       .post("/api/login/customer", { email, password })
       .then((res) => {
-        localStorage.setItem("token", res.data.token);
+        account.login(res.data.token);
         toast({
           description: "로그인 되었습니다",
           status: "success",
@@ -34,7 +35,7 @@ export function Login() {
         navigate("/");
       })
       .catch(() => {
-        localStorage.removeItem("token");
+        account.logout();
         toast({
           description: "로그인에 실패하였습니다.",
           status: "error",
