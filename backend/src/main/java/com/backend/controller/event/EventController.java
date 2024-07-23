@@ -2,6 +2,7 @@ package com.backend.controller.event;
 
 import com.backend.service.event.EventService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Description;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,7 @@ public class EventController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/event/{item}")
+    @Description("스탬프/쿠폰 조회")
     public ResponseEntity getEvent(@PathVariable String item, Authentication authentication) {
         if(eventService.checkItem(item)){
 //        Integer count = eventService.getEvent(item, Integer.valueOf(authentication.getName()));

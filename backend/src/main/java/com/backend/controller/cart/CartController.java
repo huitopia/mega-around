@@ -4,7 +4,9 @@ import com.backend.domain.cart.Cart;
 import com.backend.service.cart.CartService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Description;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,16 +16,18 @@ import org.springframework.web.bind.annotation.*;
 public class CartController {
     private final CartService cartService;
 
-    // 장바구니 추가
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("carts")
+    @Description("장바구니 추가")
     public ResponseEntity addCart(@RequestBody Cart cart) throws JsonProcessingException {
         System.out.println("cart.toString() = " + cart.toString());
         cartService.addCart(cart);
         return ResponseEntity.ok().build();
     }
 
-    // 장바구니 조회
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("carts")
+    @Description("장바구니 조회")
     public ResponseEntity getCart(Authentication authentication) throws JsonProcessingException {
 //        return ResponseEntity.ok(cartService.getCart(Integer.valueOf(authentication.getName())));
         return ResponseEntity.ok(cartService.getCart(1));
