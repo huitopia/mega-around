@@ -32,4 +32,13 @@ public class CartController {
 //        return ResponseEntity.ok(cartService.getCart(Integer.valueOf(authentication.getName())));
         return ResponseEntity.ok(cartService.getCart(1));
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("carts/{productId}")
+    @Description("장바구니 상품 삭제")
+    public ResponseEntity removeCartProduct(Authentication authentication, Integer productId){
+//        cartService.removeCartProduct(Integer.valueOf(authentication.getName()),productId);
+        cartService.removeCartProduct(1,productId);
+        return null;
+    }
 }

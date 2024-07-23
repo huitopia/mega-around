@@ -46,4 +46,9 @@ public class CartService {
 
         return cart;
     }
+
+    public void removeCartProduct(Integer customerId, Integer productId) {
+        Integer cartId = cartMapper.selectCartIdByCustomerId(customerId);
+        cartMapper.deleteCartProductByProductId(customerId, productId);
+    }
 }

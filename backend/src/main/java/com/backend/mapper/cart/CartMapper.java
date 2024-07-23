@@ -59,4 +59,10 @@ public interface CartMapper {
                 WHERE cart_id = #{cartId}
             """)
     int deleteCartProductByCustomerId(Integer cartId);
+
+    @Delete("""
+    DELETE FROM cart_product
+    WHERE cart_id = #{cartId} AND product_id = #{productId}
+""")
+    int deleteCartProductByProductId(Integer customerId, Integer productId);
 }
