@@ -4,10 +4,8 @@ import { Home } from "./Home.jsx";
 import { SignUpCustomer } from "./user/SignUpCustomer.jsx";
 import { SignUpBranch } from "./user/SignupBranch.jsx";
 import { SignUp } from "./user/SignUp.jsx";
-
-function MainProduct() {
-  return null;
-}
+import { Login } from "./Login.jsx";
+import { MainProduct } from "./MainProduct.jsx";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +18,7 @@ const router = createBrowserRouter([
       { path: "signup", element: <SignUp /> },
       { path: "signup/customer", element: <SignUpCustomer /> },
       { path: "signup/branch", element: <SignUpBranch /> },
+      { path: "login", element: <Login /> },
     ],
   },
 ]);

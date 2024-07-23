@@ -71,14 +71,14 @@ export function SignUpCustomer() {
         if (err.response.status === 409) {
           toast({
             description: "이미 존재하는 이메일입니다.",
-            status: "info",
+            status: "error",
             position: "top",
             duration: "2000",
           });
         } else {
           toast({
-            description: "회원가입 가능한 이메일입니다.",
-            status: "info",
+            description: "유효하지 않은 이메일입니다.",
+            status: "error",
             position: "top",
             duration: "2000",
           });

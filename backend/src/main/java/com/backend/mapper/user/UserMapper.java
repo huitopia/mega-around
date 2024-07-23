@@ -27,4 +27,5 @@ public interface UserMapper {
             SELECT email FROM branch WHERE email=#{email}
             """)
     Customer getBranchEmail(String email);
+
 }

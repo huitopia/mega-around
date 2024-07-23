@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService service;
 
+    // 메인페이지
+    @GetMapping("/")
+    public ResponseEntity main() {
+        return null;
+    }
+
     @PostMapping("/user/customer")
     public ResponseEntity<Object> signupCustomer(@RequestBody Customer customer) {
         if (service.validate(customer.getEmail(), customer.getPassword())) {
@@ -48,5 +54,13 @@ public class UserController {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatusCode.valueOf(409)).build();
+    }
+
+    @PostMapping("/user/login/customer")
+    public ResponseEntity<Object> login(@RequestBody Customer customer) {
+//        if () {
+//            return ResponseEntity.ok().build();
+//        }
+        return ResponseEntity.badRequest().build();
     }
 }
