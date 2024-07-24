@@ -6,6 +6,7 @@ import {
   AccordionPanel,
   Box,
   Button,
+  Card,
   Checkbox,
   CheckboxGroup,
   Divider,
@@ -13,10 +14,14 @@ import {
   FormControl,
   FormLabel,
   Heading,
+  Image,
   Input,
   Radio,
   RadioGroup,
   Spacer,
+  Spinner,
+  Stack,
+  StackDivider,
 } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { ChevronRightIcon } from "@chakra-ui/icons";
@@ -30,7 +35,8 @@ export function Order() {
   const [request, setRequest] = useState("");
   const [isTakeOut, setIsTakeOut] = useState("1");
   const [option, setOption] = useState([false, false]);
-  const [orderItem, setOrderItem] = useState({});
+  const [orderItem, setOrderItem] = useState(null);
+  const [totalPrice, setTotalPrice] = useState();
   const [searchParams] = useSearchParams();
   const prevOrder = useContext(OrderContext);
 
@@ -54,6 +60,8 @@ export function Order() {
         };
         delete updatedData.cartProduct;
         setOrderItem(updatedData);
+        setTotalPrice(calculateTotalPrice(res.data.cartProduct));
+        console.log(res.data);
       });
     } else if (searchParams.get("type") === "order") {
       setOrderItem({
@@ -97,16 +105,28 @@ export function Order() {
         if (rsp.success) {
           axios
             .post("/api/payments", {
-              // orderItem.id,
-              // orderItem.totalPrice,
+              totalPrice,
               provider,
               merchantUid,
+              request,
+              isTakeOut,
+              option,
             })
             .then()
             .catch();
         }
       },
     );
+  }
+
+  function calculateTotalPrice(cartProduct) {
+    return cartProduct.reduce((prev, cur) => {
+      return (prev += cur.totalPrice);
+    }, 0);
+  }
+
+  if (orderItem === null) {
+    return <Spinner />;
   }
 
   return (
@@ -123,15 +143,45 @@ export function Order() {
         <AccordionItem>
           <h2>
             <AccordionButton>
-              <Box as="span" flex="1" textAlign="left">
-                주문 상품
-              </Box>
-              <Box>{orderItem.orderProduct.productName}</Box>
+              <Flex>
+                <Box>주문 상품</Box>
+                <Spacer />
+                <Box>{orderItem.orderProduct[0].productName}</Box>
+              </Flex>
               <AccordionIcon />
             </AccordionButton>
           </h2>
           <AccordionPanel pb={4}>
-            <Box>수박주스</Box>
+            <Card>
+              <Stack divider={<StackDivider />} spacing="4">
+                {orderItem.orderProduct.map((product, index) => (
+                  <Flex key={index}>
+                    <Box>
+                      <Image
+                        src={
+                          "https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/" +
+                          product.filePath
+                        }
+                        w={"50px"}
+                        h={"50px"}
+                      />
+                    </Box>
+                    <Box>
+                      <Box>{product.productName}</Box>
+                      <Box>{product.count}개</Box>
+                    </Box>
+                    <Box>
+                      <Box fontWeight={"bold"}>
+                        {(product.totalPrice * product.count).toLocaleString(
+                          "ko-KR",
+                        )}
+                        원
+                      </Box>
+                    </Box>
+                  </Flex>
+                ))}
+              </Stack>
+            </Card>
           </AccordionPanel>
         </AccordionItem>
       </Accordion>
