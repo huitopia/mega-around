@@ -1,6 +1,6 @@
 import { Box, Center } from "@chakra-ui/react";
 import { useContext } from "react";
-import { LoginContext } from "./LoginProvider.jsx";
+import { LoginContext } from "./component/LoginProvider.jsx";
 
 export function MainProduct() {
   const account = useContext(LoginContext);

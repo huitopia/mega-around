@@ -7,7 +7,7 @@ import { SignUp } from "./user/SignUp.jsx";
 import { Login } from "./user/Login.jsx";
 import { MainProduct } from "./MainProduct.jsx";
 import { LoginBranch } from "./user/LoginBranch.jsx";
-import { LoginProvider } from "./LoginProvider.jsx";
+import { LoginProvider } from "./component/LoginProvider.jsx";
 
 const router = createBrowserRouter([
   {

@@ -13,7 +13,7 @@ import {
 import axios from "axios";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LoginContext } from "../LoginProvider.jsx";
+import { LoginContext } from "../component/LoginProvider.jsx";
 
 export function Login() {
   const [email, setEmail] = useState("");

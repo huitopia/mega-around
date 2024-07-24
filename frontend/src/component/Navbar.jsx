@@ -1,7 +1,7 @@
 import { Box, Flex, Spacer } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import { LoginContext } from "../LoginProvider.jsx";
+import { LoginContext } from "./LoginProvider.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 

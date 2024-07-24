@@ -12,7 +12,7 @@ import {
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { LoginContext } from "../LoginProvider.jsx";
+import { LoginContext } from "../component/LoginProvider.jsx";
 
 export function LoginBranch() {
   const [email, setEmail] = useState("");
