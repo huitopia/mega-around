@@ -56,6 +56,14 @@ public class UserService {
         return userMapper.selectBranchByEmail(email);
     }
 
+    public Customer getCustomerByNickName(String nickName) {
+        return userMapper.selectCustomerByNickName(nickName);
+    }
+
+    public Branch getBranchByBranchName(String branchName) {
+        return userMapper.selectBranchByBranchName(branchName);
+    }
+
 
     public Map<String, Object> getToken(Customer customer) {
         Map<String, Object> result = new HashMap<>();

@@ -27,4 +27,14 @@ public interface UserMapper {
             SELECT * FROM branch WHERE email=#{email}
             """)
     Branch selectBranchByEmail(String email);
+
+    @Select("""
+            SELECT * FROM customer WHERE nick_name=#{nickName}
+            """)
+    Customer selectCustomerByNickName(String nickName);
+
+    @Select("""
+            SELECT * FROM branch WHERE branch_name=#{branchName}
+            """)
+    Branch selectBranchByBranchName(String branchName);
 }

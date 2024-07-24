@@ -12,10 +12,10 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  useToast,
 } from "@chakra-ui/react";
 import { CheckIcon, CloseIcon, Search2Icon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
+import { CustomToast } from "../component/CustomToast.jsx";
 
 export function SignUpBranch() {
   const [email, setEmail] = useState("");
@@ -29,8 +29,8 @@ export function SignUpBranch() {
   const [address, setAddress] = useState("");
   const [subAddress, setSubAddress] = useState("");
   const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
-  const toast = useToast();
   const navigate = useNavigate();
+  const { successToast, errorToast, infoToast } = CustomToast();
 
   const handleComplete = (data) => {
     let fullAddress = data.address;
@@ -61,57 +61,45 @@ export function SignUpBranch() {
         address,
         subAddress,
       })
-      .then(
-        () =>
-          toast({
-            description: "지점 가입이 성공하였습니다.",
-            status: "success",
-            position: "top",
-            duration: "2000",
-          }),
-        navigate("/login"),
-      )
-      .catch(() =>
-        toast({
-          description: "지점 가입이 실패하였습니다.",
-          status: "error",
-          position: "top",
-          duration: "2000",
-        }),
-      );
+      .then(() => {
+        successToast("지점 가입에 성공하였습니다.");
+        navigate("/login");
+      })
+      .catch(() => errorToast("지점 가입에 실패하였습니다."));
   }
 
   function handleBranchCheckEmail() {
     axios
-      .get(`/api/user/branch?email=${email}`, email)
-      .then(
-        () =>
-          toast({
-            description: "회원가입 가능한 이메일입니다.",
-            status: "info",
-            position: "top",
-            duration: "2000",
-          }),
-        setIsCheckedEmail(true),
-      )
+      .get(`/api/user/branch/email/${email}`, email)
+      .then(() => {
+        successToast("회원가입 가능한 이메일입니다.");
+        setIsCheckedEmail(true);
+      })
       .catch((err) => {
         if (err.response.status === 409) {
-          toast({
-            description: "이미 존재하는 이메일입니다.",
-            status: "info",
-            position: "top",
-            duration: "2000",
-          });
+          errorToast("이미 존재하는 이메일입니다.");
         } else {
-          toast({
-            description: "회원가입 가능한 이메일입니다.",
-            status: "info",
-            position: "top",
-            duration: "2000",
-          });
+          infoToast("회원가입이 가능한 이메일입니다.");
         }
       });
   }
+
+  useEffect(() => {
+    if (branchName.trim() !== "") {
+      axios
+        .get(`/api/user/branch?branchName=${branchName}`, branchName)
+        .then((response) => {
+          if (response.status === 200) {
+            setIsCheckedNickName(true); // 지점 이름 사용 가능
+          }
+        })
+        .catch(() => {
+          setIsCheckedNickName(false); // 중복된 지점 이름 또는 에러 처리
+        });
+    } else {
+      setIsCheckedNickName(true); // 입력된 이름이 없는 경우 기본값으로 설정
+    }
+  }, [branchName]);
 
   const passwordPattern =
     /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,20}$/;
@@ -198,7 +186,10 @@ export function SignUpBranch() {
               <FormControl isRequired>
                 <FormLabel>비밀번호 재입력</FormLabel>
                 <InputGroup>
-                  <Input onChange={(e) => setPasswordCheck(e.target.value)} />
+                  <Input
+                    onChange={(e) => setPasswordCheck(e.target.value)}
+                    placeholder={"비밀번호 재입력"}
+                  />
                   <InputRightElement>
                     {passwordCheck.length > 0 &&
                       (isCheckedPassword ? (
@@ -218,25 +209,30 @@ export function SignUpBranch() {
             </Box>
             <Box mb={7}>
               <FormControl isRequired>
-                <FormLabel>지점 이름</FormLabel>
+                <FormLabel>지점명</FormLabel>
                 <InputGroup>
                   <Input
                     value={branchName}
+                    placeholder={"지점명을 입력해주세요"}
                     onChange={(e) => {
                       setBranchName(e.target.value.trim());
-                      setIsCheckedNickName(false);
                     }}
                   />
                   {/*<InputRightElement w={"90px"} mr={1}>*/}
                   {/*  <Button*/}
                   {/*    isDisabled={branchName.trim().length == 0}*/}
                   {/*    size={"sm"}*/}
-                  {/*    // onClick={handleCheckNickName}*/}
+                  {/*    // onClick={handleCheckBranchName}*/}
                   {/*  >*/}
                   {/*    중복확인*/}
                   {/*  </Button>*/}
                   {/*</InputRightElement>*/}
                 </InputGroup>
+                {isCheckedNickName || (
+                  <FormHelperText color={"#dc7b84"}>
+                    중복된 지점명입니다.
+                  </FormHelperText>
+                )}
               </FormControl>
             </Box>
             <Box mb={7}>

@@ -13,7 +13,7 @@ export function SignUp() {
               lg: 50,
             }}
             w={250}
-            colorScheme={"yellow"}
+            bgColor={"#ffde00"}
             h={20}
             onClick={() => navigate("/signup/customer")}
           >
