@@ -148,6 +148,7 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
   };
 
   const handleDeleteButton = () => {
+    setLoading(true);
     axios
       .delete(`/api/products/${productId}`)
       .then(() => {
@@ -291,7 +292,12 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
               {data.title} 상품을 삭제하시겠습니까?
             </AlertDialogBody>
             <AlertDialogFooter>
-              <Button colorScheme="red" onClick={handleDeleteButton} ml={3}>
+              <Button
+                colorScheme="red"
+                isLoading={loading}
+                onClick={handleDeleteButton}
+                ml={3}
+              >
                 Delete
               </Button>
               <Button ref={cancelRef} onClick={alertOnClose}>
