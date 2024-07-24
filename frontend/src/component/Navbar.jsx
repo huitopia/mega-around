@@ -1,4 +1,4 @@
-import { Box, Flex, Spacer, Text, Center } from "@chakra-ui/react";
+import { Box, Center, Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { LoginContext } from "./LoginProvider.jsx";
@@ -31,18 +31,12 @@ export function Navbar() {
           <Text>상품리스트</Text>
         </Center>
       </Box>
-      <Spacer />
-
       {!account.isLoggedIn() ? (
         <>
-          <Box onClick={() => navigate("/signup")} cursor={"pointer"} mr={"10"}>
+          <Box onClick={() => navigate("/signup")} cursor={"pointer"}>
             회원가입
           </Box>
-          <Box
-            marginRight="100px"
-            onClick={() => navigate("/login")}
-            cursor={"pointer"}
-          >
+          <Box onClick={() => navigate("/login")} cursor={"pointer"}>
             로그인
           </Box>
         </>
@@ -54,11 +48,7 @@ export function Navbar() {
             {account.nickName}
             {account.branchName}
           </Box>
-          <Box
-            marginRight="100px"
-            onClick={() => account.logout()}
-            cursor={"pointer"}
-          >
+          <Box onClick={() => account.logout()} cursor={"pointer"}>
             로그아웃
           </Box>
         </>
