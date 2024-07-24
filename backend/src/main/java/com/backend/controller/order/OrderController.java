@@ -46,7 +46,9 @@ public class OrderController {
     @PreAuthorize("hasAuthority('SCOPE_branch')")
     @PutMapping("/orders/{id}")
     @Description("주문 상태 변경")
-    public ResponseEntity modifyOrderItemState(@RequestParam Integer stateId, @PathVariable Integer id) {
+    public ResponseEntity modifyOrderItemState(@RequestBody Integer stateId, @PathVariable Integer id) {
+        System.out.println("stateId = " + stateId);
+        System.out.println("id = " + id);
         orderService.modifyOrderItemState(id, stateId);
         return ResponseEntity.ok().build();
     }
