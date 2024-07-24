@@ -66,7 +66,7 @@ export function ProductUpload() {
           duration: 1500,
           isClosable: true,
         });
-        navigate("/products/list");
+        navigate("/product/list");
       })
       .catch((error) => {
         toast({
@@ -178,14 +178,14 @@ export function ProductUpload() {
               <VStack>
                 <Button
                   isLoading={loading}
-                  colorScheme={"blue"}
+                  colorScheme={"orange"}
                   width={"200px"}
                   onClick={handleSaveClick}
                 >
                   Save
                 </Button>
                 <Button
-                  colorScheme={"gray"}
+                  colorScheme={"red"}
                   width={"200px"}
                   onClick={() => navigate(-1)}
                 >
