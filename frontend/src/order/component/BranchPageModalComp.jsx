@@ -1,9 +1,10 @@
 import {Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader} from "@chakra-ui/react";
 import {useEffect} from "react";
+import axios from "axios";
 
 export function BranchPageModalComp({isOpen, onClose, stateId}) {
   useEffect(() => {
-
+    axios.get(`/api/orders/${7}`).then(res => console.log(res.data));
   }, []);
 
   return <Modal isOpen={isOpen} onClose={onClose}>
