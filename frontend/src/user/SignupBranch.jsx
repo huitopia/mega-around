@@ -227,15 +227,15 @@ export function SignUpBranch() {
                       setIsCheckedNickName(false);
                     }}
                   />
-                  <InputRightElement w={"90px"} mr={1}>
-                    <Button
-                      isDisabled={branchName.trim().length == 0}
-                      size={"sm"}
-                      // onClick={handleCheckNickName}
-                    >
-                      중복확인
-                    </Button>
-                  </InputRightElement>
+                  {/*<InputRightElement w={"90px"} mr={1}>*/}
+                  {/*  <Button*/}
+                  {/*    isDisabled={branchName.trim().length == 0}*/}
+                  {/*    size={"sm"}*/}
+                  {/*    // onClick={handleCheckNickName}*/}
+                  {/*  >*/}
+                  {/*    중복확인*/}
+                  {/*  </Button>*/}
+                  {/*</InputRightElement>*/}
                 </InputGroup>
               </FormControl>
             </Box>
