@@ -28,7 +28,7 @@ import {
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 
 export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
@@ -134,20 +134,31 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
     navigate(`/product/${productId}`);
   };
 
+  function handleDeleteButton() {}
   // -- spinner
   if (data == null) {
     return <Spinner />;
   }
+
   return (
     <Modal onClose={closeModal} isOpen={isOpen} size={"xl"}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader textAlign={"center"}>{data.title}</ModalHeader>
         <ModalCloseButton />
-        <Button onClick={handleUpdateButton}>
-          {/* 수정하기 */}
-          <FontAwesomeIcon icon={faPenToSquare} />
-        </Button>
+        <VStack>
+          {/* TODO : admin 권한 설정 */}
+          <ButtonGroup>
+            <Button onClick={handleUpdateButton}>
+              {/* 수정하기 */}
+              <FontAwesomeIcon icon={faPenToSquare} />
+            </Button>
+            <Button onClick={handleDeleteButton}>
+              {/* 삭제하기 */}
+              <FontAwesomeIcon icon={faTrashCan} />
+            </Button>
+          </ButtonGroup>
+        </VStack>
         <ModalBody align={"center"}>
           <VStack spacing={4}>
             <Image
@@ -217,11 +228,13 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
           </Flex>
         </ModalBody>
         <ModalFooter>
-          <ButtonGroup>
-            <Button colorScheme={"red"}>바로 주문</Button>
-            <Button colorScheme={"orange"}>장바구니 담기</Button>
-            <Button onClick={onClose}>닫기</Button>
-          </ButtonGroup>
+          <VStack>
+            <ButtonGroup>
+              <Button colorScheme={"red"}>바로 주문</Button>
+              <Button colorScheme={"orange"}>장바구니 담기</Button>
+              <Button onClick={onClose}>닫기</Button>
+            </ButtonGroup>
+          </VStack>
         </ModalFooter>
       </ModalContent>
     </Modal>
