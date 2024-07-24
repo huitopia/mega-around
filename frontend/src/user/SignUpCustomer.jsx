@@ -10,12 +10,12 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
+import { CustomToast } from "../component/CustomToast.jsx";
 
 export function SignUpCustomer() {
   const [email, setEmail] = useState("");
@@ -26,64 +26,35 @@ export function SignUpCustomer() {
   const [isValidPassword, setIsValidPassword] = useState(false);
   const [nickName, setNickName] = useState("");
   const [isCheckedNickName, setIsCheckedNickName] = useState(false);
-  const toast = useToast();
   const navigate = useNavigate();
+  const { successToast, errorToast, infoToast } = CustomToast();
 
   function handleSignup() {
     if (!isCheckedEmail) {
-      alert("이메일 중복확인을 진행해주세요");
+      alert("이메일 중복확인을 실행해주세요");
     } else {
       axios
         .post("/api/user/customer", { email, password, nickName })
-        .then(
-          () =>
-            toast({
-              description: "회원가입이 성공하였습니다.",
-              status: "success",
-              position: "top",
-              duration: "2000",
-            }),
-          navigate("/login"),
-        )
-        .catch(() =>
-          toast({
-            description: "회원가입이 실패하였습니다.",
-            status: "error",
-            position: "top",
-            duration: "2000",
-          }),
-        );
+        .then(() => {
+          successToast("회원 가입에 성공하였습니다.");
+          navigate("/login");
+        })
+        .catch(() => errorToast("회원가입에 실패하였습니다."));
     }
   }
 
   function handleCustomerCheckEmail() {
     axios
       .get(`/api/user/customer/email/${email}`, email)
-      .then(
-        () =>
-          toast({
-            description: "회원가입 가능한 이메일입니다.",
-            status: "info",
-            position: "top",
-            duration: "2000",
-          }),
-        setIsCheckedEmail(true),
-      )
+      .then(() => {
+        infoToast("회원가입 가능한 이메일입니다.");
+        setIsCheckedEmail(true);
+      })
       .catch((err) => {
         if (err.response.status === 409) {
-          toast({
-            description: "이미 존재하는 이메일입니다.",
-            status: "error",
-            position: "top",
-            duration: "2000",
-          });
+          errorToast("이미 존재하는 이메일입니다.");
         } else {
-          toast({
-            description: "유효하지 않은 이메일입니다.",
-            status: "error",
-            position: "top",
-            duration: "2000",
-          });
+          errorToast("유효하지 않은 이메일입니다.");
         }
       });
   }
@@ -109,14 +80,14 @@ export function SignUpCustomer() {
         .get(`/api/user/customer/nickName/${nickName}`, nickName)
         .then((response) => {
           if (response.status === 200) {
-            setIsCheckedNickName(true); // 지점 이름 사용 가능
+            setIsCheckedNickName(true);
           }
         })
         .catch(() => {
-          setIsCheckedNickName(false); // 중복된 지점 이름 또는 에러 처리
+          setIsCheckedNickName(false);
         });
     } else {
-      setIsCheckedNickName(true); // 입력된 이름이 없는 경우 기본값으로 설정
+      setIsCheckedNickName(true);
     }
   }, [nickName]);
   return (
@@ -237,16 +208,27 @@ export function SignUpCustomer() {
                 )}
               </FormControl>
             </Box>
-            <Box mb={7}>
+            <Center mt={10}>
               <Button
+                // borderColor={"#fdd000"}
+                // variant={"outline"}
+                // bg={"white"}
+                // color={"black"}
+                // width={"200px"}
+                // fontSize={"14px"}
+                // borderRadius={"40"}
+                bg={"black"}
+                color={"white"}
+                width={"200px"}
+                fontSize={"14px"}
+                borderRadius={"40"}
                 // isLoading={isLoading}
-                colorScheme={"blue"}
                 // isDisabled={isDisabled}
                 onClick={handleSignup}
               >
-                가입
+                가입하기
               </Button>
-            </Box>
+            </Center>
           </Box>
         </Box>
       </Center>

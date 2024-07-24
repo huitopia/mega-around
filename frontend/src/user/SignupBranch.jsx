@@ -105,14 +105,14 @@ export function SignUpBranch() {
         .get(`/api/user/branch/branchName/${branchName}`, branchName)
         .then((response) => {
           if (response.status === 200) {
-            setIsCheckedBranchName(true); // 지점 이름 사용 가능
+            setIsCheckedBranchName(true);
           }
         })
         .catch(() => {
-          setIsCheckedBranchName(false); // 중복된 지점 이름 또는 에러 처리
+          setIsCheckedBranchName(false);
         });
     } else {
-      setIsCheckedBranchName(true); // 입력된 이름이 없는 경우 기본값으로 설정
+      setIsCheckedBranchName(true);
     }
   }, [branchName]);
   return (
@@ -248,16 +248,20 @@ export function SignUpBranch() {
             )}
             <Input value={address} readOnly placeholder="주소" />
             <Input value={subAddress} readOnly placeholder="상세주소" />
-            <Box mt={5} mb={5}>
+            <Center mt={5} mb={5}>
               <Button
+                bg={"black"}
+                color={"white"}
+                width={"200px"}
+                fontSize={"14px"}
+                borderRadius={"40"}
                 // isLoading={isLoading}
-                colorScheme={"blue"}
                 // isDisabled={isDisabled}
                 onClick={handleSignup}
               >
-                가입
+                가입하기
               </Button>
-            </Box>
+            </Center>
           </Box>
         </Box>
       </Center>
