@@ -38,7 +38,6 @@ public class OrderController {
     @GetMapping("/orders/{id}")
     @Description("주문 상세 조회")
     public ResponseEntity getOrderItem(@PathVariable Integer id) throws JsonProcessingException {
-        // TODO. 결제 정보 없어서 조회 안 됨
         return ResponseEntity.ok(orderService.getOrderItem(id));
     }
 

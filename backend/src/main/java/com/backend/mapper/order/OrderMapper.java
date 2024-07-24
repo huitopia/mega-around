@@ -53,7 +53,7 @@ public interface OrderMapper {
                 FROM order_item oi JOIN branch b ON oi.branch_id = b.id JOIN payment p ON oi.id = p.order_item_id
                 WHERE oi.id = #{id}
             """)
-    OrderItem selectOrderItemByOrderId(Integer id);
+    OrderItem selectOrderItemWithPaymentByOrderId(Integer id);
 
     @Select("""
                 SELECT op.id, op.order_item_id, op.product_id, op.count, op.options, op.total_price, pi.file_path, p.title productName
@@ -69,4 +69,18 @@ public interface OrderMapper {
             WHERE id = #{id}
             """)
     int updateOrderItemState(Integer id, Integer stateId);
+
+    @Select("""
+    SELECT id
+    FROM payment
+    WHERE order_item_id = #{orderItemId}
+""")
+    Integer selectPaymentIdByOrderId(Integer orderItemId);
+
+    @Select("""
+    SELECT oi.id, oi.customer_id, oi.branch_id, oi.total_price, oi.state_id, oi.created_at, oi.is_take_out, b.branch_name
+                FROM order_item oi JOIN branch b ON oi.branch_id = b.id
+                WHERE oi.id = #{id}
+""")
+    OrderItem selectOrderItemByOrderId(Integer id);
 }

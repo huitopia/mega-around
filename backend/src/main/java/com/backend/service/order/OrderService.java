@@ -52,8 +52,13 @@ public class OrderService {
     }
 
     public OrderItem getOrderItem(Integer id) throws JsonProcessingException {
-
-        OrderItem orderItem = orderMapper.selectOrderItemByOrderId(id);
+        Integer paymentId = orderMapper.selectPaymentIdByOrderId(id);
+        OrderItem orderItem = null;
+        if(paymentId != null){
+            orderItem = orderMapper.selectOrderItemWithPaymentByOrderId(id);
+        } else {
+            orderItem = orderMapper.selectOrderItemByOrderId(id);
+        }
 
         // 주문 정보에 주문 상품 담기
         List<OrderProduct> orderProductList = orderMapper.selectOrderProductByOrderId(orderItem.getId());
