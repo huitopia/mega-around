@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -88,5 +89,59 @@ public class ProductService {
 
         product.put("options", optionList);
         return product;
+    }
+
+
+    public Boolean updateProductById(Product product) throws Exception {
+        // List<Integer> -> String
+        product.setOptions(objectMapper.writeValueAsString(product.getOption()));
+        // 상품 수정
+        int productResult = mapper.updateProductById(product);
+        if (productResult < 1) {
+            return false;
+        }
+        return true;
+    }
+
+    public Boolean insertProductImgById(Integer id, MultipartFile[] files) throws Exception {
+        ProductFile productFile = new ProductFile();
+        productFile.setProductId(id);
+        productFile.setFileName(files[0].getOriginalFilename());
+        productFile.setFilePath("product");
+
+        // DB 저장
+        int productImgResult = mapper.insertProductImgById(productFile);
+        if (productImgResult < 1) {
+            return false;
+        }
+
+        // S3 저장
+        PutObjectRequest objectRequest = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(productFile.getFilePath())
+                .acl(ObjectCannedACL.PUBLIC_READ)
+                .build();
+
+        s3Client.putObject(objectRequest,
+                RequestBody.fromInputStream(
+                        files[0].getInputStream(), files[0].getSize()
+                ));
+
+        return true;
+    }
+
+    public Boolean deleteProductImgById(Integer id, String filePath) {
+        // DB 삭제
+        int deleteProductImg = mapper.deleteProductImgById(id);
+        if (deleteProductImg < 1) {
+            return false;
+        }
+        // S3 삭제
+        DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
+                .bucket(bucketName)
+                .key(filePath).build();
+        s3Client.deleteObject(objectRequest);
+
+        return true;
     }
 }
