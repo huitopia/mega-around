@@ -1,8 +1,11 @@
 package com.backend.controller.order;
 
+import com.backend.domain.order.OrderItem;
 import com.backend.domain.order.Payment;
+import com.backend.domain.order.PaymentDTO;
 import com.backend.service.order.PaymentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +18,10 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping("/payment")
-    public void addPayment(@RequestBody Payment payment) {
-        paymentService.addPayment(payment);
+    public void addPayment(@RequestBody PaymentDTO paymentDto, Authentication authentication) {
+        OrderItem orderItem = paymentDto.getOrderItem();
+        Payment payment = paymentDto.getPayment();
+//        paymentService.addPayment(orderItem, payment, Integer.valueOf(authentication.getName()));
+        paymentService.addPayment(orderItem, payment, 1);
     }
 }

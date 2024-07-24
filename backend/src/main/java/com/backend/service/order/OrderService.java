@@ -3,12 +3,14 @@ package com.backend.service.order;
 import com.backend.domain.order.OrderItem;
 import com.backend.domain.order.OrderProduct;
 import com.backend.mapper.order.OrderMapper;
+import com.backend.mapper.product.ProductMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,6 +19,7 @@ import java.util.List;
 public class OrderService {
     private final OrderMapper orderMapper;
     private final ObjectMapper objectMapper;
+    private final ProductMapper productMapper;
 
     public void addOrderItem(OrderItem orderItem) throws JsonProcessingException {
         orderMapper.insertOrderItem(orderItem);
@@ -28,12 +31,18 @@ public class OrderService {
         }
     }
 
-    public List<OrderItem> getOrderItemList(Integer customerId) throws JsonProcessingException {
-        List<OrderItem> orderItemList = orderMapper.selectOrderItemList(customerId);
+    public List<OrderItem> getOrderItemList(Integer customerId, String period, Integer stateId,Integer branchId) throws JsonProcessingException {
+        List<OrderItem> orderItemList = orderMapper.selectOrderItemList(customerId, period, stateId, branchId);
         for (OrderItem orderItem : orderItemList) {
             List<OrderProduct> orderProductList = orderMapper.selectOrderProductByOrderId(orderItem.getId());
+            // TODO. 필요없는 데이터 주석 처리
             for (OrderProduct orderProduct : orderProductList) {
-                orderProduct.setOption(objectMapper.readValue(orderProduct.getOptions(), List.class));
+                List<Integer> optionList = objectMapper.readValue(orderProduct.getOptions(), List.class);
+                List<String> optionListString = new ArrayList<>();
+                for (Integer optionId : optionList) {
+                    optionListString.add(productMapper.selectOptionById(optionId));
+                }
+                orderProduct.setOptionList(optionListString);
             }
 
             orderItem.setOrderProduct(orderProductList);
@@ -49,7 +58,12 @@ public class OrderService {
         // 주문 정보에 주문 상품 담기
         List<OrderProduct> orderProductList = orderMapper.selectOrderProductByOrderId(orderItem.getId());
         for (OrderProduct orderProduct : orderProductList) {
-            orderProduct.setOption(objectMapper.readValue(orderProduct.getOptions(), List.class));
+            List<Integer> optionList = objectMapper.readValue(orderProduct.getOptions(), List.class);
+            List<String> optionListString = new ArrayList<>();
+            for (Integer optionId : optionList) {
+                optionListString.add(productMapper.selectOptionById(optionId));
+            }
+            orderProduct.setOptionList(optionListString);
         }
 
         orderItem.setOrderProduct(orderProductList);

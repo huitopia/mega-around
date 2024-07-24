@@ -18,10 +18,12 @@ import {
   RadioGroup,
   Spacer,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import { checkBoxStyle } from "../component/css/style.js";
 import axios from "axios";
+import { useSearchParams } from "react-router-dom";
+import { OrderContext } from "./component/OrderProvider.jsx";
 
 export function Order() {
   const [provider, setProvider] = useState("html5_inicis");
@@ -29,6 +31,8 @@ export function Order() {
   const [isTakeOut, setIsTakeOut] = useState("1");
   const [option, setOption] = useState([false, false]);
   const [orderItem, setOrderItem] = useState({});
+  const [searchParams] = useSearchParams();
+  const prevOrder = useContext(OrderContext);
 
   useEffect(() => {
     const iamport = document.createElement("script");
@@ -40,7 +44,33 @@ export function Order() {
   }, []);
 
   useEffect(() => {
-    axios.get(`/api/carts`).then((res) => setOrderItem(res.data));
+    console.log(searchParams);
+    if (searchParams.get("type") === "cart") {
+      axios.get(`/api/carts`).then((res) => {
+        const data = res.data;
+        const updatedData = {
+          ...data,
+          orderProduct: data.cartProduct,
+        };
+        delete updatedData.cartProduct;
+        setOrderItem(updatedData);
+      });
+    } else if (searchParams.get("type") === "order") {
+      setOrderItem({
+        branchId: prevOrder.branchId,
+        branchName: prevOrder.branchName,
+        totalPrice: prevOrder.totalPrice,
+        orderProduct: [
+          {
+            productId: prevOrder.productId,
+            productName: prevOrder.productName,
+            count: prevOrder.count,
+            totalPrice: prevOrder.totalPrice,
+            option: prevOrder.option,
+          },
+        ],
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -96,7 +126,7 @@ export function Order() {
               <Box as="span" flex="1" textAlign="left">
                 주문 상품
               </Box>
-              <Box>수박주스</Box>
+              <Box>{orderItem.orderProduct.productName}</Box>
               <AccordionIcon />
             </AccordionButton>
           </h2>
