@@ -31,12 +31,18 @@ public class OrderService {
         }
     }
 
-    public List<OrderItem> getOrderItemList(Integer customerId, String period) throws JsonProcessingException {
-        List<OrderItem> orderItemList = orderMapper.selectOrderItemList(customerId, period);
+    public List<OrderItem> getOrderItemList(Integer customerId, String period, Integer stateId,Integer branchId) throws JsonProcessingException {
+        List<OrderItem> orderItemList = orderMapper.selectOrderItemList(customerId, period, stateId, branchId);
         for (OrderItem orderItem : orderItemList) {
             List<OrderProduct> orderProductList = orderMapper.selectOrderProductByOrderId(orderItem.getId());
+            // TODO. 필요없는 데이터 주석 처리
             for (OrderProduct orderProduct : orderProductList) {
-                orderProduct.setOption(objectMapper.readValue(orderProduct.getOptions(), List.class));
+                List<Integer> optionList = objectMapper.readValue(orderProduct.getOptions(), List.class);
+                List<String> optionListString = new ArrayList<>();
+                for (Integer optionId : optionList) {
+                    optionListString.add(productMapper.selectOptionById(optionId));
+                }
+                orderProduct.setOptionList(optionListString);
             }
 
             orderItem.setOrderProduct(orderProductList);

@@ -29,9 +29,9 @@ public class OrderController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/orders/list")
     @Description("주문 리스트 조회")
-    public ResponseEntity getOrderItemList(Authentication authentication, String period) throws JsonProcessingException {
-//        return ResponseEntity.ok(orderService.getOrderItemList(Integer.valueOf(authentication.getName())));
-        return ResponseEntity.ok(orderService.getOrderItemList(1, period));
+    public ResponseEntity getOrderItemList(Authentication authentication, String period, Integer stateId, Integer branchId) throws JsonProcessingException {
+//        return ResponseEntity.ok(orderService.getOrderItemList(Integer.valueOf(authentication.getName()), stateId, branchId));
+        return ResponseEntity.ok(orderService.getOrderItemList(1, period, stateId, branchId));
     }
 
     @PreAuthorize("isAuthenticated()")
