@@ -158,7 +158,6 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
           duration: 1500,
           isClosable: true,
         });
-        navigate("/product/list");
       })
       .catch((error) => {
         toast({
@@ -168,11 +167,12 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
           duration: 1500,
         });
         console.error("Error:", error);
-        alertOnClose();
       })
       .finally(() => {
         setLoading(false);
-        navigate("product/list");
+        alertOnClose();
+        closeModal();
+        window.location.reload();
       });
   };
   // -- spinner
