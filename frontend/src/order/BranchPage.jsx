@@ -9,9 +9,9 @@ export function BranchPage() {
       </Box>
       <Divider border={"1px solid black"} my={4} />
       <Box>
-        <OrderManageComp />
-        <OrderManageComp />
-        <OrderManageComp />
+        <OrderManageComp stateId={0} branchId={1} text={"신규주문"}/>
+        <OrderManageComp stateId={1} branchId={1} text={"제조중"}/>
+        <OrderManageComp stateId={2} branchId={1} text={"제조완료"}/>
       </Box>
     </Box>
   );
