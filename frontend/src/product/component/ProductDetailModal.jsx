@@ -4,6 +4,12 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
   Box,
   Button,
   ButtonGroup,
@@ -22,6 +28,7 @@ import {
   ModalOverlay,
   Spinner,
   Text,
+  useDisclosure,
   useToast,
   VStack,
 } from "@chakra-ui/react";
@@ -48,6 +55,13 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
   const [count, setCount] = useState(1);
   const navigate = useNavigate();
   const toast = useToast();
+  const {
+    isOpen: alertIsOpen,
+    onOpen: alertOnOpen,
+    onClose: alertOnClose,
+  } = useDisclosure();
+  const cancelRef = React.useRef();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (productId !== 0) {
@@ -129,12 +143,38 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
   };
 
   const handleUpdateButton = () => {
-    // TODO : 상품 수정 버튼 admin 권한만 보이게 설정
     onClose();
     navigate(`/product/${productId}`);
   };
 
-  function handleDeleteButton() {}
+  const handleDeleteButton = () => {
+    axios
+      .delete(`/api/products/${productId}`)
+      .then(() => {
+        toast({
+          title: "상품 삭제 성공",
+          status: "success",
+          position: "top",
+          duration: 1500,
+          isClosable: true,
+        });
+        navigate("/product/list");
+      })
+      .catch((error) => {
+        toast({
+          status: "warning",
+          description: "상품 삭제 중 문제가 발생하였습니다.",
+          position: "top",
+          duration: 1500,
+        });
+        console.error("Error:", error);
+        alertOnClose();
+      })
+      .finally(() => {
+        setLoading(false);
+        navigate("product/list");
+      });
+  };
   // -- spinner
   if (data == null) {
     return <Spinner />;
@@ -153,7 +193,7 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
               {/* 수정하기 */}
               <FontAwesomeIcon icon={faPenToSquare} />
             </Button>
-            <Button onClick={handleDeleteButton}>
+            <Button onClick={alertOnOpen}>
               {/* 삭제하기 */}
               <FontAwesomeIcon icon={faTrashCan} />
             </Button>
@@ -237,6 +277,30 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
           </VStack>
         </ModalFooter>
       </ModalContent>
+      <AlertDialog
+        leastDestructiveRef={cancelRef}
+        isOpen={alertIsOpen}
+        onClose={alertOnClose}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              상품 삭제
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              {data.title} 상품을 삭제하시겠습니까?
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button colorScheme="red" onClick={handleDeleteButton} ml={3}>
+                Delete
+              </Button>
+              <Button ref={cancelRef} onClick={alertOnClose}>
+                Cancel
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </Modal>
   );
 };
