@@ -68,9 +68,10 @@ public class UserService {
                         .issuer("self")
                         .issuedAt(Instant.now())
                         .expiresAt(Instant.now().plusSeconds(60 * 60 * 24 * 7))
-                        .subject(customer.getEmail()) // 사용자를 나타내는 정보
+                        .subject(db.getId().toString()) // 사용자를 나타내는 정보
                         .claim("scope", "") // 권한
                         .claim("nickName", db.getNickName())
+                        .claim("email", db.getEmail())
                         .build();
                 String token = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
                 result.put("token", token);
@@ -90,8 +91,9 @@ public class UserService {
                         .issuer("self")
                         .issuedAt(Instant.now())
                         .expiresAt(Instant.now().plusSeconds(60 * 60 * 24 * 7))
-                        .subject(branch.getEmail()) // 사용자를 나타내는 정보
+                        .subject(dbBranch.getId().toString()) // 사용자를 나타내는 정보
                         .claim("scope", "") // 권한
+                        .claim("email", dbBranch.getEmail())
                         .claim("branchName", dbBranch.getBranchName())
                         .claim("address", dbBranch.getAddress())
                         .claim("subAddress", dbBranch.getSubAddress())
