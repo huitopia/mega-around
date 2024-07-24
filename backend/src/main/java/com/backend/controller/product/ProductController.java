@@ -47,4 +47,28 @@ public class ProductController {
         Map<String, Object> result = service.selectProductDetailById(id);
         return ResponseEntity.ok().body(result);
     }
+
+    @PutMapping("{id}")
+    @Description("상품 수정")
+    public ResponseEntity updateProduct(
+            @PathVariable Integer id,
+            Product product,
+            @RequestParam("filePath") String filePath,
+            @RequestParam(value = "files[]", required = false) MultipartFile[] files) throws Exception {
+        // 상품 수정
+        Boolean updateProduct = service.updateProductById(product);
+        if (updateProduct && files != null) {
+            // 기존 이미지 삭제
+            Boolean deleteProductImg = service.deleteProductImgById(id, filePath);
+            if (!deleteProductImg) {
+                return ResponseEntity.badRequest().build();
+            }
+            // 새 이미지 생성
+            Boolean insertProductImg = service.insertProductImgById(id, files);
+            if (!insertProductImg) {
+                return ResponseEntity.badRequest().build();
+            }
+        }
+        return ResponseEntity.ok().build();
+    }
 }
