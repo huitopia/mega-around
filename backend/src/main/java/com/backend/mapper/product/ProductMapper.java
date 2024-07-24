@@ -63,4 +63,14 @@ public interface ProductMapper {
             DELETE FROM product_img WHERE product_id = #{id}
             """)
     int deleteProductImgById(Integer id);
+
+    @Delete("""
+            DELETE FROM product WHERE id = #{id}
+            """)
+    int deleteProductById(Integer id);
+
+    @Select("""
+            SELECT * FROM product_img WHERE product_id = #{id}
+            """)
+    ProductFile selectProductImgById(Integer id);
 }
