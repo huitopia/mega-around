@@ -17,11 +17,11 @@ export function OrderManageComp({stateId, branchId, text}) {
 
   return (
     <Flex h={"180px"}>
-      <Center bg={"blue"} w={"150px"}>
+      <Center bg={"pink"} w={"150px"}>
         <Box>{text}</Box>
         <Box>({0})</Box>
       </Center>
-      <Box bg={"gray.200"} w={"800px"}>
+      <Box border={"1px solid black"} w={"800px"}>
         {orderList.map((order,index) => (<Flex key={index}>
           {order.orderProduct.map((product) =>
             (<Box key={product.productName} onClick={onOpen}>
