@@ -12,7 +12,7 @@ import {
   InputRightElement,
   useToast,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
@@ -102,6 +102,23 @@ export function SignUpCustomer() {
   if (password === passwordCheck) {
     isCheckedPassword = true;
   }
+
+  useEffect(() => {
+    if (nickName.trim() !== "") {
+      axios
+        .get(`/api/user/customer/nickName/${nickName}`, nickName)
+        .then((response) => {
+          if (response.status === 200) {
+            setIsCheckedNickName(true); // 지점 이름 사용 가능
+          }
+        })
+        .catch(() => {
+          setIsCheckedNickName(false); // 중복된 지점 이름 또는 에러 처리
+        });
+    } else {
+      setIsCheckedNickName(true); // 입력된 이름이 없는 경우 기본값으로 설정
+    }
+  }, [nickName]);
   return (
     <>
       <Center>
@@ -210,10 +227,14 @@ export function SignUpCustomer() {
                     placeholder={"닉네임을 입력해주세요"}
                     onChange={(e) => {
                       setNickName(e.target.value.trim());
-                      setIsCheckedNickName(false);
                     }}
                   />
                 </InputGroup>
+                {isCheckedNickName || (
+                  <FormHelperText color={"#dc7b84"}>
+                    중복된 닉네임입니다.
+                  </FormHelperText>
+                )}
               </FormControl>
             </Box>
             <Box mb={7}>

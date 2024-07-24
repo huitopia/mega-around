@@ -25,7 +25,7 @@ export function SignUpBranch() {
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [passwordCheck, setPasswordCheck] = useState("");
   const [isValidPassword, setIsValidPassword] = useState(false);
-  const [isCheckedNickName, setIsCheckedNickName] = useState(false);
+  const [isCheckedBranchName, setIsCheckedBranchName] = useState(false);
   const [address, setAddress] = useState("");
   const [subAddress, setSubAddress] = useState("");
   const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
@@ -84,23 +84,6 @@ export function SignUpBranch() {
       });
   }
 
-  useEffect(() => {
-    if (branchName.trim() !== "") {
-      axios
-        .get(`/api/user/branch/branchName/${branchName}`, branchName)
-        .then((response) => {
-          if (response.status === 200) {
-            setIsCheckedNickName(true); // 지점 이름 사용 가능
-          }
-        })
-        .catch(() => {
-          setIsCheckedNickName(false); // 중복된 지점 이름 또는 에러 처리
-        });
-    } else {
-      setIsCheckedNickName(true); // 입력된 이름이 없는 경우 기본값으로 설정
-    }
-  }, [branchName]);
-
   const passwordPattern =
     /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,20}$/;
   useEffect(() => {
@@ -116,6 +99,22 @@ export function SignUpBranch() {
     isCheckedPassword = true;
   }
 
+  useEffect(() => {
+    if (branchName.trim() !== "") {
+      axios
+        .get(`/api/user/branch/branchName/${branchName}`, branchName)
+        .then((response) => {
+          if (response.status === 200) {
+            setIsCheckedBranchName(true); // 지점 이름 사용 가능
+          }
+        })
+        .catch(() => {
+          setIsCheckedBranchName(false); // 중복된 지점 이름 또는 에러 처리
+        });
+    } else {
+      setIsCheckedBranchName(true); // 입력된 이름이 없는 경우 기본값으로 설정
+    }
+  }, [branchName]);
   return (
     <>
       <Center>
@@ -219,7 +218,7 @@ export function SignUpBranch() {
                     }}
                   />
                 </InputGroup>
-                {isCheckedNickName || (
+                {isCheckedBranchName || (
                   <FormHelperText color={"#dc7b84"}>
                     중복된 지점명입니다.
                   </FormHelperText>
