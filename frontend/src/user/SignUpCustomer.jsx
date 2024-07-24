@@ -2,14 +2,13 @@ import {
   Box,
   Button,
   Center,
-  Flex,
   FormControl,
   FormHelperText,
   FormLabel,
-  Heading,
   Input,
   InputGroup,
   InputRightElement,
+  Text,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -93,18 +92,11 @@ export function SignUpCustomer() {
   return (
     <>
       <Center>
-        <Box w={520}>
-          <Flex mb={10} justifyContent={"space-between"}>
-            <Heading>고객 회원 가입</Heading>
-            <Button
-              colorScheme={"teal"}
-              borderRadius={"unset"}
-              variant={"outline"}
-              onClick={() => navigate("/signup/branch")}
-            >
-              지점 회원가입
-            </Button>
-          </Flex>
+        <Box w={520} mt={10}>
+          <Center mt={5} mb={10} fontSize={"25px"} fontWeight={"bold"}>
+            <Text>개인 회원가입</Text>
+          </Center>
+
           <Box>
             <Box mb={7}>
               <FormControl isRequired>
@@ -119,11 +111,12 @@ export function SignUpCustomer() {
                       setIsValidEmail(!e.target.validity.typeMismatch);
                     }}
                   />
-                  <InputRightElement w={"90px"} mr={1} colorScheme={"red"}>
+                  <InputRightElement w={"90px"} mr={1}>
                     <Button
                       isDisabled={!isValidEmail || email.trim().length == 0}
                       onClick={handleCustomerCheckEmail}
                       size={"sm"}
+                      colorScheme={"teal"}
                     >
                       중복확인
                     </Button>
@@ -210,13 +203,6 @@ export function SignUpCustomer() {
             </Box>
             <Center mt={10}>
               <Button
-                // borderColor={"#fdd000"}
-                // variant={"outline"}
-                // bg={"white"}
-                // color={"black"}
-                // width={"200px"}
-                // fontSize={"14px"}
-                // borderRadius={"40"}
                 bg={"black"}
                 color={"white"}
                 width={"200px"}

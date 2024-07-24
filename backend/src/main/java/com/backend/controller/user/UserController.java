@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -19,7 +20,7 @@ public class UserController {
 
     // 메인페이지
     @GetMapping("/")
-    public ResponseEntity main() {
+    public ResponseEntity main(Authentication authentication) {
         return null;
     }
 
@@ -83,6 +84,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatusCode.valueOf(409)).build();
     }
 
+    // 고객 로그인
     @PostMapping("/login/customer")
     public ResponseEntity<Object> tokenCustomer(@RequestBody Customer customer) {
         Map<String, Object> map = service.getToken(customer);
@@ -92,6 +94,7 @@ public class UserController {
         return ResponseEntity.ok(map);
     }
 
+    // 지점 로그인
     @PostMapping("/login/branch")
     public ResponseEntity<Object> tokenBranch(@RequestBody Branch branch) {
         Map<String, Object> map = service.getTokenBranch(branch);

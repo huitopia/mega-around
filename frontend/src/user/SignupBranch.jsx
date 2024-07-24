@@ -8,10 +8,10 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
-  Heading,
   Input,
   InputGroup,
   InputRightElement,
+  Text,
 } from "@chakra-ui/react";
 import { CheckIcon, CloseIcon, Search2Icon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
@@ -118,10 +118,10 @@ export function SignUpBranch() {
   return (
     <>
       <Center>
-        <Box w={520}>
-          <Box mb={10}>
-            <Heading>지점 회원가입</Heading>
-          </Box>
+        <Box w={520} mt={10}>
+          <Center mt={5} mb={10} fontSize={"25px"} fontWeight={"bold"}>
+            <Text>지점 회원가입</Text>
+          </Center>
           <Box>
             <Box mb={7}>
               <FormControl isRequired>
@@ -141,6 +141,7 @@ export function SignUpBranch() {
                       isDisabled={!isValidEmail || email.trim().length == 0}
                       onClick={handleBranchCheckEmail}
                       size={"sm"}
+                      colorScheme={"blue"}
                     >
                       중복확인
                     </Button>

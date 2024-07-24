@@ -43,7 +43,10 @@ export function Navbar() {
       ) : (
         <>
           <Box mr={10}>
-            <FontAwesomeIcon icon={faUser} style={{ color: "#FFD43B" }} />
+            <FontAwesomeIcon
+              icon={faUser}
+              style={{ color: "darkolivegreen" }}
+            />
             &nbsp;
             {account.nickName}
             {account.branchName}
