@@ -97,10 +97,7 @@ public class ProductService {
         product.setOptions(objectMapper.writeValueAsString(product.getOption()));
         // 상품 수정
         int productResult = mapper.updateProductById(product);
-        if (productResult < 1) {
-            return false;
-        }
-        return true;
+        return productResult >= 1;
     }
 
     public Boolean insertProductImgById(Integer id, MultipartFile[] files) throws Exception {
@@ -143,5 +140,13 @@ public class ProductService {
         s3Client.deleteObject(objectRequest);
 
         return true;
+    }
+
+    public ProductFile deleteProductById(Integer id) {
+        int deleteProduct = mapper.deleteProductById(id);
+        if (deleteProduct < 1) {
+            return null;
+        }
+        return mapper.selectProductImgById(id);
     }
 }
