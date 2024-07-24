@@ -1,8 +1,14 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Home } from "./Home.jsx";
-import { ProductUpload } from "./product/ProductUpload.jsx";
 import { MainProduct } from "./MainProduct.jsx";
+import { SignUpCustomer } from "./user/SignUpCustomer.jsx";
+import { SignUpBranch } from "./user/SignupBranch.jsx";
+import { SignUp } from "./user/SignUp.jsx";
+import { Login } from "./user/Login.jsx";
+import { LoginBranch } from "./user/LoginBranch.jsx";
+import { LoginProvider } from "./component/LoginProvider.jsx";
+import { ProductUpload } from "./product/ProductUpload.jsx";
 import { ProductList } from "./product/ProductList.jsx";
 import Stamp from "./event/Stamp.jsx";
 import { theme } from "./component/css/Theme.jsx";
@@ -34,6 +40,13 @@ const router = createBrowserRouter([
       { path: "cart", element: <Cart /> },
       // branch_order
       { path: "branch/order", element: <BranchPage /> },
+
+      // user
+      { path: "signup", element: <SignUp /> },
+      { path: "signup/customer", element: <SignUpCustomer /> },
+      { path: "signup/branch", element: <SignUpBranch /> },
+      { path: "login", element: <Login /> },
+      { path: "login/branch", element: <LoginBranch /> },
     ],
   },
 ]);
@@ -41,11 +54,13 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <OrderProvider>
-        <ChakraProvider theme={theme}>
-          <RouterProvider router={router} />
-        </ChakraProvider>
-      </OrderProvider>
+      <LoginProvider>
+        <OrderProvider>
+          <ChakraProvider theme={theme}>
+            <RouterProvider router={router} />
+          </ChakraProvider>
+        </OrderProvider>
+      </LoginProvider>
     </>
   );
 }

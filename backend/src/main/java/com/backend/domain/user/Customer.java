@@ -9,7 +9,7 @@ public class Customer {
     private Integer id;
     private String email;
     private String password;
-    private String nick_name;
+    private String nickName;
     private String phone;
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 }
