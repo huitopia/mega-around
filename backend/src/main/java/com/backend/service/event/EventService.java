@@ -11,7 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class EventService {
     private final EventMapper eventMapper;
 
-    public void getEvent(String item) {
+    public Integer getEvent(String item, Integer customerId) {
+        if(item.equals("stamp")){
+            return eventMapper.selectStampByCustomerId(customerId);
+        } else
+            return eventMapper.selectCouponByCustomerId(customerId);
+    }
 
+    public Boolean checkItem(String item) {
+        return item.equals("stamp") || item.equals("coupon");
     }
 }

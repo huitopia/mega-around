@@ -15,7 +15,9 @@ SELECT *
 FROM order_state;
 
 SELECT *
-FROM branch;
+FROM payment;
+
+
 
 ALTER TABLE order_product
     ADD COLUMN total_price INT NOT NULL;
@@ -41,3 +43,28 @@ ALTER TABLE payment
 
 ALTER TABLE payment
     CHANGE method provider VARCHAR(50);
+
+SELECT oi.id,
+       oi.customer_id,
+       oi.branch_id,
+       oi.total_price,
+       oi.state_id,
+       oi.created_at,
+       oi.is_take_out,
+       b.branch_name,
+       p.provider
+FROM order_item oi
+         JOIN branch b ON oi.branch_id = b.id
+         JOIN payment p ON oi.id = p.order_item_id
+WHERE oi.id = 6;
+
+INSERT INTO payment
+    (order_item_id, total_price, provider, merchant_uid)
+VALUES (6, 5000, '카카오페이', '4534');
+
+ALTER TABLE payment
+    ADD COLUMN coupon_count INT NOT NULL DEFAULT 0;
+
+UPDATE payment
+SET coupon_count = 1
+WHERE id = 1;

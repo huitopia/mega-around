@@ -41,4 +41,11 @@ public interface ProductMapper {
             WHERE p.id = #{id}
             """)
     Map<String, Object> selectProductDetailById(Integer id);
+
+    @Select("""
+                    SELECT content
+                    FROM option_item
+                    WHERE id = #{id}
+            """)
+    String selectOptionById(Integer id);
 }

@@ -15,6 +15,7 @@ public class CartProduct {
     private Integer totalPrice;
     // 선택한 옵션 리스트
     private List<Integer> option;
+    private List<String> optionList;
     // 옵션 리스트 JSON 객체로 변환
     private String options;
     private String filePath;
