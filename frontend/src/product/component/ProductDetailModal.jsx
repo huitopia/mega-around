@@ -219,7 +219,7 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
         <ModalFooter>
           <ButtonGroup>
             <Button>바로 주문</Button>
-            <Button>장바구니 담기</Button>
+            <Button colorScheme={"orange"}>장바구니 담기</Button>
             <Button onClick={onClose}>닫기</Button>
           </ButtonGroup>
         </ModalFooter>
