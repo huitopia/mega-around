@@ -87,7 +87,7 @@ export function SignUpBranch() {
   useEffect(() => {
     if (branchName.trim() !== "") {
       axios
-        .get(`/api/user/branch?branchName=${branchName}`, branchName)
+        .get(`/api/user/branch/branchName/${branchName}`, branchName)
         .then((response) => {
           if (response.status === 200) {
             setIsCheckedNickName(true); // 지점 이름 사용 가능
@@ -218,15 +218,6 @@ export function SignUpBranch() {
                       setBranchName(e.target.value.trim());
                     }}
                   />
-                  {/*<InputRightElement w={"90px"} mr={1}>*/}
-                  {/*  <Button*/}
-                  {/*    isDisabled={branchName.trim().length == 0}*/}
-                  {/*    size={"sm"}*/}
-                  {/*    // onClick={handleCheckBranchName}*/}
-                  {/*  >*/}
-                  {/*    중복확인*/}
-                  {/*  </Button>*/}
-                  {/*</InputRightElement>*/}
                 </InputGroup>
                 {isCheckedNickName || (
                   <FormHelperText color={"#dc7b84"}>

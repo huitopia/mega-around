@@ -58,7 +58,7 @@ export function SignUpCustomer() {
 
   function handleCustomerCheckEmail() {
     axios
-      .get(`/api/user/customer?email=${email}`, email)
+      .get(`/api/user/customer/email/${email}`, email)
       .then(
         () =>
           toast({
@@ -180,7 +180,10 @@ export function SignUpCustomer() {
               <FormControl isRequired>
                 <FormLabel>비밀번호 재입력</FormLabel>
                 <InputGroup>
-                  <Input onChange={(e) => setPasswordCheck(e.target.value)} />
+                  <Input
+                    onChange={(e) => setPasswordCheck(e.target.value)}
+                    placeholder={"비밀번호 재입력"}
+                  />
                   <InputRightElement>
                     {passwordCheck.length > 0 &&
                       (isCheckedPassword ? (
@@ -204,20 +207,12 @@ export function SignUpCustomer() {
                 <InputGroup>
                   <Input
                     value={nickName}
+                    placeholder={"닉네임을 입력해주세요"}
                     onChange={(e) => {
                       setNickName(e.target.value.trim());
                       setIsCheckedNickName(false);
                     }}
                   />
-                  {/*<InputRightElement w={"90px"} mr={1}>*/}
-                  {/*  <Button*/}
-                  {/*    isDisabled={nickName.trim().length == 0}*/}
-                  {/*    size={"sm"}*/}
-                  {/*    // onClick={handleCheckNickName}*/}
-                  {/*  >*/}
-                  {/*    중복확인*/}
-                  {/*  </Button>*/}
-                  {/*</InputRightElement>*/}
                 </InputGroup>
               </FormControl>
             </Box>

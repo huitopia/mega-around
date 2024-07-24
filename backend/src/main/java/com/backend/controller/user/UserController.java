@@ -64,8 +64,8 @@ public class UserController {
     }
 
     // 고객 닉네임 중복확인
-    @GetMapping("/user/customer")
-    public ResponseEntity<Object> getNameCustomer(@RequestParam String nickName) {
+    @GetMapping("/user/customer/nickName/{nickName}")
+    public ResponseEntity<Object> getNameCustomer(@PathVariable String nickName) {
         Customer customer = service.getCustomerByNickName(nickName);
         if (customer == null) {
             return ResponseEntity.ok().build();
@@ -73,9 +73,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatusCode.valueOf(409)).build();
     }
 
-    // 지점 이름 중복확인
-    @GetMapping("/user/branch")
-    public ResponseEntity<Object> getNameBranch(@RequestParam String branchName) {
+    // 지점명 중복확인
+    @GetMapping("/user/branch/branchName/{branchName}")
+    public ResponseEntity<Object> getNameBranch(@PathVariable String branchName) {
         Branch branch = service.getBranchByBranchName(branchName);
         if (branch == null) {
             return ResponseEntity.ok().build();
