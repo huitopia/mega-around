@@ -6,6 +6,7 @@ export const checkBoxStyle = {
       _checked: {
         bg: "blue.500",
         borderColor: "blue.500",
+        zIndex : -1,
         _before: {
           content: `""`,
           display: "block",

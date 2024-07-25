@@ -8,13 +8,13 @@ import {
   FormHelperText,
   FormLabel,
   Heading,
+  HStack,
   Image,
   Input,
   NumberInput,
   NumberInputField,
   Textarea,
   useToast,
-  VStack,
 } from "@chakra-ui/react";
 import { CategoryComp } from "./component/CategoryComp.jsx";
 import { useNavigate, useParams } from "react-router-dom";
@@ -41,6 +41,7 @@ export const ProductUpdate = () => {
   const [content, setContent] = useState("");
   const [price, setPrice] = useState(0);
   const [imgSrc, setImgSrc] = useState("");
+  const [filePath, setFilePath] = useState("");
   const [files, setFiles] = useState([]);
   const navigate = useNavigate();
   const toast = useToast();
@@ -53,10 +54,11 @@ export const ProductUpdate = () => {
         if (response.data != null) {
           setTitle(response.data.title);
           setContent(response.data.content);
-          setImgSrc(
-            "https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/" +
-              response.data.file_path,
-          );
+          setFilePath(response.data.file_path),
+            setImgSrc(
+              "https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/" +
+                response.data.file_path,
+            );
           setPrice(response.data.price);
           response.data.options.map((option) => {
             setOption((prevState) => [...prevState, option.id]);
@@ -111,15 +113,6 @@ export const ProductUpdate = () => {
   };
 
   const handleUpdateClick = () => {
-    console.log(
-      title,
-      content,
-      price,
-      mainCategory,
-      subCategory,
-      option,
-      files,
-    );
     setLoading(true);
     axios
       .putForm(`/api/products/${productId}`, {
@@ -129,6 +122,7 @@ export const ProductUpdate = () => {
         subCategory,
         option,
         price,
+        filePath,
         files,
       })
       .then(() => {
@@ -139,7 +133,7 @@ export const ProductUpdate = () => {
           duration: 1500,
           isClosable: true,
         });
-        navigate("/products/list");
+        navigate("/product/list");
       })
       .catch((error) => {
         toast({
@@ -225,26 +219,26 @@ export const ProductUpdate = () => {
             <FormHelperText>가격은 0원 이상부터 가능합니다.</FormHelperText>
           </FormControl>
         </Box>
-        <Box>
+        <Box mb={"100px"}>
           <Center>
             <ButtonGroup variant="solid">
-              <VStack>
+              <HStack>
                 <Button
                   isLoading={loading}
-                  colorScheme={"blue"}
+                  colorScheme={"orange"}
                   width={"200px"}
                   onClick={handleUpdateClick}
                 >
                   Update
                 </Button>
                 <Button
-                  colorScheme={"gray"}
+                  colorScheme={"red"}
                   width={"200px"}
                   onClick={() => navigate(-1)}
                 >
                   Cancel
                 </Button>
-              </VStack>
+              </HStack>
             </ButtonGroup>
           </Center>
         </Box>

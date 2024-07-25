@@ -26,6 +26,14 @@ const components = {
               bg: "pink",
             },
           };
+        } else if (props.colorScheme === "yellow") {
+          return {
+            bg: "yellow",
+            color: "black",
+            _hover: {
+              bg: "yellow",
+            },
+          };
         }
       },
     },

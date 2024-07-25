@@ -2,10 +2,7 @@ package com.backend.mapper.product;
 
 import com.backend.domain.product.Product;
 import com.backend.domain.product.ProductFile;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.Map;
@@ -43,9 +40,37 @@ public interface ProductMapper {
     Map<String, Object> selectProductDetailById(Integer id);
 
     @Select("""
-                    SELECT content
-                    FROM option_item
-                    WHERE id = #{id}
+            SELECT content
+            FROM option_item
+            WHERE id = #{id}
             """)
     String selectOptionById(Integer id);
+
+    @Update("""
+            UPDATE product
+            SET title=#{title},
+                content=#{content},
+                main_category=#{mainCategory},
+                sub_category=#{subCategory},
+                options=#{options},
+                price=#{price},
+                created_at=NOW()
+            WHERE id=#{id}
+            """)
+    int updateProductById(Product product);
+
+    @Delete("""
+            DELETE FROM product_img WHERE product_id = #{id}
+            """)
+    int deleteProductImgById(Integer id);
+
+    @Delete("""
+            DELETE FROM product WHERE id = #{id}
+            """)
+    int deleteProductById(Integer id);
+
+    @Select("""
+            SELECT * FROM product_img WHERE product_id = #{id}
+            """)
+    ProductFile selectProductImgById(Integer id);
 }

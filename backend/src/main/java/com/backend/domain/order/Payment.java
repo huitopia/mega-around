@@ -10,6 +10,6 @@ public class Payment {
     private Integer orderItemId;
     private Integer totalPrice;
     private String provider;
-    private List<Boolean> option;
+    private Integer couponCount;
     private String merchantUid;
 }
