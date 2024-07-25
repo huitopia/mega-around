@@ -271,7 +271,7 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
         <ModalFooter>
           <VStack>
             <ButtonGroup>
-              <Button colorScheme={"red"}>바로 주문</Button>
+              <Button colorScheme={"pink"}>바로 주문</Button>
               <Button colorScheme={"orange"}>장바구니 담기</Button>
               <Button onClick={onClose}>닫기</Button>
             </ButtonGroup>
