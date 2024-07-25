@@ -21,9 +21,8 @@ public interface EventMapper {
     Integer selectCouponByCustomerId(Integer customerId);
 
     @Insert("""
-    INSERT INTO stmap
-    (count) VALUES (#{count})
-    WHERE customer_id = customerId
+    INSERT INTO stamp
+    (count, customer_id) VALUES (#{count}, #{customerId})
     """)
     int insertStamp(Integer customerId, Integer count);
 
@@ -68,7 +67,7 @@ public interface EventMapper {
     @Update("""
     UPDATE stamp
     SET count = #{restStampCount}
-    WHERE = customer_id = #{customerId}
+    WHERE customer_id = #{customerId}
 """)
     int updateStamp(Integer customerId, Integer restStampCount);
 }
