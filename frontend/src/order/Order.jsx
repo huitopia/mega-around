@@ -6,6 +6,7 @@ import {
   AccordionPanel,
   Box,
   Button,
+  Card,
   Checkbox,
   CheckboxGroup,
   Divider,
@@ -13,26 +14,34 @@ import {
   FormControl,
   FormLabel,
   Heading,
+  Image,
   Input,
   Radio,
   RadioGroup,
   Spacer,
+  Spinner,
+  Stack,
+  StackDivider,
 } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import { checkBoxStyle } from "../component/css/style.js";
 import axios from "axios";
-import { useSearchParams } from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import { OrderContext } from "./component/OrderProvider.jsx";
+import {LoginContext} from "../component/LoginProvider.jsx";
 
 export function Order() {
   const [provider, setProvider] = useState("html5_inicis");
   const [request, setRequest] = useState("");
   const [isTakeOut, setIsTakeOut] = useState("1");
   const [option, setOption] = useState([false, false]);
-  const [orderItem, setOrderItem] = useState({});
+  const [orderItem, setOrderItem] = useState(null);
+  const [totalPrice, setTotalPrice] = useState();
   const [searchParams] = useSearchParams();
   const prevOrder = useContext(OrderContext);
+  const account = useContext(LoginContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const iamport = document.createElement("script");
@@ -54,6 +63,8 @@ export function Order() {
         };
         delete updatedData.cartProduct;
         setOrderItem(updatedData);
+        setTotalPrice(calculateTotalPrice(res.data.cartProduct));
+        console.log(res.data);
       });
     } else if (searchParams.get("type") === "order") {
       setOrderItem({
@@ -86,27 +97,49 @@ export function Order() {
         pg: provider,
         pay_method: "card",
         merchant_uid: "merchant_" + new Date().getTime(),
-        name: "주문명:결제테스트", // 상품명
+        name: "메가어라운드 " + orderItem.orderProduct.productName, // 상품명
         amount: 1000, //상품 가격
-        buyer_email: "iamport@siot.do", //고객 이메일,
-        buyer_nickName: "구매자이름", // 고객 닉네임
+        buyer_email: account.email, //고객 이메일,
+        buyer_nickName: account.nickName, // 고객 닉네임
         buyer_tel: "010-1234-5678" /*구매자 연락처*/,
       },
       function (rsp) {
         const merchantUid = rsp.merchant_uid;
+        console.log(rsp);
         if (rsp.success) {
+          console.log("실행이 외않되");
           axios
             .post("/api/payments", {
-              // orderItem.id,
-              // orderItem.totalPrice,
-              provider,
-              merchantUid,
+              orderItem : {
+                customerId : account.id,
+                branchId : orderItem.branchId,
+                totalPrice,
+                request,
+                isTakeOut,
+                option,
+              },
+              payment : {
+                totalPrice,
+                provider,
+                merchantUid,
+                couponCount : 0
+              }
             })
-            .then()
+            .then((res) => navigate(`/order/${res.data}`))
             .catch();
         }
       },
     );
+  }
+
+  function calculateTotalPrice(cartProduct) {
+    return cartProduct.reduce((prev, cur) => {
+      return (prev += cur.totalPrice);
+    }, 0);
+  }
+
+  if (orderItem === null) {
+    return <Spinner />;
   }
 
   return (
@@ -123,15 +156,45 @@ export function Order() {
         <AccordionItem>
           <h2>
             <AccordionButton>
-              <Box as="span" flex="1" textAlign="left">
-                주문 상품
-              </Box>
-              <Box>{orderItem.orderProduct.productName}</Box>
+              <Flex>
+                <Box>주문 상품</Box>
+                <Spacer />
+                <Box>{orderItem.orderProduct[0].productName}</Box>
+              </Flex>
               <AccordionIcon />
             </AccordionButton>
           </h2>
           <AccordionPanel pb={4}>
-            <Box>수박주스</Box>
+            <Card>
+              <Stack divider={<StackDivider />} spacing="4">
+                {orderItem.orderProduct.map((product, index) => (
+                  <Flex key={index}>
+                    <Box>
+                      <Image
+                        src={
+                          "https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/" +
+                          product.filePath
+                        }
+                        w={"50px"}
+                        h={"50px"}
+                      />
+                    </Box>
+                    <Box>
+                      <Box>{product.productName}</Box>
+                      <Box>{product.count}개</Box>
+                    </Box>
+                    <Box>
+                      <Box fontWeight={"bold"}>
+                        {(product.totalPrice * product.count).toLocaleString(
+                          "ko-KR",
+                        )}
+                        원
+                      </Box>
+                    </Box>
+                  </Flex>
+                ))}
+              </Stack>
+            </Card>
           </AccordionPanel>
         </AccordionItem>
       </Accordion>
@@ -181,10 +244,10 @@ export function Order() {
           <Radio size="md" value={"kakaopay"}>
             카카오페이
           </Radio>
-          <Radio size="md" value={"naverpay"}>
-            네이버페이
+          <Radio size="md" value={"payco"}>
+            페이코
           </Radio>
-          <Radio size="md" value={"tosspay"}>
+          <Radio size="md" value={"uplus"}>
             토스페이
           </Radio>
         </RadioGroup>

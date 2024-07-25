@@ -3,7 +3,7 @@ import { extendTheme } from "@chakra-ui/react";
 const colors = {
   yellow: "#ffde00", // Replace with your desired yellow color
   orange: "#401F02",
-  red: "#e8e4e0",
+  pink: "#e8e4e0",
 };
 
 const components = {
@@ -18,12 +18,20 @@ const components = {
               bg: "orange",
             },
           };
-        } else if (props.colorScheme === "red") {
+        } else if (props.colorScheme === "pink") {
           return {
-            bg: "red", // 원하는 새로운 색상
+            bg: "pink", // 원하는 새로운 색상
             color: "orange",
             _hover: {
-              bg: "red",
+              bg: "pink",
+            },
+          };
+        } else if (props.colorScheme === "yellow") {
+          return {
+            bg: "yellow",
+            color: "black",
+            _hover: {
+              bg: "yellow",
             },
           };
         }

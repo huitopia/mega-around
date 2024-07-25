@@ -38,7 +38,6 @@ public class OrderController {
     @GetMapping("/orders/{id}")
     @Description("주문 상세 조회")
     public ResponseEntity getOrderItem(@PathVariable Integer id) throws JsonProcessingException {
-        // TODO. 결제 정보 없어서 조회 안 됨
         return ResponseEntity.ok(orderService.getOrderItem(id));
     }
 
@@ -47,7 +46,9 @@ public class OrderController {
     @PreAuthorize("hasAuthority('SCOPE_branch')")
     @PutMapping("/orders/{id}")
     @Description("주문 상태 변경")
-    public ResponseEntity modifyOrderItemState(@RequestParam Integer stateId, @PathVariable Integer id) {
+    public ResponseEntity modifyOrderItemState(@RequestBody Integer stateId, @PathVariable Integer id) {
+        System.out.println("stateId = " + stateId);
+        System.out.println("id = " + id);
         orderService.modifyOrderItemState(id, stateId);
         return ResponseEntity.ok().build();
     }

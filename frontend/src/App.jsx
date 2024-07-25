@@ -19,6 +19,7 @@ import { ProductUpdate } from "./product/ProductUpdate.jsx";
 import { Cart } from "./cart/Cart.jsx";
 import { OrderProvider } from "./order/component/OrderProvider.jsx";
 import { BranchPage } from "./order/BranchPage.jsx";
+import { Coupon } from "./event/Coupon.jsx";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,7 @@ const router = createBrowserRouter([
       { path: "product/:productId", element: <ProductUpdate /> },
       // event
       { path: "/stamp", element: <Stamp /> },
+      { path: "/coupon", element: <Coupon /> },
       // order
       { path: "/order", element: <Order /> },
       { path: "/order/list", element: <OrderList /> },
