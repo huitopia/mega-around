@@ -163,7 +163,7 @@ export function SignUpCustomer() {
                 <InputGroup>
                   <Input
                     onChange={(e) => setPasswordCheck(e.target.value)}
-                    placeholder={"비밀번호 재입력"}
+                    placeholder={"비밀번호를 한번 더 입력해주세요"}
                   />
                   <InputRightElement>
                     {passwordCheck.length > 0 &&
