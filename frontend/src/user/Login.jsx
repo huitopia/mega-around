@@ -8,40 +8,30 @@ import {
   Input,
   InputGroup,
   Text,
-  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../component/LoginProvider.jsx";
+import { CustomToast } from "../component/CustomToast.jsx";
 
 export function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const toast = useToast();
   const navigate = useNavigate();
   const account = useContext(LoginContext);
+  const { successToast, errorToast, infoToast } = CustomToast();
   function handleCustomerLogin() {
     axios
       .post("/api/login/customer", { email, password })
       .then((res) => {
         account.login(res.data.token);
-        toast({
-          description: "로그인 되었습니다",
-          status: "success",
-          position: "top",
-          duration: 2000,
-        });
+        successToast("로그인 되었습니다");
         navigate("/");
       })
       .catch(() => {
         account.logout();
-        toast({
-          description: "로그인에 실패하였습니다.",
-          status: "error",
-          position: "top",
-          duration: 2000,
-        });
+        errorToast("로그인이 실패하였습니다");
       });
   }
 

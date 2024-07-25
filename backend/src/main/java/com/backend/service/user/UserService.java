@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -56,6 +57,13 @@ public class UserService {
         return userMapper.selectBranchByEmail(email);
     }
 
+    public Customer getCustomerByNickName(String nickName) {
+        return userMapper.selectCustomerByNickName(nickName);
+    }
+
+    public Branch getBranchByBranchName(String branchName) {
+        return userMapper.selectBranchByBranchName(branchName);
+    }
 
     public Map<String, Object> getToken(Customer customer) {
         Map<String, Object> result = new HashMap<>();
@@ -69,7 +77,7 @@ public class UserService {
                         .issuedAt(Instant.now())
                         .expiresAt(Instant.now().plusSeconds(60 * 60 * 24 * 7))
                         .subject(db.getId().toString()) // 사용자를 나타내는 정보
-                        .claim("scope", "") // 권한
+                        .claim("scope", "customer") // 권한
                         .claim("nickName", db.getNickName())
                         .claim("email", db.getEmail())
                         .build();
@@ -86,6 +94,15 @@ public class UserService {
         Branch dbBranch = userMapper.selectBranchByEmail(branch.getEmail());
         if (dbBranch != null) {
             if (passwordEncoder.matches(branch.getPassword(), dbBranch.getPassword())) {
+
+                List<String> authority = userMapper.selectAuthorityByBranchAuth(dbBranch.getAuth());
+
+                if (authority != null) {
+
+                }
+
+//                String auth = authority.stream().collect(Collectors.joining(" ")); //리스트의 모든 요소로 공백으로 구분하여 하나의 문자열로 결합
+
                 // 토큰 생성
                 JwtClaimsSet claims = JwtClaimsSet.builder()
                         .issuer("self")

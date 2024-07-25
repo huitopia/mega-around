@@ -47,6 +47,10 @@ export function LoginProvider({ children }) {
     setSubAddress("");
   }
 
+  function hasAccess(param) {
+    return id == param; // 타입이 달라도 값이 같으면 같게 인식
+  }
+
   return (
     <LoginContext.Provider
       value={{
@@ -59,6 +63,7 @@ export function LoginProvider({ children }) {
         login,
         logout,
         isLoggedIn,
+        hasAccess,
       }}
     >
       {children}

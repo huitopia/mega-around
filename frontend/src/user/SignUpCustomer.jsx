@@ -2,20 +2,19 @@ import {
   Box,
   Button,
   Center,
-  Flex,
   FormControl,
   FormHelperText,
   FormLabel,
-  Heading,
   Input,
   InputGroup,
   InputRightElement,
-  useToast,
+  Text,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
+import { CustomToast } from "../component/CustomToast.jsx";
 
 export function SignUpCustomer() {
   const [email, setEmail] = useState("");
@@ -26,64 +25,35 @@ export function SignUpCustomer() {
   const [isValidPassword, setIsValidPassword] = useState(false);
   const [nickName, setNickName] = useState("");
   const [isCheckedNickName, setIsCheckedNickName] = useState(false);
-  const toast = useToast();
   const navigate = useNavigate();
+  const { successToast, errorToast, infoToast } = CustomToast();
 
   function handleSignup() {
     if (!isCheckedEmail) {
-      alert("이메일 중복확인을 진행해주세요");
+      alert("이메일 중복확인을 실행해주세요");
     } else {
       axios
         .post("/api/user/customer", { email, password, nickName })
-        .then(
-          () =>
-            toast({
-              description: "회원가입이 성공하였습니다.",
-              status: "success",
-              position: "top",
-              duration: "2000",
-            }),
-          navigate("/login"),
-        )
-        .catch(() =>
-          toast({
-            description: "회원가입이 실패하였습니다.",
-            status: "error",
-            position: "top",
-            duration: "2000",
-          }),
-        );
+        .then(() => {
+          successToast("회원 가입에 성공하였습니다.");
+          navigate("/login");
+        })
+        .catch(() => errorToast("회원가입에 실패하였습니다."));
     }
   }
 
   function handleCustomerCheckEmail() {
     axios
-      .get(`/api/user/customer?email=${email}`, email)
-      .then(
-        () =>
-          toast({
-            description: "회원가입 가능한 이메일입니다.",
-            status: "info",
-            position: "top",
-            duration: "2000",
-          }),
-        setIsCheckedEmail(true),
-      )
+      .get(`/api/user/customer/email/${email}`, email)
+      .then(() => {
+        infoToast("회원가입 가능한 이메일입니다.");
+        setIsCheckedEmail(true);
+      })
       .catch((err) => {
         if (err.response.status === 409) {
-          toast({
-            description: "이미 존재하는 이메일입니다.",
-            status: "error",
-            position: "top",
-            duration: "2000",
-          });
+          errorToast("이미 존재하는 이메일입니다.");
         } else {
-          toast({
-            description: "유효하지 않은 이메일입니다.",
-            status: "error",
-            position: "top",
-            duration: "2000",
-          });
+          errorToast("유효하지 않은 이메일입니다.");
         }
       });
   }
@@ -102,21 +72,31 @@ export function SignUpCustomer() {
   if (password === passwordCheck) {
     isCheckedPassword = true;
   }
+
+  useEffect(() => {
+    if (nickName.trim() !== "") {
+      axios
+        .get(`/api/user/customer/nickName/${nickName}`, nickName)
+        .then((response) => {
+          if (response.status === 200) {
+            setIsCheckedNickName(true);
+          }
+        })
+        .catch(() => {
+          setIsCheckedNickName(false);
+        });
+    } else {
+      setIsCheckedNickName(true);
+    }
+  }, [nickName]);
   return (
     <>
       <Center>
-        <Box w={520}>
-          <Flex mb={10} justifyContent={"space-between"}>
-            <Heading>고객 회원 가입</Heading>
-            <Button
-              colorScheme={"teal"}
-              borderRadius={"unset"}
-              variant={"outline"}
-              onClick={() => navigate("/signup/branch")}
-            >
-              지점 회원가입
-            </Button>
-          </Flex>
+        <Box w={520} mt={10}>
+          <Center mt={5} mb={10} fontSize={"25px"} fontWeight={"bold"}>
+            <Text>개인 회원가입</Text>
+          </Center>
+
           <Box>
             <Box mb={7}>
               <FormControl isRequired>
@@ -131,11 +111,12 @@ export function SignUpCustomer() {
                       setIsValidEmail(!e.target.validity.typeMismatch);
                     }}
                   />
-                  <InputRightElement w={"90px"} mr={1} colorScheme={"red"}>
+                  <InputRightElement w={"90px"} mr={1}>
                     <Button
                       isDisabled={!isValidEmail || email.trim().length == 0}
                       onClick={handleCustomerCheckEmail}
                       size={"sm"}
+                      colorScheme={"teal"}
                     >
                       중복확인
                     </Button>
@@ -180,7 +161,10 @@ export function SignUpCustomer() {
               <FormControl isRequired>
                 <FormLabel>비밀번호 재입력</FormLabel>
                 <InputGroup>
-                  <Input onChange={(e) => setPasswordCheck(e.target.value)} />
+                  <Input
+                    onChange={(e) => setPasswordCheck(e.target.value)}
+                    placeholder={"비밀번호를 한번 더 입력해주세요"}
+                  />
                   <InputRightElement>
                     {passwordCheck.length > 0 &&
                       (isCheckedPassword ? (
@@ -204,33 +188,33 @@ export function SignUpCustomer() {
                 <InputGroup>
                   <Input
                     value={nickName}
+                    placeholder={"닉네임을 입력해주세요"}
                     onChange={(e) => {
                       setNickName(e.target.value.trim());
-                      setIsCheckedNickName(false);
                     }}
                   />
-                  {/*<InputRightElement w={"90px"} mr={1}>*/}
-                  {/*  <Button*/}
-                  {/*    isDisabled={nickName.trim().length == 0}*/}
-                  {/*    size={"sm"}*/}
-                  {/*    // onClick={handleCheckNickName}*/}
-                  {/*  >*/}
-                  {/*    중복확인*/}
-                  {/*  </Button>*/}
-                  {/*</InputRightElement>*/}
                 </InputGroup>
+                {isCheckedNickName || (
+                  <FormHelperText color={"#dc7b84"}>
+                    중복된 닉네임입니다.
+                  </FormHelperText>
+                )}
               </FormControl>
             </Box>
-            <Box mb={7}>
+            <Center mt={10}>
               <Button
+                bg={"black"}
+                color={"white"}
+                width={"200px"}
+                fontSize={"14px"}
+                borderRadius={"40"}
                 // isLoading={isLoading}
-                colorScheme={"blue"}
                 // isDisabled={isDisabled}
                 onClick={handleSignup}
               >
-                가입
+                가입하기
               </Button>
-            </Box>
+            </Center>
           </Box>
         </Box>
       </Center>

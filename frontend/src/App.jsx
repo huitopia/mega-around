@@ -20,6 +20,15 @@ import { Cart } from "./cart/Cart.jsx";
 import { OrderProvider } from "./order/component/OrderProvider.jsx";
 import { BranchPage } from "./order/BranchPage.jsx";
 import { Coupon } from "./event/Coupon.jsx";
+import axios from "axios";
+
+axios.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 const router = createBrowserRouter([
   {
