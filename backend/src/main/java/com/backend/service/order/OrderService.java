@@ -24,7 +24,7 @@ public class OrderService {
     private final ProductMapper productMapper;
     private final EventService eventService;
 
-    public void addOrderItem(OrderItem orderItem) throws JsonProcessingException {
+    public void addOrderItem(OrderItem orderItem, Integer customerId) throws JsonProcessingException {
         // 포장 옵션
         orderItem.setOptions(objectMapper.writeValueAsString(orderItem.getOption()));
         orderMapper.insertOrderItem(orderItem);
@@ -33,6 +33,8 @@ public class OrderService {
         for (OrderProduct orderProduct : orderProductList) {
             orderProduct.setOrderItemId(orderItem.getId());
             // 상품 옵션
+            // TODO. 상품 옵션 저장 안됨
+            System.out.println("orderProduct.getOption().get(0) = " + orderProduct.getOption().get(0));
             orderProduct.setOptions(objectMapper.writeValueAsString(orderProduct.getOption()));
             orderMapper.insertOrderProduct(orderProduct);
             totalCount += orderProduct.getCount();
