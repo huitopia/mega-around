@@ -2,8 +2,10 @@ package com.backend.service.order;
 
 import com.backend.domain.order.OrderItem;
 import com.backend.domain.order.OrderProduct;
+import com.backend.mapper.event.EventMapper;
 import com.backend.mapper.order.OrderMapper;
 import com.backend.mapper.product.ProductMapper;
+import com.backend.service.event.EventService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -20,18 +22,22 @@ public class OrderService {
     private final OrderMapper orderMapper;
     private final ObjectMapper objectMapper;
     private final ProductMapper productMapper;
+    private final EventService eventService;
 
     public void addOrderItem(OrderItem orderItem) throws JsonProcessingException {
         // 포장 옵션
         orderItem.setOptions(objectMapper.writeValueAsString(orderItem.getOption()));
         orderMapper.insertOrderItem(orderItem);
         List<OrderProduct> orderProductList = orderItem.getOrderProduct();
+        Integer totalCount = 0;
         for (OrderProduct orderProduct : orderProductList) {
             orderProduct.setOrderItemId(orderItem.getId());
             // 상품 옵션
             orderProduct.setOptions(objectMapper.writeValueAsString(orderProduct.getOption()));
             orderMapper.insertOrderProduct(orderProduct);
+            totalCount += orderProduct.getCount();
         }
+        eventService.addStamp(orderItem.getCustomerId(), totalCount);
     }
 
     public List<OrderItem> getOrderItemList(Integer customerId, String period, Integer stateId,Integer branchId) throws JsonProcessingException {

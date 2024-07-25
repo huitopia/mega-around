@@ -6,6 +6,7 @@ import com.backend.mapper.cart.CartMapper;
 import com.backend.mapper.event.EventMapper;
 import com.backend.mapper.order.OrderMapper;
 import com.backend.mapper.order.PaymentMapper;
+import com.backend.service.event.EventService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(rollbackFor = Exception.class)
 public class PaymentService {
     private final PaymentMapper paymentMapper;
-    private final EventMapper eventMapper;
     private final OrderService orderService;
     private final CartMapper cartMapper;
 
@@ -30,8 +30,6 @@ public class PaymentService {
         Integer cartId = cartMapper.selectCartIdByCustomerId(customerId);
         cartMapper.deleteCartProductByCustomerId(cartId);
         cartMapper.deleteCartByCustomerId(customerId);
-
-        // 스탬프 발급 및 알림 추가
 
 
         // 스탬프 10개 이상이면 쿠폰으로 교환 및 알림 추가
