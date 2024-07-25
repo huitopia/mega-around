@@ -37,6 +37,7 @@ public interface EventMapper {
     DELETE FROM stamp
     WHERE customer_id = #{customerId}
 """)
+    int deleteStamp(Integer customerId);
 
     @Delete("""
             DELETE FROM coupon
