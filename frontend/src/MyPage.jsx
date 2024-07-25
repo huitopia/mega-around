@@ -1,13 +1,12 @@
 import { Box, Center, Table, Td, Th, Tr } from "@chakra-ui/react";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { LoginContext } from "./component/LoginProvider.jsx";
-import axios from "axios";
 
 export function MyPage() {
   const account = useContext(LoginContext);
-  useEffect(() => {
-    axios.get("/api/user/customer");
-  }, []);
+  // useEffect(() => {
+  //   axios.get(`/api/user/customer/${id}`);
+  // }, []);
   return (
     <>
       <Center mt={10}>
@@ -25,7 +24,7 @@ export function MyPage() {
                 <Th>닉네임</Th>
                 <Td>안녕</Td>
               </Tr>
-              {account.hasAuth() == "branch" && (
+              {account.hasAuth() === "branch" && (
                 <Tr>
                   <Th>주소</Th>
                   <Td>ㅁㅁ</Td>

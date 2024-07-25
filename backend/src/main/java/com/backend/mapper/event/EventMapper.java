@@ -21,15 +21,13 @@ public interface EventMapper {
 
     @Insert("""
             INSERT INTO stmap
-            (count) VALUES (#{count})
-            WHERE customer_id = customerId
+            (customer_id, count) VALUES (#{customerId},0)
             """)
     int insertStamp(Integer customerId);
 
     @Insert("""
                 INSERT INTO coupon
-                (count) VALUES (#{count})
-                WHERE customer_id = customerId
+                (customer_id, count) VALUES (#{customerId},0)
             """)
     int insertCoupon(Integer customerId);
 

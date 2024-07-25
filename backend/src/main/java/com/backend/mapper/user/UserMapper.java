@@ -4,15 +4,18 @@ import com.backend.domain.user.Branch;
 import com.backend.domain.user.Customer;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
 @Mapper
 public interface UserMapper {
+
     @Insert("""
             INSERT INTO customer(email,password,nick_name) VALUES (#{email},#{password},#{nickName})
             """)
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertCustomer(Customer customer);
 
     @Insert("""

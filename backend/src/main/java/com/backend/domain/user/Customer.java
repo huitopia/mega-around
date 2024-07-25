@@ -12,4 +12,6 @@ public class Customer {
     private String nickName;
     private String phone;
     private LocalDateTime createdAt;
+    private Integer coupon;
+    private Integer stamp;
 }

@@ -2,6 +2,7 @@ package com.backend.service.user;
 
 import com.backend.domain.user.Branch;
 import com.backend.domain.user.Customer;
+import com.backend.mapper.event.EventMapper;
 import com.backend.mapper.user.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,7 +21,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserService {
     private final UserMapper userMapper;
-    //    private final PasswordEncoder passwordEncoder;
+    private final EventMapper eventMapper;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtEncoder jwtEncoder;
 
@@ -41,6 +42,8 @@ public class UserService {
     public void addCustomer(Customer customer) {
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         userMapper.insertCustomer(customer);
+        eventMapper.insertCoupon(customer.getId());
+        eventMapper.insertStamp(customer.getId());
     }
 
     public void addBranch(Branch branch) {
