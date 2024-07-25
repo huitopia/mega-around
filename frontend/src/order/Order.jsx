@@ -30,6 +30,7 @@ import axios from "axios";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import { OrderContext } from "./component/OrderProvider.jsx";
 import {LoginContext} from "../component/LoginProvider.jsx";
+import {CustomToast} from "../component/CustomToast.jsx";
 
 export function Order() {
   const [provider, setProvider] = useState("html5_inicis");
@@ -42,6 +43,7 @@ export function Order() {
   const prevOrder = useContext(OrderContext);
   const account = useContext(LoginContext);
   const navigate = useNavigate();
+  const {errorToast} = CustomToast();
 
   useEffect(() => {
     const iamport = document.createElement("script");
@@ -106,11 +108,14 @@ export function Order() {
       function (rsp) {
         const merchantUid = rsp.merchant_uid;
         console.log(rsp);
+        console.log("----orderItem");
+        console.log(orderItem);
         if (rsp.success) {
           console.log("실행이 외않되");
           axios
             .post("/api/payments", {
               orderItem : {
+                ...orderItem,
                 customerId : account.id,
                 branchId : orderItem.branchId,
                 totalPrice,
@@ -126,7 +131,7 @@ export function Order() {
               }
             })
             .then((res) => navigate(`/order/${res.data}`))
-            .catch();
+            .catch(() => errorToast("결제 실패했습니다"));
         }
       },
     );
@@ -251,7 +256,6 @@ export function Order() {
             토스페이
           </Radio>
         </RadioGroup>
-
         <Box>
           <Box>쿠폰 적용</Box>
           <Flex>
