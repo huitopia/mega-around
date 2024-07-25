@@ -68,3 +68,15 @@ ALTER TABLE payment
 UPDATE payment
 SET coupon_count = 1
 WHERE id = 1;
+
+ALTER TABLE order_item
+    MODIFY COLUMN options JSON NOT NULL;
+
+DELETE FROM order_item
+WHERE id = 7;
+
+DELETE FROM order_product
+WHERE order_item_id = 7;
+
+DELETE FROM payment
+WHERE order_item_id = 7;
