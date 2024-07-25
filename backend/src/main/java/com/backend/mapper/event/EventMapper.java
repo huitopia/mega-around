@@ -20,7 +20,7 @@ public interface EventMapper {
     Integer selectCouponByCustomerId(Integer customerId);
 
     @Insert("""
-            INSERT INTO stmap
+            INSERT INTO stamp
             (customer_id, count) VALUES (#{customerId},0)
             """)
     int insertStamp(Integer customerId);

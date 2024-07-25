@@ -7,8 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
-import java.util.List;
-
 @Mapper
 public interface UserMapper {
 
@@ -42,9 +40,4 @@ public interface UserMapper {
             SELECT * FROM branch WHERE branch_name=#{branchName}
             """)
     Branch selectBranchByBranchName(String branchName);
-
-    @Select("""
-            SELECT auth FROM branch WHERE auth = true
-            """)
-    List<String> selectAuthorityByBranchAuth(Boolean auth);
 }
