@@ -27,8 +27,9 @@ import { useContext, useEffect, useState } from "react";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import { checkBoxStyle } from "../component/css/style.js";
 import axios from "axios";
-import { useSearchParams } from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import { OrderContext } from "./component/OrderProvider.jsx";
+import {LoginContext} from "../component/LoginProvider.jsx";
 
 export function Order() {
   const [provider, setProvider] = useState("html5_inicis");
@@ -39,6 +40,8 @@ export function Order() {
   const [totalPrice, setTotalPrice] = useState();
   const [searchParams] = useSearchParams();
   const prevOrder = useContext(OrderContext);
+  const account = useContext(LoginContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const iamport = document.createElement("script");
@@ -94,25 +97,35 @@ export function Order() {
         pg: provider,
         pay_method: "card",
         merchant_uid: "merchant_" + new Date().getTime(),
-        name: "주문명:결제테스트", // 상품명
+        name: "메가어라운드 " + orderItem.orderProduct.productName, // 상품명
         amount: 1000, //상품 가격
-        buyer_email: "iamport@siot.do", //고객 이메일,
-        buyer_nickName: "구매자이름", // 고객 닉네임
+        buyer_email: account.email, //고객 이메일,
+        buyer_nickName: account.nickName, // 고객 닉네임
         buyer_tel: "010-1234-5678" /*구매자 연락처*/,
       },
       function (rsp) {
         const merchantUid = rsp.merchant_uid;
+        console.log(rsp);
         if (rsp.success) {
+          console.log("실행이 외않되");
           axios
             .post("/api/payments", {
-              totalPrice,
-              provider,
-              merchantUid,
-              request,
-              isTakeOut,
-              option,
+              orderItem : {
+                customerId : account.id,
+                branchId : orderItem.branchId,
+                totalPrice,
+                request,
+                isTakeOut,
+                option,
+              },
+              payment : {
+                totalPrice,
+                provider,
+                merchantUid,
+                couponCount : 0
+              }
             })
-            .then()
+            .then((res) => navigate(`/order/${res.data}`))
             .catch();
         }
       },
@@ -231,10 +244,10 @@ export function Order() {
           <Radio size="md" value={"kakaopay"}>
             카카오페이
           </Radio>
-          <Radio size="md" value={"naverpay"}>
-            네이버페이
+          <Radio size="md" value={"payco"}>
+            페이코
           </Radio>
-          <Radio size="md" value={"tosspay"}>
+          <Radio size="md" value={"uplus"}>
             토스페이
           </Radio>
         </RadioGroup>
