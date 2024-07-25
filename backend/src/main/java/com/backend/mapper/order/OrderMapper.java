@@ -12,8 +12,8 @@ public interface OrderMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     @Insert("""
                 INSERT INTO order_item
-                (customer_id, branch_id, total_price, state_id) VALUES
-                (#{customerId}, #{branchId}, #{totalPrice}, 1)
+                (customer_id, branch_id, total_price, state_id, request, is_take_out, options) VALUES
+                (#{customerId}, #{branchId}, #{totalPrice}, 0, ${request}, #{isTakeOut}, #{options})
             """)
     int insertOrderItem(OrderItem orderItem);
 

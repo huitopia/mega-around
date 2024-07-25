@@ -22,10 +22,13 @@ public class OrderService {
     private final ProductMapper productMapper;
 
     public void addOrderItem(OrderItem orderItem) throws JsonProcessingException {
+        // 포장 옵션
+        orderItem.setOptions(objectMapper.writeValueAsString(orderItem.getOption()));
         orderMapper.insertOrderItem(orderItem);
         List<OrderProduct> orderProductList = orderItem.getOrderProduct();
         for (OrderProduct orderProduct : orderProductList) {
             orderProduct.setOrderItemId(orderItem.getId());
+            // 상품 옵션
             orderProduct.setOptions(objectMapper.writeValueAsString(orderProduct.getOption()));
             orderMapper.insertOrderProduct(orderProduct);
         }
