@@ -4,6 +4,12 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
   Box,
   Button,
   ButtonGroup,
@@ -22,13 +28,14 @@ import {
   ModalOverlay,
   Spinner,
   Text,
+  useDisclosure,
   useToast,
   VStack,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 
 export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
@@ -48,6 +55,13 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
   const [count, setCount] = useState(1);
   const navigate = useNavigate();
   const toast = useToast();
+  const {
+    isOpen: alertIsOpen,
+    onOpen: alertOnOpen,
+    onClose: alertOnClose,
+  } = useDisclosure();
+  const cancelRef = React.useRef();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (productId !== 0) {
@@ -129,25 +143,63 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
   };
 
   const handleUpdateButton = () => {
-    // TODO : 상품 수정 버튼 admin 권한만 보이게 설정
     onClose();
     navigate(`/product/${productId}`);
   };
 
+  const handleDeleteButton = () => {
+    setLoading(true);
+    axios
+      .delete(`/api/products/${productId}`)
+      .then(() => {
+        toast({
+          title: "상품 삭제 성공",
+          status: "success",
+          position: "top",
+          duration: 1500,
+          isClosable: true,
+        });
+      })
+      .catch((error) => {
+        toast({
+          status: "warning",
+          description: "상품 삭제 중 문제가 발생하였습니다.",
+          position: "top",
+          duration: 1500,
+        });
+        console.error("Error:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+        alertOnClose();
+        closeModal();
+        window.location.reload();
+      });
+  };
   // -- spinner
   if (data == null) {
     return <Spinner />;
   }
+
   return (
     <Modal onClose={closeModal} isOpen={isOpen} size={"xl"}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader textAlign={"center"}>{data.title}</ModalHeader>
         <ModalCloseButton />
-        <Button onClick={handleUpdateButton}>
-          {/* 수정하기 */}
-          <FontAwesomeIcon icon={faPenToSquare} />
-        </Button>
+        <VStack>
+          {/* TODO : admin 권한 설정 */}
+          <ButtonGroup>
+            <Button onClick={handleUpdateButton}>
+              {/* 수정하기 */}
+              <FontAwesomeIcon icon={faPenToSquare} />
+            </Button>
+            <Button onClick={alertOnOpen}>
+              {/* 삭제하기 */}
+              <FontAwesomeIcon icon={faTrashCan} />
+            </Button>
+          </ButtonGroup>
+        </VStack>
         <ModalBody align={"center"}>
           <VStack spacing={4}>
             <Image
@@ -217,13 +269,44 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
           </Flex>
         </ModalBody>
         <ModalFooter>
-          <ButtonGroup>
-            <Button>바로 주문</Button>
-            <Button colorScheme={"orange"}>장바구니 담기</Button>
-            <Button onClick={onClose}>닫기</Button>
-          </ButtonGroup>
+          <VStack>
+            <ButtonGroup>
+              <Button colorScheme={"red"}>바로 주문</Button>
+              <Button colorScheme={"orange"}>장바구니 담기</Button>
+              <Button onClick={onClose}>닫기</Button>
+            </ButtonGroup>
+          </VStack>
         </ModalFooter>
       </ModalContent>
+      <AlertDialog
+        leastDestructiveRef={cancelRef}
+        isOpen={alertIsOpen}
+        onClose={alertOnClose}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              상품 삭제
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              {data.title} 상품을 삭제하시겠습니까?
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button
+                colorScheme="red"
+                isLoading={loading}
+                onClick={handleDeleteButton}
+                ml={3}
+              >
+                Delete
+              </Button>
+              <Button ref={cancelRef} onClick={alertOnClose}>
+                Cancel
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </Modal>
   );
 };
