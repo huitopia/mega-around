@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -95,10 +94,11 @@ public class UserService {
         if (dbBranch != null) {
             if (passwordEncoder.matches(branch.getPassword(), dbBranch.getPassword())) {
 
-                List<String> authority = userMapper.selectAuthorityByBranchAuth(dbBranch.getAuth());
-
-                if (authority != null) {
-
+                String authorityString;
+                if (Boolean.TRUE.equals(dbBranch.getAuth())) {
+                    authorityString = "admin";
+                } else {
+                    authorityString = "branch";
                 }
 
 //                String auth = authority.stream().collect(Collectors.joining(" ")); //리스트의 모든 요소로 공백으로 구분하여 하나의 문자열로 결합
@@ -109,7 +109,7 @@ public class UserService {
                         .issuedAt(Instant.now())
                         .expiresAt(Instant.now().plusSeconds(60 * 60 * 24 * 7))
                         .subject(dbBranch.getId().toString()) // 사용자를 나타내는 정보
-                        .claim("scope", "") // 권한
+                        .claim("scope", authorityString) // 권한
                         .claim("email", dbBranch.getEmail())
                         .claim("branchName", dbBranch.getBranchName())
                         .claim("address", dbBranch.getAddress())
