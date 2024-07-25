@@ -9,6 +9,7 @@ export function LoginProvider({ children }) {
   const [email, setEmail] = useState("");
   const [nickName, setNickName] = useState("");
   const [branchName, setBranchName] = useState("");
+  const [auth, setAuth] = useState("");
   const [address, setAddress] = useState("");
   const [subAddress, setSubAddress] = useState("");
   const [expired, setExpired] = useState(0);
@@ -32,6 +33,7 @@ export function LoginProvider({ children }) {
     setEmail(payload.email);
     setNickName(payload.nickName);
     setBranchName(payload.branchName);
+    setAuth(payload.scope);
     setAddress(payload.address);
     setSubAddress(payload.subAddress);
   }
@@ -39,6 +41,7 @@ export function LoginProvider({ children }) {
   function logout() {
     localStorage.removeItem("token");
     setExpired(0);
+    setAuth("");
     setId("");
     setEmail("");
     setNickName("");
@@ -49,6 +52,15 @@ export function LoginProvider({ children }) {
 
   function hasAccess(param) {
     return id == param; // 타입이 달라도 값이 같으면 같게 인식
+  }
+
+  // 권한
+  function hasAuth() {
+    if (auth.includes("admin")) {
+      return "admin";
+    } else if (auth.includes("customer")) {
+      return "customer";
+    } else return "branch";
   }
 
   return (
@@ -64,6 +76,7 @@ export function LoginProvider({ children }) {
         logout,
         isLoggedIn,
         hasAccess,
+        hasAuth,
       }}
     >
       {children}

@@ -14,6 +14,7 @@ function MyPageMenu(props) {
         <MenuItem onClick={() => navigate("/stamp")}>스탬프</MenuItem>
         <MenuItem onClick={() => navigate("/coupon")}>쿠폰</MenuItem>
         <MenuItem onClick={() => navigate(`/order/list`)}>주문 내역</MenuItem>
+        <MenuItem onClick={() => navigate(`/mypage`)}>내 정보</MenuItem>
       </MenuList>
     </Menu>
   );
