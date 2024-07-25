@@ -1,15 +1,25 @@
 package com.backend.service.user;
 
 import com.backend.domain.user.Branch;
+import com.backend.domain.user.BranchGeocode;
 import com.backend.domain.user.Customer;
+import com.backend.mapper.user.BranchMapper;
 import com.backend.mapper.user.UserMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -20,10 +30,17 @@ import java.util.Map;
 @Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
 public class UserService {
+
+    @Value("${kakao.api.key}")
+    String kakaoRestAPIKey;
+
     private final UserMapper userMapper;
     //    private final PasswordEncoder passwordEncoder;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtEncoder jwtEncoder;
+    private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
+    private final BranchMapper branchMapper;
 
     public boolean validate(String email, String password) {
         if (email == null || email.isBlank()) {
@@ -44,9 +61,51 @@ public class UserService {
         userMapper.insertCustomer(customer);
     }
 
-    public void addBranch(Branch branch) {
+    public Boolean addBranch(Branch branch) throws Exception {
         branch.setPassword(passwordEncoder.encode(branch.getPassword()));
         userMapper.insertBranch(branch);
+        // -- Geocode
+        BranchGeocode branchGeocode = getGeocode(branch);
+        if (branchGeocode.getLatitude() == 0.0) {
+            return false;
+        }
+        branchGeocode.setBranchId(branch);
+        // mapper 저장
+        int insertResult = branchMapper.insertGeocodeById(branchGeocode);
+        return insertResult >= 1;
+    }
+
+    private BranchGeocode getGeocode(Branch branch) throws Exception {
+        // 위도, 경도 받기
+        String geocode = getKaKaoMapInfo(branch.getAddress());
+        if (geocode == null) {
+            return null;
+        }
+        // String -> Json
+        return parseGeocode(geocode);
+    }
+
+    private String getKaKaoMapInfo(String address) {
+        String kakaoMapUrl = "https://dapi.kakao.com/v2/local/search/keyword.json?query=";
+        String url = kakaoMapUrl + address;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "KakaoAK " + kakaoRestAPIKey);
+        headers.set("Accept", "application/json");
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        return response.getBody();
+    }
+
+    private BranchGeocode parseGeocode(String geocode) throws Exception {
+        BranchGeocode branchGeocode = new BranchGeocode();
+        JsonNode root = objectMapper.readTree(geocode);
+        JsonNode location = root.path("documents").get(0);
+        if (location == null) {
+            return null;
+        }
+        branchGeocode.setLatitude(location.path("y").asDouble());
+        branchGeocode.setLongitude(location.path("x").asDouble());
+        return branchGeocode;
     }
 
     public Customer getCustomerByEmail(String email) {
