@@ -22,7 +22,7 @@ public class PaymentService {
 
     public void addPayment(OrderItem orderItem, Payment payment, Integer customerId) throws JsonProcessingException {
         // 주문 생성
-        orderService.addOrderItem(orderItem);
+        orderService.addOrderItem(orderItem, customerId);
         payment.setOrderItemId(orderItem.getId());
         paymentMapper.insertPayment(payment);
 
@@ -31,7 +31,5 @@ public class PaymentService {
         cartMapper.deleteCartProductByCustomerId(cartId);
         cartMapper.deleteCartByCustomerId(customerId);
 
-
-        // 스탬프 10개 이상이면 쿠폰으로 교환 및 알림 추가
     }
 }

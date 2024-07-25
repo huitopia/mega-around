@@ -22,7 +22,7 @@ public class PaymentController {
     public void addPayment(@RequestBody PaymentDTO paymentDto, Authentication authentication) throws JsonProcessingException {
         OrderItem orderItem = paymentDto.getOrderItem();
         Payment payment = paymentDto.getPayment();
-//        paymentService.addPayment(orderItem, payment, Integer.valueOf(authentication.getName()));
-        paymentService.addPayment(orderItem, payment, 1);
+        paymentService.addPayment(orderItem, payment, Integer.valueOf(authentication.getName()));
+//        paymentService.addPayment(orderItem, payment, 1);
     }
 }
