@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import DaumPostcode from "react-daum-postcode";
 import {
   Box,
   Button,
@@ -13,9 +12,10 @@ import {
   InputRightElement,
   Text,
 } from "@chakra-ui/react";
-import { CheckIcon, CloseIcon, Search2Icon } from "@chakra-ui/icons";
+import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import { CustomToast } from "../component/CustomToast.jsx";
+import { Postcode } from "./component/Postcode.jsx";
 
 export function SignUpBranch() {
   const [email, setEmail] = useState("");
@@ -28,28 +28,11 @@ export function SignUpBranch() {
   const [isCheckedBranchName, setIsCheckedBranchName] = useState(false);
   const [address, setAddress] = useState("");
   const [subAddress, setSubAddress] = useState("");
-  const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
   const navigate = useNavigate();
   const { successToast, errorToast, infoToast } = CustomToast();
-
-  const handleComplete = (data) => {
-    let fullAddress = data.address;
-    let extraAddress = "";
-
-    if (data.addressType === "R") {
-      if (data.bname !== "") {
-        extraAddress += data.bname;
-      }
-      if (data.buildingName !== "") {
-        extraAddress +=
-          extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
-      }
-      fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
-    }
+  const handleAddressSelect = (fullAddress, extraAddress) => {
     setAddress(fullAddress);
     setSubAddress(extraAddress);
-    setIsPostcodeOpen(false); // 주소 선택 후 팝업 닫기
-    console.log(fullAddress); // e.g. '서울 성동구 왕십리로2길 20 (성수동1가)'
   };
 
   function handleSignup() {
@@ -229,24 +212,9 @@ export function SignUpBranch() {
             <Box mb={7}>
               <FormControl isRequired>
                 <FormLabel>주소</FormLabel>
-                <Button
-                  type="button"
-                  onClick={() => setIsPostcodeOpen(true)}
-                  leftIcon={<Search2Icon />}
-                  cursor={"pointer"}
-                >
-                  주소 검색
-                </Button>
+                <Postcode onAddressSelect={handleAddressSelect} />
               </FormControl>
             </Box>
-            {isPostcodeOpen && (
-              <DaumPostcode
-                onComplete={handleComplete}
-                autoClose={false}
-                style={{ width: "100%", height: "400px" }}
-                scriptUrl="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
-              />
-            )}
             <Input value={address} readOnly placeholder="주소" />
             <Input value={subAddress} readOnly placeholder="상세주소" />
             <Center mt={5} mb={5}>
