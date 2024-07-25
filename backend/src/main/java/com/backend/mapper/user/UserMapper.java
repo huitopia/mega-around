@@ -4,6 +4,7 @@ import com.backend.domain.user.Branch;
 import com.backend.domain.user.Customer;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public interface UserMapper {
     @Insert("""
             INSERT INTO branch(email,password,branch_name,address,sub_address) VALUES (#{email},#{password},#{branchName},#{address},#{subAddress})
             """)
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertBranch(Branch branch);
 
     @Select("""
