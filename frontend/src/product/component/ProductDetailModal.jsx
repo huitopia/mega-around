@@ -181,6 +181,12 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
     return <Spinner />;
   }
 
+  function handleAddCart() {
+    axios.post("/api/carts", {
+      // TODO. 데이터 추가
+    }).then();
+  }
+
   return (
     <Modal onClose={closeModal} isOpen={isOpen} size={"xl"}>
       <ModalOverlay />
@@ -272,7 +278,7 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
           <VStack>
             <ButtonGroup>
               <Button colorScheme={"red"}>바로 주문</Button>
-              <Button colorScheme={"orange"}>장바구니 담기</Button>
+              <Button colorScheme={"orange"} onClick={handleAddCart}>장바구니 담기</Button>
               <Button onClick={onClose}>닫기</Button>
             </ButtonGroup>
           </VStack>
