@@ -106,13 +106,14 @@ public class UserController {
         return ResponseEntity.ok(map);
     }
 
-    @GetMapping("/user/customer/{customerId}")
+    // 고객 정보 읽기
+    @GetMapping("/user/customer/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Object> getCustomerById(@PathVariable String customerId, Authentication authentication) {
-        if (!service.hasAccess(customerId, authentication)) {
+    public ResponseEntity<Object> getCustomerById(@PathVariable String id, Authentication authentication) {
+        if (!service.hasAccess(id, authentication)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        Customer customer = service.getCustomerById(customerId);
+        Customer customer = service.getCustomerById(id);
         if (customer == null) {
             return ResponseEntity.notFound().build();
         }

@@ -1,16 +1,19 @@
 import { Box, Center, Table, Td, Th, Tr } from "@chakra-ui/react";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "./component/LoginProvider.jsx";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 export function MyPage() {
   const account = useContext(LoginContext);
-  // const [, set] = useState();
-  // useEffect(() => {
-  //   axios
-  //     .get(`/api/user/customer/${id}`)
-  //     .then((res) => set(res.data))
-  //     .catch(<Spinner />);
-  // }, []);
+  const [customer, setCustomer] = useState();
+  const { id } = useParams();
+  console.log(id);
+  useEffect(() => {
+    axios
+      .get(`/api/user/customer/${id}`, id)
+      .then((res) => setCustomer(res.data));
+  }, []);
   return (
     <>
       <Center mt={10}>
@@ -22,11 +25,11 @@ export function MyPage() {
             <Table w={400}>
               <Tr>
                 <Th>이메일</Th>
-                <Td>joo@naver.com</Td>
+                <Td>{customer.email}</Td>
               </Tr>
               <Tr>
                 <Th>닉네임</Th>
-                <Td>안녕</Td>
+                <Td>{customer.nickName}</Td>
               </Tr>
               {account.hasAuth() === "branch" && (
                 <Tr>

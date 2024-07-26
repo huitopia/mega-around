@@ -59,7 +59,7 @@ const router = createBrowserRouter([
       { path: "signup/branch", element: <SignUpBranch /> },
       { path: "login", element: <Login /> },
       { path: "login/branch", element: <LoginBranch /> },
-      { path: "mypage", element: <MyPage /> },
+      { path: "mypage/:id", element: <MyPage /> },
     ],
   },
 ]);

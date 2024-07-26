@@ -2,8 +2,6 @@ import { Box, Center, Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { LoginContext } from "./LoginProvider.jsx";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
 import MyPageMenu from "./MyPageMenu.jsx";
 
 export function Navbar() {
@@ -45,10 +43,8 @@ export function Navbar() {
       ) : (
         <>
           <Box mr={10} onMouseOver={() => setShowTabs(true)}>
-            <FontAwesomeIcon icon={faUser} style={{ color: "darkolivegreen" }} />
-            &nbsp;
             {account.nickName}
-            {account.branchName}
+            {account.branchName}&nbsp;님
           </Box>
           {showTabs && <MyPageMenu />}
           <Box onClick={() => account.logout()} cursor={"pointer"}>

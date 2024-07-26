@@ -140,6 +140,8 @@ public class UserService {
 
 
     public boolean hasAccess(String customerId, Authentication authentication) {
+        System.out.println("customerId = " + customerId);
+        System.out.println("authentication = " + authentication);
         if (customerId.equals(authentication.getName())) {
             return true;
         }

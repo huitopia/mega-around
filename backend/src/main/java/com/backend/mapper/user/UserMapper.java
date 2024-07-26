@@ -42,7 +42,7 @@ public interface UserMapper {
     Branch selectBranchByBranchName(String branchName);
 
     @Select("""
-            SELECT * FROM customer WHERE customer_id = #{customerId}
+            SELECT * FROM customer WHERE id = #{customerId}
             """)
     Customer selectCustomerById(String customerId);
 }
