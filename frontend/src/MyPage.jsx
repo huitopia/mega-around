@@ -4,8 +4,12 @@ import { LoginContext } from "./component/LoginProvider.jsx";
 
 export function MyPage() {
   const account = useContext(LoginContext);
+  // const [, set] = useState();
   // useEffect(() => {
-  //   axios.get(`/api/user/customer/${id}`);
+  //   axios
+  //     .get(`/api/user/customer/${id}`)
+  //     .then((res) => set(res.data))
+  //     .catch(<Spinner />);
   // }, []);
   return (
     <>

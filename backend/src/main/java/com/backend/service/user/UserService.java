@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -25,15 +26,25 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtEncoder jwtEncoder;
 
-    public boolean validate(String email, String password) {
+    public boolean validate(String email, String password, String nickName) {
         if (email == null || email.isBlank()) {
             return false;
         }
         if (password == null || password.isBlank()) {
             return false;
         }
+        if (nickName == null || nickName.isBlank()) {
+            return false;
+        }
         String emailPattern = "[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*";
         if (!email.matches(emailPattern)) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean validateAddress(String address) {
+        if (address == null || address.isBlank()) {
             return false;
         }
         return true;
@@ -104,8 +115,6 @@ public class UserService {
                     authorityString = "branch";
                 }
 
-//                String auth = authority.stream().collect(Collectors.joining(" ")); //리스트의 모든 요소로 공백으로 구분하여 하나의 문자열로 결합
-
                 // 토큰 생성
                 JwtClaimsSet claims = JwtClaimsSet.builder()
                         .issuer("self")
@@ -124,4 +133,10 @@ public class UserService {
         }
         return result;
     }
+
+    public List<String> getCustomerById(String customerId) {
+        return userMapper.selectCustomerById(customerId);
+    }
+
+
 }

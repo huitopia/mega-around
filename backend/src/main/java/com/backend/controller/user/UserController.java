@@ -27,7 +27,7 @@ public class UserController {
     // 고객 회원가입
     @PostMapping("/user/customer")
     public ResponseEntity<Object> signupCustomer(@RequestBody Customer customer) {
-        if (service.validate(customer.getEmail(), customer.getPassword())) {
+        if (service.validate(customer.getEmail(), customer.getPassword(), customer.getNickName())) {
             service.addCustomer(customer);
             return ResponseEntity.ok().build();
         }
@@ -37,7 +37,8 @@ public class UserController {
     // 지점 회원가입
     @PostMapping("/user/branch")
     public ResponseEntity<Object> signupBranch(@RequestBody Branch branch) {
-        if (service.validate(branch.getEmail(), branch.getPassword())) {
+        if (service.validate(branch.getEmail(), branch.getPassword(), branch.getBranchName()) &&
+                service.validateAddress(branch.getAddress())) {
             service.addBranch(branch);
             return ResponseEntity.ok().build();
         }
@@ -103,4 +104,15 @@ public class UserController {
         }
         return ResponseEntity.ok(map);
     }
+
+//    @GetMapping("/user/customer/{customerId}")
+//    @PreAuthorize("isAuthenticated()")
+//    public ResponseEntity<Object> getCustomerById(@PathVariable String customerId, Authentication authentication) {
+//        if (service.) {
+//            List<String> customer = service.getCustomerById(customerId);
+//            System.out.println("customer = " + customer);
+//            return ResponseEntity.ok();
+//        }
+//        return null;
+//    }
 }
