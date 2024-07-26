@@ -3,10 +3,7 @@ package com.backend.service.order;
 import com.backend.domain.order.OrderItem;
 import com.backend.domain.order.Payment;
 import com.backend.mapper.cart.CartMapper;
-import com.backend.mapper.event.EventMapper;
-import com.backend.mapper.order.OrderMapper;
 import com.backend.mapper.order.PaymentMapper;
-import com.backend.service.event.EventService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,9 +17,9 @@ public class PaymentService {
     private final OrderService orderService;
     private final CartMapper cartMapper;
 
-    public void addPayment(OrderItem orderItem, Payment payment, Integer customerId) throws JsonProcessingException {
+    public Integer addPayment(OrderItem orderItem, Payment payment, Integer customerId) throws JsonProcessingException {
         // 주문 생성
-        orderService.addOrderItem(orderItem, customerId);
+        Integer orderId = orderService.addOrderItem(orderItem, customerId);
         payment.setOrderItemId(orderItem.getId());
         paymentMapper.insertPayment(payment);
 
@@ -30,6 +27,6 @@ public class PaymentService {
         Integer cartId = cartMapper.selectCartIdByCustomerId(customerId);
         cartMapper.deleteCartProductByCustomerId(cartId);
         cartMapper.deleteCartByCustomerId(customerId);
-
+        return orderId;
     }
 }

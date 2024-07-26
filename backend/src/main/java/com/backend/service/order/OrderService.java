@@ -2,7 +2,6 @@ package com.backend.service.order;
 
 import com.backend.domain.order.OrderItem;
 import com.backend.domain.order.OrderProduct;
-import com.backend.mapper.event.EventMapper;
 import com.backend.mapper.order.OrderMapper;
 import com.backend.mapper.product.ProductMapper;
 import com.backend.service.event.EventService;
@@ -24,7 +23,7 @@ public class OrderService {
     private final ProductMapper productMapper;
     private final EventService eventService;
 
-    public void addOrderItem(OrderItem orderItem, Integer customerId) throws JsonProcessingException {
+    public Integer addOrderItem(OrderItem orderItem, Integer customerId) throws JsonProcessingException {
         // 포장 옵션
         orderItem.setOptions(objectMapper.writeValueAsString(orderItem.getOption()));
         orderMapper.insertOrderItem(orderItem);
@@ -32,17 +31,15 @@ public class OrderService {
         Integer totalCount = 0;
         for (OrderProduct orderProduct : orderProductList) {
             orderProduct.setOrderItemId(orderItem.getId());
-            // 상품 옵션
-            // TODO. 상품 옵션 저장 안됨
-            System.out.println("orderProduct.getOption().get(0) = " + orderProduct.getOption().get(0));
             orderProduct.setOptions(objectMapper.writeValueAsString(orderProduct.getOption()));
             orderMapper.insertOrderProduct(orderProduct);
             totalCount += orderProduct.getCount();
         }
         eventService.addStamp(orderItem.getCustomerId(), totalCount);
+        return orderItem.getId();
     }
 
-    public List<OrderItem> getOrderItemList(Integer customerId, String period, Integer stateId,Integer branchId) throws JsonProcessingException {
+    public List<OrderItem> getOrderItemList(Integer customerId, String period, Integer stateId, Integer branchId) throws JsonProcessingException {
         List<OrderItem> orderItemList = orderMapper.selectOrderItemList(customerId, period, stateId, branchId);
         for (OrderItem orderItem : orderItemList) {
             List<OrderProduct> orderProductList = orderMapper.selectOrderProductByOrderId(orderItem.getId());
@@ -50,8 +47,10 @@ public class OrderService {
             for (OrderProduct orderProduct : orderProductList) {
                 List<Integer> optionList = objectMapper.readValue(orderProduct.getOptions(), List.class);
                 List<String> optionListString = new ArrayList<>();
-                for (Integer optionId : optionList) {
-                    optionListString.add(productMapper.selectOptionById(optionId));
+                if (optionList != null && !optionList.isEmpty()) {
+                    for (Integer optionId : optionList) {
+                        optionListString.add(productMapper.selectOptionById(optionId));
+                    }
                 }
                 orderProduct.setOptionList(optionListString);
             }
@@ -65,7 +64,7 @@ public class OrderService {
     public OrderItem getOrderItem(Integer id) throws JsonProcessingException {
         Integer paymentId = orderMapper.selectPaymentIdByOrderId(id);
         OrderItem orderItem = null;
-        if(paymentId != null){
+        if (paymentId != null) {
             orderItem = orderMapper.selectOrderItemWithPaymentByOrderId(id);
         } else {
             orderItem = orderMapper.selectOrderItemByOrderId(id);
@@ -76,8 +75,10 @@ public class OrderService {
         for (OrderProduct orderProduct : orderProductList) {
             List<Integer> optionList = objectMapper.readValue(orderProduct.getOptions(), List.class);
             List<String> optionListString = new ArrayList<>();
-            for (Integer optionId : optionList) {
-                optionListString.add(productMapper.selectOptionById(optionId));
+            if (optionList != null && !optionList.isEmpty()) {
+                for (Integer optionId : optionList) {
+                    optionListString.add(productMapper.selectOptionById(optionId));
+                }
             }
             orderProduct.setOptionList(optionListString);
         }

@@ -20,8 +20,8 @@ public class OrderController {
     @PostMapping("/orders")
     @Description("주문 생성")
     public ResponseEntity addOrderItem(@RequestBody OrderItem orderItem, Authentication authentication) throws JsonProcessingException {
-        orderService.addOrderItem(orderItem, Integer.valueOf(authentication.getName()));
-        return ResponseEntity.ok().build();
+        Integer orderId = orderService.addOrderItem(orderItem, Integer.valueOf(authentication.getName()));
+        return ResponseEntity.ok(orderId);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -29,8 +29,7 @@ public class OrderController {
     @Description("주문 리스트 조회")
     public ResponseEntity getOrderItemList(Authentication authentication, String period, Integer stateId, Integer branchId) throws JsonProcessingException {
         System.out.println("a = " + authentication.getName());
-        return ResponseEntity.ok(orderService.getOrderItemList(Integer.valueOf(authentication.getName()), period,stateId, branchId));
-//        return ResponseEntity.ok(orderService.getOrderItemList(1, period, stateId, branchId));
+        return ResponseEntity.ok(orderService.getOrderItemList(Integer.valueOf(authentication.getName()), period, stateId, branchId));
     }
 
     @PreAuthorize("isAuthenticated()")
