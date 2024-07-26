@@ -35,7 +35,7 @@ public class EventService {
                 eventMapper.updateStamp(customerId, restStampCount);
                 eventMapper.insertNotice(customerId, "stamp", "스탬프가 " + restStampCount + "개 적립되었습니다");
             } else {
-                eventMapper.deleteStamp(customerId);
+                eventMapper.updateStamp(customerId, 0);
             }
         }
     }
