@@ -15,6 +15,9 @@ export function CartProductComp({ setIsEmptyCart }) {
       setCart(res.data);
       setIsChanged(false);
       setTotalPrice(calculateTotalPrice(res.data.cartProduct));
+      if (res.data) {
+        setIsEmptyCart(false);
+      }
     });
   }, [isChanged]);
 
