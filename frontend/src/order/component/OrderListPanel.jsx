@@ -1,4 +1,4 @@
-import { Box, Divider, Flex, Spinner } from "@chakra-ui/react";
+import { Box, Divider, Flex } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -27,7 +27,7 @@ export function OrderListPanel(period) {
   };
 
   if (orderList === null) {
-    return <Spinner />;
+    return <Box>주문 내역이 없어요</Box>;
   }
 
   return (

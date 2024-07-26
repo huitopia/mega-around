@@ -1,7 +1,12 @@
-import { Box, Divider, Heading } from "@chakra-ui/react";
+import { Box, Button, Divider, Heading } from "@chakra-ui/react";
 import { CartProductComp } from "./component/CartProductComp.jsx";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export function Cart() {
+  const navigate = useNavigate();
+  const [isEmptyCart, setIsEmptyCart] = useState(false);
+
   return (
     <Box maxWidth="1000px" mx={"auto"}>
       <Box>
@@ -13,8 +18,11 @@ export function Cart() {
           이대역사거리점
         </Box>
         <Box>주문 상품</Box>
-        <CartProductComp />
+        <CartProductComp setIsEmptyCart={setIsEmptyCart} />
       </Box>
+      {isEmptyCart || (
+        <Button onClick={() => navigate("/order?type=cart")}>주문하기</Button>
+      )}
     </Box>
   );
 }

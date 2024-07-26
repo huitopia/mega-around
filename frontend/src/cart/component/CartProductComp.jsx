@@ -1,16 +1,8 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Image,
-  Spacer,
-  Spinner,
-  useToast,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, Image, Spacer, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export function CartProductComp(props) {
+export function CartProductComp({ setIsEmptyCart }) {
   const [isChanged, setIsChanged] = useState(false);
   const [cart, setCart] = useState(null);
   const [updateCart, setUpdateCart] = useState(null);
@@ -27,7 +19,8 @@ export function CartProductComp(props) {
   }, [isChanged]);
 
   if (cart === null) {
-    return <Spinner />;
+    setIsEmptyCart(true);
+    return <Box>장바구니에 상품이 없어요</Box>;
   }
 
   function handleRemoveProduct(productId) {
