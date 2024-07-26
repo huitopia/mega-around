@@ -38,4 +38,11 @@ public class CartController {
     public void removeCartProduct(Authentication authentication, @PathVariable Integer productId) {
         cartService.removeCartProduct(Integer.valueOf(authentication.getName()), productId);
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("carts")
+    @Description("장바구니 수정")
+    public void modifyCart(@RequestBody Cart cart) {
+        cartService.modifyCart(cart);
+    }
 }

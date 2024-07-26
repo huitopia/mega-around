@@ -64,4 +64,11 @@ public class CartService {
         Integer cartId = cartMapper.selectCartIdByCustomerId(customerId);
         cartMapper.deleteCartProductByProductId(cartId, productId);
     }
+
+    public void modifyCart(Cart cart) {
+        List<CartProduct> cartProductList = cart.getCartProduct();
+        for (CartProduct cartProduct : cartProductList) {
+            cartMapper.updateCartProductCount(cartProduct);
+        }
+    }
 }
