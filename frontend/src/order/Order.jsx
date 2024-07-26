@@ -19,7 +19,6 @@ import {
   Radio,
   RadioGroup,
   Spacer,
-  Spinner,
   Stack,
   StackDivider,
 } from "@chakra-ui/react";
@@ -27,10 +26,10 @@ import { useContext, useEffect, useState } from "react";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import { checkBoxStyle } from "../component/css/style.js";
 import axios from "axios";
-import {useNavigate, useSearchParams} from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { OrderContext } from "./component/OrderProvider.jsx";
-import {LoginContext} from "../component/LoginProvider.jsx";
-import {CustomToast} from "../component/CustomToast.jsx";
+import { LoginContext } from "../component/LoginProvider.jsx";
+import { CustomToast } from "../component/CustomToast.jsx";
 
 export function Order() {
   const [provider, setProvider] = useState("html5_inicis");
@@ -38,12 +37,13 @@ export function Order() {
   const [isTakeOut, setIsTakeOut] = useState("1");
   const [option, setOption] = useState([false, false]);
   const [orderItem, setOrderItem] = useState(null);
+  const [couponCount, setCouponCount] = useState(0);
   const [totalPrice, setTotalPrice] = useState();
   const [searchParams] = useSearchParams();
   const prevOrder = useContext(OrderContext);
   const account = useContext(LoginContext);
   const navigate = useNavigate();
-  const {errorToast} = CustomToast();
+  const { errorToast } = CustomToast();
 
   useEffect(() => {
     const iamport = document.createElement("script");
@@ -55,6 +55,10 @@ export function Order() {
   }, []);
 
   useEffect(() => {
+    axios.get("/api/event/coupon").then((res) => {
+      setCouponCount(res.data);
+      console.log(res.data);
+    });
     console.log(searchParams);
     if (searchParams.get("type") === "cart") {
       axios.get(`/api/carts`).then((res) => {
@@ -114,21 +118,21 @@ export function Order() {
           console.log("실행이 외않되");
           axios
             .post("/api/payments", {
-              orderItem : {
+              orderItem: {
                 ...orderItem,
-                customerId : account.id,
-                branchId : orderItem.branchId,
+                customerId: account.id,
+                branchId: orderItem.branchId,
                 totalPrice,
                 request,
                 isTakeOut,
                 option,
               },
-              payment : {
+              payment: {
                 totalPrice,
                 provider,
                 merchantUid,
-                couponCount : 0
-              }
+                couponCount: 0,
+              },
             })
             .then((res) => navigate(`/order/${res.data}`))
             .catch(() => errorToast("결제 실패했습니다"));
@@ -144,7 +148,7 @@ export function Order() {
   }
 
   if (orderItem === null) {
-    return <Spinner />;
+    return <Box>장바구니에 상품이 없어요</Box>;
   }
 
   return (
@@ -161,9 +165,8 @@ export function Order() {
         <AccordionItem>
           <h2>
             <AccordionButton>
-              <Flex>
+              <Flex gap={10}>
                 <Box>주문 상품</Box>
-                <Spacer />
                 <Box>{orderItem.orderProduct[0].productName}</Box>
               </Flex>
               <AccordionIcon />
@@ -186,6 +189,9 @@ export function Order() {
                     </Box>
                     <Box>
                       <Box>{product.productName}</Box>
+                      {product.optionList.map((item, index) => (
+                        <Box key={index}>{item}</Box>
+                      ))}
                       <Box>{product.count}개</Box>
                     </Box>
                     <Box>
@@ -261,6 +267,7 @@ export function Order() {
           <Flex>
             <Box>쿠폰</Box>
             <Spacer />
+            <Box>{couponCount}장 보유</Box>
             <ChevronRightIcon />
           </Flex>
         </Box>
