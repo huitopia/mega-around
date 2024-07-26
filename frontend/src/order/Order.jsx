@@ -38,7 +38,7 @@ export function Order() {
   const [option, setOption] = useState([false, false]);
   const [orderItem, setOrderItem] = useState(null);
   const [couponCount, setCouponCount] = useState(0);
-  const [totalPrice, setTotalPrice] = useState();
+  const [useCouponCount, setUseCouponCount] = useState(0);
   const [searchParams] = useSearchParams();
   const prevOrder = useContext(OrderContext);
   const account = useContext(LoginContext);
@@ -69,7 +69,6 @@ export function Order() {
         };
         delete updatedData.cartProduct;
         setOrderItem(updatedData);
-        setTotalPrice(calculateTotalPrice(res.data.cartProduct));
         console.log(res.data);
       });
     } else if (searchParams.get("type") === "order") {
@@ -104,7 +103,8 @@ export function Order() {
         pay_method: "card",
         merchant_uid: "merchant_" + new Date().getTime(),
         name: "메가어라운드 " + orderItem.orderProduct.productName, // 상품명
-        amount: 1000, //상품 가격
+        amount:
+          calculateTotalPrice(orderItem.orderProduct) - 2000 * useCouponCount, //상품 가격
         buyer_email: account.email, //고객 이메일,
         buyer_nickName: account.nickName, // 고객 닉네임
         buyer_tel: "010-1234-5678" /*구매자 연락처*/,
@@ -122,19 +122,21 @@ export function Order() {
                 ...orderItem,
                 customerId: account.id,
                 branchId: orderItem.branchId,
-                totalPrice,
+                totalPrice: orderItem.totalPrice,
                 request,
                 isTakeOut,
                 option,
               },
               payment: {
-                totalPrice,
+                totalPrice: orderItem.totalPrice,
                 provider,
                 merchantUid,
-                couponCount: 0,
+                couponCount: useCouponCount,
               },
             })
-            .then((res) => navigate(`/order/${res.data}`))
+            .then((res) => {
+              navigate(`/order/${res.data}`);
+            })
             .catch(() => errorToast("결제 실패했습니다"));
         }
       },
@@ -143,12 +145,28 @@ export function Order() {
 
   function calculateTotalPrice(cartProduct) {
     return cartProduct.reduce((prev, cur) => {
-      return (prev += cur.totalPrice);
+      return (prev += cur.totalPrice * cur.count);
     }, 0);
   }
 
   if (orderItem === null) {
     return <Box>장바구니에 상품이 없어요</Box>;
+  }
+
+  function reduceCouponCount() {
+    const newCouponCount = useCouponCount > 0 ? useCouponCount - 1 : 0;
+    setUseCouponCount(newCouponCount);
+    console.log(newCouponCount);
+  }
+
+  function plusCouponCount() {
+    const newCouponCount =
+      useCouponCount < couponCount &&
+      orderItem.totalPrice > useCouponCount * 2000
+        ? useCouponCount + 1
+        : useCouponCount;
+    setUseCouponCount(newCouponCount);
+    console.log(newCouponCount);
   }
 
   return (
@@ -161,7 +179,7 @@ export function Order() {
         이대역사거리점
       </Box>
       <Spacer />
-      <Accordion defaultIndex={[0]} allowMultiple>
+      <Accordion allowMultiple>
         <AccordionItem>
           <h2>
             <AccordionButton>
@@ -262,13 +280,57 @@ export function Order() {
             토스페이
           </Radio>
         </RadioGroup>
+        <Accordion allowMultiple>
+          <AccordionItem>
+            <h2>
+              <AccordionButton>
+                <Box>
+                  <Box>쿠폰 적용</Box>
+                  <Flex>
+                    <Spacer />
+                    <Box>{couponCount}개 보유</Box>
+                    <ChevronRightIcon />
+                  </Flex>
+                </Box>
+              </AccordionButton>
+              <AccordionPanel>
+                <Box>쿠폰</Box>
+                <Flex>
+                  <Button onClick={reduceCouponCount}>-</Button>
+                  <Box>{useCouponCount}</Box>
+                  <Button onClick={plusCouponCount}>+</Button>
+                  <Box>개 사용</Box>
+                </Flex>
+              </AccordionPanel>
+            </h2>
+          </AccordionItem>
+        </Accordion>
         <Box>
-          <Box>쿠폰 적용</Box>
           <Flex>
-            <Box>쿠폰</Box>
+            <Box>상품금액</Box>
             <Spacer />
-            <Box>{couponCount}장 보유</Box>
-            <ChevronRightIcon />
+            <Box>
+              {calculateTotalPrice(orderItem.orderProduct).toLocaleString(
+                "ko-KR",
+              )}
+              원
+            </Box>
+          </Flex>
+          <Flex>
+            <Box>할인금액</Box>
+            <Spacer />
+            <Box>-{useCouponCount * 2000}원</Box>
+          </Flex>
+          <Flex>
+            <Box>결제금액</Box>
+            <Spacer />
+            <Box>
+              {(
+                calculateTotalPrice(orderItem.orderProduct) -
+                useCouponCount * 2000
+              ).toLocaleString("ko-KR")}
+              원
+            </Box>
           </Flex>
         </Box>
         <Button onClick={handlePayment}>결제하기</Button>
