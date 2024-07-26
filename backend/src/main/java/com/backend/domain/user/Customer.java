@@ -3,6 +3,7 @@ package com.backend.domain.user;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Data
 public class Customer {
@@ -14,4 +15,9 @@ public class Customer {
     private LocalDateTime createdAt;
     private Integer coupon;
     private Integer stamp;
+
+    public String getCreatedAt() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return createdAt.format(formatter);
+    }
 }

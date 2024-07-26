@@ -108,12 +108,7 @@ public class UserService {
         if (dbBranch != null) {
             if (passwordEncoder.matches(branch.getPassword(), dbBranch.getPassword())) {
 
-                String authorityString;
-                if (Boolean.TRUE.equals(dbBranch.getAuth())) {
-                    authorityString = "admin";
-                } else {
-                    authorityString = "branch";
-                }
+                String authorityString = Boolean.TRUE.equals(dbBranch.getAuth()) ? "admin" : "branch";
 
                 // 토큰 생성
                 JwtClaimsSet claims = JwtClaimsSet.builder()
@@ -128,9 +123,15 @@ public class UserService {
                         .claim("subAddress", dbBranch.getSubAddress())
                         .build();
                 String token = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+                // 이메일과 비밀번호 일치
+                System.out.println("service. 이메일과 비밀번호 일치  = token" + token);
                 result.put("token", token);
-            }
+            }// 이메일은 있지만 비밀번호 불일치
+            System.out.println("service. 이메일은 있지만 비밀번호 불일치 = dbBranch" + dbBranch);
+
         }
+        // 회원가입이 되어있지 않을 때
+        System.out.println("service. 회원가입이 되지 있지 않음 result = " + result);
         return result;
     }
 
@@ -140,8 +141,6 @@ public class UserService {
 
 
     public boolean hasAccess(String customerId, Authentication authentication) {
-        System.out.println("customerId = " + customerId);
-        System.out.println("authentication = " + authentication);
         // customerId, authentication이 null 값이거나 front에서 넘어 온 id가 jwt토큰의 id와 같지 않으면 false 리턴
         if (customerId == null || authentication == null || !customerId.equals(authentication.getName())) {
             return false;

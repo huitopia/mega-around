@@ -47,7 +47,13 @@ export function Navbar() {
             {account.branchName}&nbsp;님
           </Box>
           {showTabs && <MyPageMenu />}
-          <Box onClick={() => account.logout()} cursor={"pointer"}>
+          <Box
+            onClick={() => {
+              account.logout();
+              navigate("/");
+            }}
+            cursor={"pointer"}
+          >
             로그아웃
           </Box>
         </>

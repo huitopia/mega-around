@@ -29,9 +29,13 @@ export function LoginBranch() {
         successToast("로그인 되었습니다");
         navigate("/");
       })
-      .catch(() => {
+      .catch((err) => {
         account.logout();
-        errorToast("로그인이 실패하였습니다");
+        if (err.response.status === 401) {
+          errorToast("비밀번호가 맞지 않습니다.");
+        } else if (err.response.status === 403) {
+          errorToast("가입되지 않은 이메일입니다.");
+        } else errorToast("로그인에 실패하였습니다.");
       });
   }
 
