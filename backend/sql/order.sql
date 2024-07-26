@@ -23,6 +23,9 @@ FROM coupon;
 SELECT *
 FROM stamp;
 
+SELECT *
+FROM notice;
+
 ALTER TABLE order_product
     ADD COLUMN total_price INT NOT NULL;
 
@@ -88,6 +91,10 @@ DELETE
 FROM payment
 WHERE order_item_id = 7;
 
-INSERT INTO stamp
+INSERT INTO coupon
     (customer_id, count)
 VALUES (12, 0);
+
+UPDATE coupon
+SET count = 3
+WHERE customer_id = 12;
