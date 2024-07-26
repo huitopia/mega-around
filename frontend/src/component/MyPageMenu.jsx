@@ -12,12 +12,25 @@ function MyPageMenu(props) {
         마이페이지
       </MenuButton>
       <MenuList>
-        <MenuItem onClick={() => navigate("/stamp")}>스탬프</MenuItem>
-        <MenuItem onClick={() => navigate("/coupon")}>쿠폰</MenuItem>
-        <MenuItem onClick={() => navigate(`/order/list`)}>주문 내역</MenuItem>
-        <MenuItem onClick={() => navigate(`/mypage/${account.id}`)}>
-          내 정보
-        </MenuItem>
+        {account.hasAuth() === "customer" && (
+          <>
+            <MenuItem onClick={() => navigate("/stamp")}>스탬프</MenuItem>
+            <MenuItem onClick={() => navigate("/coupon")}>쿠폰</MenuItem>
+            <MenuItem onClick={() => navigate(`/order/list`)}>
+              주문 내역
+            </MenuItem>
+            <MenuItem
+              onClick={() => navigate(`/mypage/customer/${account.id}`)}
+            >
+              내 정보
+            </MenuItem>
+          </>
+        )}
+        {account.hasAuth() === "branch" && (
+          <MenuItem onCLick={() => navigate(`/mapage/branch/${account.id}`)}>
+            내 정보(지점)
+          </MenuItem>
+        )}
       </MenuList>
     </Menu>
   );

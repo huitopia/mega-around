@@ -142,9 +142,10 @@ public class UserService {
     public boolean hasAccess(String customerId, Authentication authentication) {
         System.out.println("customerId = " + customerId);
         System.out.println("authentication = " + authentication);
-        if (customerId.equals(authentication.getName())) {
-            return true;
+        // customerId, authentication이 null 값이거나 front에서 넘어 온 id가 jwt토큰의 id와 같지 않으면 false 리턴
+        if (customerId == null || authentication == null || !customerId.equals(authentication.getName())) {
+            return false;
         }
-        return false;
+        return true;
     }
 }

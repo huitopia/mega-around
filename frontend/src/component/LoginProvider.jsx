@@ -56,7 +56,10 @@ export function LoginProvider({ children }) {
       return "admin";
     } else if (auth.includes("customer")) {
       return "customer";
-    } else return "branch";
+    } else if (auth.includes("branch")) {
+      return "branch";
+    }
+    return null;
   }
 
   return (
