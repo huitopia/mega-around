@@ -17,7 +17,11 @@ FROM order_state;
 SELECT *
 FROM payment;
 
+SELECT *
+FROM coupon;
 
+SELECT *
+FROM stamp;
 
 ALTER TABLE order_product
     ADD COLUMN total_price INT NOT NULL;
@@ -72,11 +76,18 @@ WHERE id = 1;
 ALTER TABLE order_item
     MODIFY COLUMN options JSON NOT NULL;
 
-DELETE FROM order_item
+DELETE
+FROM order_item
 WHERE id = 7;
 
-DELETE FROM order_product
+DELETE
+FROM order_product
 WHERE order_item_id = 7;
 
-DELETE FROM payment
+DELETE
+FROM payment
 WHERE order_item_id = 7;
+
+INSERT INTO stamp
+    (customer_id, count)
+VALUES (12, 0);
