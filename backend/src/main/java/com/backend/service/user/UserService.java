@@ -5,6 +5,7 @@ import com.backend.domain.user.Customer;
 import com.backend.mapper.event.EventMapper;
 import com.backend.mapper.user.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -14,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -134,9 +134,15 @@ public class UserService {
         return result;
     }
 
-    public List<String> getCustomerById(String customerId) {
+    public Customer getCustomerById(String customerId) {
         return userMapper.selectCustomerById(customerId);
     }
 
 
+    public boolean hasAccess(String customerId, Authentication authentication) {
+        if (customerId.equals(authentication.getName())) {
+            return true;
+        }
+        return false;
+    }
 }

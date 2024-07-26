@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -105,14 +106,16 @@ public class UserController {
         return ResponseEntity.ok(map);
     }
 
-//    @GetMapping("/user/customer/{customerId}")
-//    @PreAuthorize("isAuthenticated()")
-//    public ResponseEntity<Object> getCustomerById(@PathVariable String customerId, Authentication authentication) {
-//        if (service.) {
-//            List<String> customer = service.getCustomerById(customerId);
-//            System.out.println("customer = " + customer);
-//            return ResponseEntity.ok();
-//        }
-//        return null;
-//    }
+    @GetMapping("/user/customer/{customerId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Object> getCustomerById(@PathVariable String customerId, Authentication authentication) {
+        if (!service.hasAccess(customerId, authentication)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        Customer customer = service.getCustomerById(customerId);
+        if (customer == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(customer);
+    }
 }
