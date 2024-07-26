@@ -75,7 +75,7 @@ public interface CartMapper {
 
     @Update("""
                 UPDATE cart_product 
-                SET count = #{count}, total_price = #{totalPrice}, options = #{options}
+                SET count = #{count}, total_price = total_price + #{totalPrice}, options = #{options}
                 WHERE product_id = #{productId} AND cart_id = #{cartId}
             """)
     int updateCartProduct(CartProduct cartProduct);

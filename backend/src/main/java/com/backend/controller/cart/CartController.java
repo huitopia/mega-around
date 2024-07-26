@@ -21,8 +21,7 @@ public class CartController {
     @Description("장바구니 추가")
     public ResponseEntity addCart(@RequestBody Cart cart, Authentication authentication) throws JsonProcessingException {
         System.out.println("cart.toString() = " + cart.toString());
-//        cartService.addCart(cart, Integer.valueOf(authentication.getName()));
-        cartService.addCart(cart, 1);
+        cartService.addCart(cart, Integer.valueOf(authentication.getName()));
         return ResponseEntity.ok().build();
     }
 
@@ -30,16 +29,13 @@ public class CartController {
     @GetMapping("carts")
     @Description("장바구니 조회")
     public ResponseEntity getCart(Authentication authentication) throws JsonProcessingException {
-//        return ResponseEntity.ok(cartService.getCart(Integer.valueOf(authentication.getName())));
-        return ResponseEntity.ok(cartService.getCart(1));
+        return ResponseEntity.ok(cartService.getCart(Integer.valueOf(authentication.getName())));
     }
 
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("carts/{productId}")
     @Description("장바구니 상품 삭제")
-    public ResponseEntity removeCartProduct(Authentication authentication, @PathVariable Integer productId) {
-//        cartService.removeCartProduct(Integer.valueOf(authentication.getName()),productId);
-        cartService.removeCartProduct(1, productId);
-        return null;
+    public void removeCartProduct(Authentication authentication, @PathVariable Integer productId) {
+        cartService.removeCartProduct(Integer.valueOf(authentication.getName()), productId);
     }
 }
