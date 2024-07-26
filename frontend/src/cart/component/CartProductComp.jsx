@@ -1,28 +1,28 @@
-import { Box, Button, Flex, Image, Spacer, useToast } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { Box, Button, Flex, Image, Spacer, Spinner } from "@chakra-ui/react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { LoginContext } from "../../component/LoginProvider.jsx";
+import { CustomToast } from "../../component/CustomToast.jsx";
+import { useNavigate } from "react-router-dom";
+import { OrderContext } from "../../order/component/OrderProvider.jsx";
 
-export function CartProductComp({ setIsEmptyCart }) {
+export function CartProductComp(props) {
+  const account = useContext(LoginContext);
+  const userId = account;
   const [isChanged, setIsChanged] = useState(false);
   const [cart, setCart] = useState(null);
-  const [updateCart, setUpdateCart] = useState(null);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [updateTotalPrice, setUpdateTotalPrice] = useState(0);
-  const toast = useToast();
+  const { successToast, errorToast } = CustomToast();
+  const navigate = useNavigate();
+  const item = useContext(OrderContext);
 
   useEffect(() => {
     axios.get("/api/carts").then((res) => {
       setCart(res.data);
       setIsChanged(false);
-      setTotalPrice(calculateTotalPrice(res.data.cartProduct));
-      if (res.data) {
-        setIsEmptyCart(false);
-      }
     });
-  }, [isChanged]);
+  }, [userId, isChanged]);
 
-  if (cart === null) {
-    setIsEmptyCart(true);
+  if (cart === null || cart.cartProduct.length === 0) {
     return <Box>장바구니에 상품이 없어요</Box>;
   }
 
@@ -30,99 +30,45 @@ export function CartProductComp({ setIsEmptyCart }) {
     axios
       .delete(`/api/carts/${productId}`)
       .then(() => {
-        toast({
-          description: "삭제되었습니다",
-          duration: 1000,
-          status: "success",
-        });
+        successToast("삭제되었습니다");
         setIsChanged(true);
       })
-      .catch(() =>
-        toast({
-          description: "삭제 실패했습니다",
-          duration: 1000,
-          status: "error",
-        }),
-      )
-      .finally();
+      .catch(() => errorToast("삭제 실패했습니다"));
   }
 
   function calculateTotalPrice(cartProduct) {
     return cartProduct.reduce((prev, cur) => {
-      return (prev += cur.totalPrice);
+      return (prev += cur.totalPrice * cur.count);
     }, 0);
   }
 
   function handleReduceCount(index) {
-    let newCart = {};
-    let newCartProduct = {};
-    const count =
-      cart.cartProduct[index].count - 1 > 1
-        ? cart.cartProduct[index].count - 1
-        : 1;
-    const perPrice =
-      count === 1
-        ? cart.cartProduct[index].totalPrice
-        : cart.cartProduct[index].totalPrice / (count + 1);
-    if (updateCart === null) {
-      newCart = { ...cart };
-      const newCartProduct = {
-        ...cart.cartProduct[index],
-        count: count,
-        // TODO. count - 1 로 곱해지는 문제
-        totalPrice: perPrice * count,
-      };
-      newCart.cartProduct[index] = newCartProduct;
-      if (count > 1) {
-        setUpdateTotalPrice(totalPrice - perPrice);
-      }
-      console.log(updateTotalPrice);
-    } else {
-      newCart = { ...updateCart };
-      const updateCount =
-        updateCart.cartProduct[index].count - 1 > 1
-          ? updateCart.cartProduct[index].count - 1
-          : 1;
-      newCartProduct = {
-        ...updateCart.cartProduct[index],
-        count: updateCount,
-        totalPrice: perPrice * updateCount,
-      };
-      newCart.cartProduct[index] = newCartProduct;
-      if (updateCount - 1 > 1) {
-        setUpdateTotalPrice(updateTotalPrice - perPrice);
-      }
-      console.log("함수 안 " + updateTotalPrice);
-    }
-    setUpdateCart(newCart);
-    setIsChanged(true);
+    const count = cart.cartProduct[index].count;
+    const minusCount = count > 1 ? count - 1 : count;
+    const newCart = {
+      ...cart,
+    };
+    newCart.cartProduct[index] = {
+      ...cart.cartProduct[index],
+      count: minusCount,
+    };
+    setCart(newCart);
   }
 
   function handlePlusCount(index) {
-    let newCart = {};
-    let newCartProduct = {};
     const count = cart.cartProduct[index].count;
-    const perPrice = cart.cartProduct[index].totalPrice / count;
-    if (updateCart === null) {
-      newCart = { ...cart };
-      const newCartProduct = {
-        ...cart.cartProduct[index],
-        count: count + 1,
-        totalPrice: perPrice * (count + 1),
-      };
-      newCart.cartProduct[index] = newCartProduct;
-    } else {
-      newCart = { ...updateCart };
-      const updateCount = updateCart.cartProduct[index].count + 1;
-      newCartProduct = {
-        ...updateCart.cartProduct[index],
-        count: updateCount,
-        totalPrice: perPrice * updateCount,
-      };
-      newCart.cartProduct[index] = newCartProduct;
-    }
-    setUpdateCart(newCart);
-    setIsChanged(true);
+    const newCart = {
+      ...cart,
+    };
+    newCart.cartProduct[index] = {
+      ...cart.cartProduct[index],
+      count: count + 1,
+    };
+    setCart(newCart);
+  }
+
+  if (cart === null) {
+    return <Spinner />;
   }
 
   return (
@@ -146,8 +92,6 @@ export function CartProductComp({ setIsEmptyCart }) {
               <Button onClick={() => handleReduceCount(index)}>-</Button>
               <Box mx={4} textAlign="center">
                 {product.count}
-                {/*{updateCart === null || updateCart.cartProduct[index].count}*/}
-                {/*{updateCart === null && product.count}개*/}
               </Box>
               <Button onClick={() => handlePlusCount(index)}>+</Button>
             </Flex>
@@ -161,13 +105,7 @@ export function CartProductComp({ setIsEmptyCart }) {
               X
             </Button>
             <Box>
-              {updateCart === null ||
-                updateCart.cartProduct[index].totalPrice.toLocaleString(
-                  "ko-KR",
-                )}
-              {updateCart === null &&
-                product.totalPrice.toLocaleString("ko-KR")}
-              원
+              {(product.totalPrice * product.count).toLocaleString("ko-KR")}원
             </Box>
           </Box>
         </Flex>
@@ -176,10 +114,23 @@ export function CartProductComp({ setIsEmptyCart }) {
         <Box>상품금액</Box>
         <Spacer />
         <Box>
-          {updateTotalPrice === 0 && totalPrice.toLocaleString("ko-KR")}
-          {updateTotalPrice !== 0 && updateTotalPrice.toLocaleString("ko-KR")}원
+          {calculateTotalPrice(cart.cartProduct).toLocaleString("ko-KR")}원
         </Box>
       </Flex>
+      {cart && (
+        <Button
+          onClick={() =>
+            axios
+              .put("/api/carts", cart)
+              .then(() => navigate("/order?type=cart"))
+              .catch(() =>
+                errorToast("주문하기 실패했습니다. 다시 시도해주십시오."),
+              )
+          }
+        >
+          주문하기
+        </Button>
+      )}
     </Box>
   );
 }
