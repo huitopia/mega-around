@@ -27,12 +27,10 @@ export function SignUpBranch() {
   const [isValidPassword, setIsValidPassword] = useState(false);
   const [isCheckedBranchName, setIsCheckedBranchName] = useState(false);
   const [address, setAddress] = useState("");
-  const [subAddress, setSubAddress] = useState("");
   const navigate = useNavigate();
   const { successToast, errorToast, infoToast } = CustomToast();
-  const handleAddressSelect = (fullAddress, extraAddress) => {
+  const handleAddressSelect = (fullAddress) => {
     setAddress(fullAddress);
-    setSubAddress(extraAddress);
   };
 
   function handleSignup() {
@@ -42,7 +40,6 @@ export function SignUpBranch() {
         password,
         branchName,
         address,
-        subAddress,
       })
       .then(() => {
         successToast("지점 가입에 성공하였습니다.");
@@ -216,7 +213,6 @@ export function SignUpBranch() {
               </FormControl>
             </Box>
             <Input value={address} readOnly placeholder="주소" />
-            <Input value={subAddress} readOnly placeholder="상세주소" />
             <Center mt={5} mb={5}>
               <Button
                 bg={"black"}
