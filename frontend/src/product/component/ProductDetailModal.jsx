@@ -182,9 +182,21 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
   }
 
   function handleAddCart() {
-    axios.post("/api/carts", {
-      // TODO. 데이터 추가
-    }).then();
+    axios
+      .post("/api/carts", {
+        // TODO. 나중에 변경
+        branchId: 1,
+        totalPrice,
+        cartProduct: [
+          {
+            productId,
+            count,
+            totalPrice: totalPrice / count,
+            option: Object.values(checkedItems),
+          },
+        ],
+      })
+      .then();
   }
 
   return (
@@ -278,7 +290,9 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
           <VStack>
             <ButtonGroup>
               <Button colorScheme={"red"}>바로 주문</Button>
-              <Button colorScheme={"orange"} onClick={handleAddCart}>장바구니 담기</Button>
+              <Button colorScheme={"orange"} onClick={handleAddCart}>
+                장바구니 담기
+              </Button>
               <Button onClick={onClose}>닫기</Button>
             </ButtonGroup>
           </VStack>
