@@ -12,20 +12,20 @@ public interface CartMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     @Insert("""
                 INSERT INTO cart
-                (customer_id, branch_id, total_price)
-                VALUES (#{customerId}, #{branchId}, #{totalPrice})
+                (customer_id, branch_id)
+                VALUES (#{customerId}, #{branchId})
             """)
     int insertCart(Cart cart);
 
     @Insert("""
                 INSERT INTO cart_product
-                (cart_id, product_id, count, total_price, options)
-                VALUES (#{cartId}, #{productId}, #{count}, #{totalPrice}, #{options})
+                (cart_id, product_id, count, options)
+                VALUES (#{cartId}, #{productId}, #{count}, #{options})
             """)
     int insertCartProduct(CartProduct cartProduct);
 
     @Select("""
-                SELECT c.id, c.customer_id, c.branch_id, c.total_price, b.branch_name, c.created_at
+                SELECT c.id, c.customer_id, c.branch_id, b.branch_name, c.created_at
                 FROM cart c JOIN branch b ON c.branch_id = b.id
                 WHERE c.customer_id = #{customerId}
             """)
@@ -75,8 +75,21 @@ public interface CartMapper {
 
     @Update("""
                 UPDATE cart_product 
-                SET count = #{count}, total_price = total_price + #{totalPrice}, options = #{options}
+                SET count = #{count}, options = #{options}
                 WHERE product_id = #{productId} AND cart_id = #{cartId}
             """)
     int updateCartProduct(CartProduct cartProduct);
+
+    @Update("""
+                UPDATE cart
+                SET total_price = total_price + #{totalPrice}, branch_id = #{branchId}
+            """)
+    int updateCart(Cart cart);
+
+    @Update("""
+                    UPDATE cart_product
+                    SET count = #{count}
+                    WHERE cart_id = #{cartId}
+            """)
+    int updateCartProductCount(CartProduct cartProduct);
 }
