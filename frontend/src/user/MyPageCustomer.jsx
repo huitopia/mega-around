@@ -10,6 +10,7 @@ export function MyPageCustomer() {
   const { id } = useParams();
   const navigate = useNavigate();
   console.log(id);
+  console.log("customer 값 = ", customer);
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       return navigate("/login");
@@ -26,12 +27,14 @@ export function MyPageCustomer() {
           navigate("/");
         }
       });
-  }, [account, id]);
+  }, []);
 
   if (customer === null) {
-    <Center>
-      <Spinner />
-    </Center>;
+    return (
+      <Center>
+        <Spinner />
+      </Center>
+    );
   }
 
   return (
