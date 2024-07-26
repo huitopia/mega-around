@@ -91,10 +91,8 @@ public class UserController {
     public ResponseEntity<Object> tokenCustomer(@RequestBody Customer customer) {
         Map<String, Object> map = service.getToken(customer);
         if (map == null) {
-            System.out.println("고객로그인 null. map = " + map);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        System.out.println("고객로그인 ok. map = " + map);
         return ResponseEntity.ok(map);
     }
 
@@ -104,15 +102,13 @@ public class UserController {
         Map<String, Object> map = service.getTokenBranch(branch);
         if (map.isEmpty()) {
             if (map.containsKey("token")) {
-                // DB에 email은 있으나 비밀번호가 맞지 않을 때
-                System.out.println("map.containsKey = " + map);
+                // email은 있으나 비밀번호가 맞지 않을 때
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
             // DB에 저장된 정보가 없을 때(회원가입이 되어있지 않을 때)
-            System.out.println("!map.containsKey = " + map);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        System.out.println("map이 null이 아닐 때 = " + map);
+        // email,password 모두 맞을 때
         return ResponseEntity.ok(map);
     }
 

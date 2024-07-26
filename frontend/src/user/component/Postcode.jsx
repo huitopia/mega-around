@@ -22,7 +22,12 @@ export const Postcode = ({ onAddressSelect }) => {
       type="button"
       leftIcon={<Search2Icon />}
       cursor={"pointer"}
+      variant={"outline"}
+      colorScheme={"purple"}
       onClick={handleClick}
+      fontSize={"sm"}
+      width={"150px"}
+      borderRadius={5}
     >
       주소 검색
     </Button>

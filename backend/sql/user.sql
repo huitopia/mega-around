@@ -4,5 +4,5 @@ FROM coupon
 WHERE customer_id = 14;
 
 DELETE
-FROM customer
-WHERE id = 1
+FROM branch
+WHERE id = 20;
