@@ -16,7 +16,7 @@ function MyPageMenu(props) {
         {account.branchName}&nbsp;님&nbsp;&nbsp;
         <FontAwesomeIcon icon={faCaretDown} />
       </MenuButton>
-      <MenuList>
+      <MenuList fontSize={"14px"} width="200px">
         {account.hasAuth() === "customer" && (
           <>
             <MenuItem onClick={() => navigate("/stamp")}>스탬프</MenuItem>

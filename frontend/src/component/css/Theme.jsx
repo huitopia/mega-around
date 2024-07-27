@@ -13,9 +13,12 @@ const { definePartsStyle, defineMultiStyleConfig } =
 
 // define the base component styles
 const baseStyle = definePartsStyle({
+  // define the part you're going to style
   button: {
+    // as={Text}는 스타일 적용안됨
+    // this will style the MenuButton component
     fontWeight: "medium",
-    bg: "teal.800",
+    // bg: "teal.500",
     color: "gray.200",
     _hover: {
       bg: "teal.600",
@@ -23,23 +26,28 @@ const baseStyle = definePartsStyle({
     },
   },
   list: {
-    py: "4",
-    borderRadius: "xl",
-    border: "none",
-    bg: "teal.500",
+    // this will style the MenuList component
+    py: "0",
+    borderRadius: "l",
+    border: "1px solid #c3d2e4",
+    bg: "white",
+    width: `40px`,
   },
   item: {
-    color: "gray.200",
+    // this will style the MenuItem and MenuItemOption components
+    color: "black",
     _hover: {
-      bg: "teal.600",
+      bg: "gray.200",
     },
-    _focus: {
-      bg: "teal.600",
-    },
+    // _focus: {
+    //   bg: "teal.600",
+    // },
   },
 });
 
-const menuTheme = defineMultiStyleConfig({ baseStyle });
+const menuTheme = defineMultiStyleConfig({
+  baseStyle,
+});
 
 const components = {
   Button: {
