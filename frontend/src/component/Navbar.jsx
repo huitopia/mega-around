@@ -1,13 +1,13 @@
 import { Box, Center, Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { LoginContext } from "./LoginProvider.jsx";
 import MyPageMenu from "./MyPageMenu.jsx";
 
 export function Navbar() {
   const account = useContext(LoginContext);
   const navigate = useNavigate();
-  const [showTabs, setShowTabs] = useState(false);
+  // const [showTabs, setShowTabs] = useState(false);
   return (
     <Flex
       h={"40px"}
@@ -42,11 +42,12 @@ export function Navbar() {
         </>
       ) : (
         <>
-          <Box mr={10} onMouseOver={() => setShowTabs(true)}>
-            {account.nickName}
-            {account.branchName}&nbsp;님
-          </Box>
-          {showTabs && <MyPageMenu />}
+          {/*<Box mr={10} onMouseOver={() => setShowTabs(true)}>*/}
+          {/*{account.nickName}*/}
+          {/*{account.branchName}&nbsp;님*/}
+          {/*</Box>*/}
+          {/*{showTabs && <MyPageMenu />}*/}
+          <MyPageMenu />
           <Box
             onClick={() => {
               account.logout();
