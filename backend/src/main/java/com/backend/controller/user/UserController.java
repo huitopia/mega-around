@@ -105,16 +105,16 @@ public class UserController {
     @PostMapping("/login/branch")
     public ResponseEntity<Object> tokenBranch(@RequestBody Branch branch) {
         Map<String, Object> map = service.getTokenBranch(branch);
-        if (!map.isEmpty()) {
-            if (map.containsKey("token")) {
-                // email,password 모두 맞을 때
-                return ResponseEntity.ok(map);
-            }
-            // email은 있으나 비밀번호가 맞지 않을 때
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(map);
+        // email,password 모두 맞을 때 (토큰이 생성되었을 때)
+        if (map.containsKey("token")) {
+            return ResponseEntity.ok(map);
+        }
+        // email은 있으나 비밀번호가 맞지 않을 때
+        if (map.containsKey("unauthorized")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(map.get("unauthorized"));
         }
         // DB에 저장된 정보가 없을 때(회원가입이 되어있지 않을 때)
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(map.get("forbidden"));
     }
 
     // 고객 정보 읽기

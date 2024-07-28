@@ -103,35 +103,36 @@ public class UserService {
 
     public Map<String, Object> getTokenBranch(Branch branch) {
         Map<String, Object> result = new HashMap<>();
-        // 로그인 시도 한 email의 db 가져오기
+        // 로그인 시도 한 이메일에 해당하는 db 가져오기
         Branch dbBranch = userMapper.selectBranchByEmail(branch.getEmail());
 
-        // email이 있으면
-        if (dbBranch != null) {
-            // 비밀번호가 맞으면
-            if (passwordEncoder.matches(branch.getPassword(), dbBranch.getPassword())) {
-                // Auth가 true이면 admin, false이면 branch
-                String authorityString = Boolean.TRUE.equals(dbBranch.getAuth()) ? "admin" : "branch";
-                // 토큰 생성
-                JwtClaimsSet claims = JwtClaimsSet.builder()
-                        .issuer("self")
-                        .issuedAt(Instant.now())
-                        .expiresAt(Instant.now().plusSeconds(60 * 60 * 24 * 7))
-                        .subject(dbBranch.getId().toString()) // 사용자를 나타내는 정보
-                        .claim("scope", authorityString) // 권한
-                        .claim("email", dbBranch.getEmail())
-                        .claim("branchName", dbBranch.getBranchName())
-                        .claim("address", dbBranch.getAddress())
-                        .build();
-                String token = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
-                // 이메일과 비밀번호 일치
-                result.put("token", token);
-            } else {
-                // 이메일은 있지만 비밀번호 불일치
-                result.put("UNAUTHORIZED", "비밀번호가 맞지 않습니다.");
-            }
-        }
         // 회원가입이 되어있지 않을 때
+        if (dbBranch == null) {
+            result.put("forbidden", "가입되지 않은 이메일입니다.");
+            return result;
+        }
+        // 이메일이 있고 비밀번호가 일치했을 때
+        if (passwordEncoder.matches(branch.getPassword(), dbBranch.getPassword())) {
+            // Auth가 true이면 admin, false이면 branch
+            String authorityString = Boolean.TRUE.equals(dbBranch.getAuth()) ? "admin" : "branch";
+            // 토큰 생성
+            JwtClaimsSet claims = JwtClaimsSet.builder()
+                    .issuer("self")
+                    .issuedAt(Instant.now())
+                    .expiresAt(Instant.now().plusSeconds(60 * 60 * 24 * 7))
+                    .subject(dbBranch.getId().toString()) // 사용자를 나타내는 정보
+                    .claim("scope", authorityString) // 권한
+                    .claim("email", dbBranch.getEmail())
+                    .claim("branchName", dbBranch.getBranchName())
+                    .claim("address", dbBranch.getAddress())
+                    .build();
+            String token = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+            result.put("token", token);
+            result.put("name", dbBranch.getBranchName());
+            return result;
+        }
+        // 이메일이 있지만 비밀번호가 일치하지 않을 때
+        result.put("unauthorized", "비밀번호가 맞지 않습니다.");
         return result;
     }
 
