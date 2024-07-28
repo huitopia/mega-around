@@ -143,16 +143,19 @@ public class UserService {
         return result;
     }
 
+    public boolean hasAccess(String id, Authentication authentication) {
+        // id, authentication이 null 값이거나 front에서 넘어 온 id가 jwt토큰의 id와 같지 않으면 false 리턴
+        if (id == null || authentication == null || !id.equals(authentication.getName())) {
+            return false;
+        }
+        return true;
+    }
+
     public Customer getCustomerById(String customerId) {
         return userMapper.selectCustomerById(customerId);
     }
 
-
-    public boolean hasAccess(String customerId, Authentication authentication) {
-        // customerId, authentication이 null 값이거나 front에서 넘어 온 id가 jwt토큰의 id와 같지 않으면 false 리턴
-        if (customerId == null || authentication == null || !customerId.equals(authentication.getName())) {
-            return false;
-        }
-        return true;
+    public Branch getBranchById(String branchId) {
+        return userMapper.selectBranchById(branchId);
     }
 }

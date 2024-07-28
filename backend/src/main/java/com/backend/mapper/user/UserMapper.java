@@ -45,4 +45,9 @@ public interface UserMapper {
             SELECT * FROM customer WHERE id = #{customerId}
             """)
     Customer selectCustomerById(String customerId);
+
+    @Select("""
+            SELECT * FROM branch WHERE id = #{branchId}
+            """)
+    Branch selectBranchById(String branchId);
 }

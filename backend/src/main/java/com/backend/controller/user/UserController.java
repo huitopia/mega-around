@@ -128,4 +128,18 @@ public class UserController {
         }
         return ResponseEntity.ok(customer);
     }
+
+    // 지점 정보 읽기
+    @GetMapping("/user/branch/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Object> getBranchById(@PathVariable String id, Authentication authentication) {
+        if (!service.hasAccess(id, authentication)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        Branch branch = service.getBranchById(id);
+        if (branch == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(branch);
+    }
 }
