@@ -40,7 +40,7 @@ export function Order() {
   const [couponCount, setCouponCount] = useState(0);
   const [useCouponCount, setUseCouponCount] = useState(0);
   const [searchParams] = useSearchParams();
-  const prevOrder = useContext(OrderContext);
+  const directOrder = useContext(OrderContext);
   const account = useContext(LoginContext);
   const navigate = useNavigate();
   const { errorToast } = CustomToast();
@@ -72,20 +72,7 @@ export function Order() {
         console.log(res.data);
       });
     } else if (searchParams.get("type") === "order") {
-      setOrderItem({
-        branchId: prevOrder.branchId,
-        branchName: prevOrder.branchName,
-        totalPrice: prevOrder.totalPrice,
-        orderProduct: [
-          {
-            productId: prevOrder.productId,
-            productName: prevOrder.productName,
-            count: prevOrder.count,
-            totalPrice: prevOrder.totalPrice,
-            option: prevOrder.option,
-          },
-        ],
-      });
+      setOrderItem(directOrder.item);
     }
   }, []);
 

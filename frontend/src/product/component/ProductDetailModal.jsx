@@ -32,11 +32,13 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import { CustomToast } from "../../component/CustomToast.jsx";
+import { OrderContext } from "../../order/component/OrderProvider.jsx";
 
 export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
   // TODO : 권한마다 다른 화면
@@ -62,6 +64,8 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
   } = useDisclosure();
   const cancelRef = React.useRef();
   const [loading, setLoading] = useState(false);
+  const { successToast, errorToast } = CustomToast();
+  const directOrder = useContext(OrderContext);
 
   useEffect(() => {
     if (productId !== 0) {
@@ -196,7 +200,42 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
           },
         ],
       })
-      .then();
+      .then(() => {
+        successToast("상품을 장바구니에 담았습니다");
+        onClose();
+      })
+      .catch(() => errorToast("오류 : 장바구니 담기에 실패했습니다"));
+  }
+
+  // TODO. branchId 수정
+  function handleOrder() {
+    const option = Object.values(checkedItems);
+    const optionList = option.map((id) => {
+      for (const option of data.options) {
+        const selectedItem = option.option_item.find((item) => item.id === id);
+        if (selectedItem) {
+          return selectedItem.content;
+        }
+      }
+    });
+
+    directOrder.setItem({
+      branchId: 1,
+      branchName: "메가커피",
+      orderProduct: [
+        {
+          count: count,
+          filePath: data.filePath,
+          option: option,
+          optionList: optionList,
+          productId,
+          productName: data.title,
+          totalPrice: totalPrice / count,
+        },
+      ],
+    });
+    console.log(directOrder.item);
+    navigate("/order?type=order");
   }
 
   return (
@@ -289,7 +328,9 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
         <ModalFooter>
           <VStack>
             <ButtonGroup>
-              <Button colorScheme={"red"}>바로 주문</Button>
+              <Button colorScheme={"red"} onClick={handleOrder}>
+                바로 주문
+              </Button>
               <Button colorScheme={"orange"} onClick={handleAddCart}>
                 장바구니 담기
               </Button>
