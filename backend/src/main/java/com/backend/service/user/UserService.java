@@ -80,7 +80,7 @@ public class UserService {
 
     public Map<String, Object> getToken(Customer customer) {
         Map<String, Object> result = new HashMap<>();
-
+        // 로그인 시도 한 email의 db 가져오기
         Customer db = userMapper.selectCustomerByEmail(customer.getEmail());
         if (db != null) {
             if (passwordEncoder.matches(customer.getPassword(), db.getPassword())) {
@@ -103,13 +103,15 @@ public class UserService {
 
     public Map<String, Object> getTokenBranch(Branch branch) {
         Map<String, Object> result = new HashMap<>();
-
+        // 로그인 시도 한 email의 db 가져오기
         Branch dbBranch = userMapper.selectBranchByEmail(branch.getEmail());
+
+        // email이 있으면
         if (dbBranch != null) {
+            // 비밀번호가 맞으면
             if (passwordEncoder.matches(branch.getPassword(), dbBranch.getPassword())) {
-
+                // Auth가 true이면 admin, false이면 branch
                 String authorityString = Boolean.TRUE.equals(dbBranch.getAuth()) ? "admin" : "branch";
-
                 // 토큰 생성
                 JwtClaimsSet claims = JwtClaimsSet.builder()
                         .issuer("self")
@@ -120,18 +122,16 @@ public class UserService {
                         .claim("email", dbBranch.getEmail())
                         .claim("branchName", dbBranch.getBranchName())
                         .claim("address", dbBranch.getAddress())
-                        .claim("subAddress", dbBranch.getSubAddress())
                         .build();
                 String token = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
                 // 이메일과 비밀번호 일치
-                System.out.println("service. 이메일과 비밀번호 일치  = token" + token);
                 result.put("token", token);
-            }// 이메일은 있지만 비밀번호 불일치
-            System.out.println("service. 이메일은 있지만 비밀번호 불일치 = dbBranch" + dbBranch);
-
+            } else {
+                // 이메일은 있지만 비밀번호 불일치
+                result.put("UNAUTHORIZED", "비밀번호가 맞지 않습니다.");
+            }
         }
         // 회원가입이 되어있지 않을 때
-        System.out.println("service. 회원가입이 되지 있지 않음 result = " + result);
         return result;
     }
 

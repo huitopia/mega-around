@@ -32,7 +32,7 @@ export function LoginBranch() {
       .catch((err) => {
         account.logout();
         if (err.response.status === 401) {
-          errorToast("비밀번호가 맞지 않습니다.");
+          errorToast(err.response.data.UNAUTHORIZED);
         } else if (err.response.status === 403) {
           errorToast("가입되지 않은 이메일입니다.");
         } else errorToast("로그인에 실패하였습니다.");

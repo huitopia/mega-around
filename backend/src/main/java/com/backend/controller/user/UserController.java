@@ -90,8 +90,13 @@ public class UserController {
     @PostMapping("/login/customer")
     public ResponseEntity<Object> tokenCustomer(@RequestBody Customer customer) {
         Map<String, Object> map = service.getToken(customer);
-        if (map == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+
+        if (map.isEmpty()) {
+            if (map.containsKey("token")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         return ResponseEntity.ok(map);
     }
@@ -100,16 +105,16 @@ public class UserController {
     @PostMapping("/login/branch")
     public ResponseEntity<Object> tokenBranch(@RequestBody Branch branch) {
         Map<String, Object> map = service.getTokenBranch(branch);
-        if (map.isEmpty()) {
+        if (!map.isEmpty()) {
             if (map.containsKey("token")) {
-                // email은 있으나 비밀번호가 맞지 않을 때
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                // email,password 모두 맞을 때
+                return ResponseEntity.ok(map);
             }
-            // DB에 저장된 정보가 없을 때(회원가입이 되어있지 않을 때)
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            // email은 있으나 비밀번호가 맞지 않을 때
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(map);
         }
-        // email,password 모두 맞을 때
-        return ResponseEntity.ok(map);
+        // DB에 저장된 정보가 없을 때(회원가입이 되어있지 않을 때)
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     // 고객 정보 읽기

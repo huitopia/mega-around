@@ -13,7 +13,6 @@ public class Branch {
     private String branchName;
     private LocalDateTime createdAt;
     private String address;
-    private String subAddress;
     private Boolean auth;
 
     public String getCreatedAt() {
