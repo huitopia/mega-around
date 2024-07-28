@@ -90,15 +90,13 @@ public class UserController {
     @PostMapping("/login/customer")
     public ResponseEntity<Object> tokenCustomer(@RequestBody Customer customer) {
         Map<String, Object> map = service.getToken(customer);
-
-
-        if (map.isEmpty()) {
-            if (map.containsKey("token")) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        if (map.containsKey("token")) {
+            return ResponseEntity.ok(map);
         }
-        return ResponseEntity.ok(map);
+        if (map.containsKey("unauthorized")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(map.get("unauthorized"));
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(map.get("forbidden"));
     }
 
     // 지점 로그인

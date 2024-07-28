@@ -82,22 +82,29 @@ public class UserService {
         Map<String, Object> result = new HashMap<>();
         // 로그인 시도 한 email의 db 가져오기
         Customer db = userMapper.selectCustomerByEmail(customer.getEmail());
-        if (db != null) {
-            if (passwordEncoder.matches(customer.getPassword(), db.getPassword())) {
-                // 토큰 생성
-                JwtClaimsSet claims = JwtClaimsSet.builder()
-                        .issuer("self")
-                        .issuedAt(Instant.now())
-                        .expiresAt(Instant.now().plusSeconds(60 * 60 * 24 * 7))
-                        .subject(db.getId().toString()) // 사용자를 나타내는 정보
-                        .claim("scope", "customer") // 권한
-                        .claim("nickName", db.getNickName())
-                        .claim("email", db.getEmail())
-                        .build();
-                String token = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
-                result.put("token", token);
-            }
+        // 회원가입이 되어있지 않을 때
+        if (db == null) {
+            result.put("forbidden", "등록되지 않은 이메일입니다.");
+            return result;
         }
+        // 이메일이 있고 비밀번호가 일치했을 때
+        if (passwordEncoder.matches(customer.getPassword(), db.getPassword())) {
+            // 토큰 생성
+            JwtClaimsSet claims = JwtClaimsSet.builder()
+                    .issuer("self")
+                    .issuedAt(Instant.now())
+                    .expiresAt(Instant.now().plusSeconds(60 * 60 * 24 * 7))
+                    .subject(db.getId().toString()) // 사용자를 나타내는 정보
+                    .claim("scope", "customer") // 권한
+                    .claim("nickName", db.getNickName())
+                    .claim("email", db.getEmail())
+                    .build();
+            String token = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+            result.put("token", token);
+            result.put("name", db.getNickName());
+        }
+        // 이메일은 있지만 비밀번호가 일치하지 않을 때
+        result.put("unauthorized", "비밀번호가 일치하지 않습니다. 다시 시도해 주세요.");
         return result;
     }
 
@@ -108,7 +115,7 @@ public class UserService {
 
         // 회원가입이 되어있지 않을 때
         if (dbBranch == null) {
-            result.put("forbidden", "가입되지 않은 이메일입니다.");
+            result.put("forbidden", "등록되지 않은 이메일입니다.");
             return result;
         }
         // 이메일이 있고 비밀번호가 일치했을 때
@@ -131,8 +138,8 @@ public class UserService {
             result.put("name", dbBranch.getBranchName());
             return result;
         }
-        // 이메일이 있지만 비밀번호가 일치하지 않을 때
-        result.put("unauthorized", "비밀번호가 맞지 않습니다.");
+        // 이메일은 있지만 비밀번호가 일치하지 않을 때
+        result.put("unauthorized", "비밀번호가 일치하지 않습니다. 다시 시도해 주세요.");
         return result;
     }
 

@@ -29,7 +29,7 @@ export function Login() {
         successToast(res.data.name + "님 환영합니다");
         navigate("/");
       })
-      .catch(() => {
+      .catch((err) => {
         account.logout();
         const errorMessage = err.response
           ? err.response.data
