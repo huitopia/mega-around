@@ -2,7 +2,7 @@ import { Box, Center, Spinner, Table, Td, Th, Tr } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../component/LoginProvider.jsx";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 export function MyPageBranch() {
   const account = useContext(LoginContext);
@@ -30,7 +30,7 @@ export function MyPageBranch() {
 
   if (branch === null) {
     return (
-      <Center>
+      <Center mt={20}>
         <Spinner />
       </Center>
     );
@@ -65,6 +65,22 @@ export function MyPageBranch() {
                   </Tr>
                 </Table>
               </Center>
+              <Link to={`/mypage/branch/edit/${id}`}>
+                <Box display="flex">
+                  <Box
+                    mt={10}
+                    fontSize="sm"
+                    ml={"auto"}
+                    mr={12}
+                    cursor="pointer"
+                    as={"u"}
+                    color={"gray.500"}
+                    // onClick={() => navigate(`/mypage/branch/edit/${id}`)}
+                  >
+                    회원정보 수정
+                  </Box>
+                </Box>
+              </Link>
             </>
           )}
         </Box>

@@ -32,7 +32,7 @@ function MyPageMenu(props) {
           </>
         )}
         {account.hasAuth() === "branch" && (
-          <MenuItem onCLick={() => navigate(`/mapage/branch/${account.id}`)}>
+          <MenuItem onClick={() => navigate(`/mypage/branch/${account.id}`)}>
             내 정보(지점)
           </MenuItem>
         )}

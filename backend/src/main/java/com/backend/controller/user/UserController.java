@@ -117,11 +117,12 @@ public class UserController {
 
     // 고객 정보 읽기
     @GetMapping("/user/customer/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('SCOPE_customer')")
     public ResponseEntity<Object> getCustomerById(@PathVariable String id, Authentication authentication) {
-        if (!service.hasAccess(id, authentication)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+//        if (!service.hasAccess(id, authentication)) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+//        }
+        System.out.println("authentication = " + authentication);
         Customer customer = service.getCustomerById(id);
         if (customer == null) {
             return ResponseEntity.notFound().build();
@@ -131,7 +132,7 @@ public class UserController {
 
     // 지점 정보 읽기
     @GetMapping("/user/branch/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAuthority('SCOPE_branch')")
     public ResponseEntity<Object> getBranchById(@PathVariable String id, Authentication authentication) {
         if (!service.hasAccess(id, authentication)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
