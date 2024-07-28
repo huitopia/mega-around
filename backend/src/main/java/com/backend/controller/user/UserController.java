@@ -119,10 +119,9 @@ public class UserController {
     @GetMapping("/user/customer/{id}")
     @PreAuthorize("hasAuthority('SCOPE_customer')")
     public ResponseEntity<Object> getCustomerById(@PathVariable String id, Authentication authentication) {
-//        if (!service.hasAccess(id, authentication)) {
-//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-//        }
-        System.out.println("authentication = " + authentication);
+        if (!service.hasAccess(id, authentication)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         Customer customer = service.getCustomerById(id);
         if (customer == null) {
             return ResponseEntity.notFound().build();

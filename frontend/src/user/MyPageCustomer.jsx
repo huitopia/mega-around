@@ -62,7 +62,7 @@ export function MyPageCustomer() {
                   </Tr>
                 </Table>
               </Center>
-              <Link to={`edit/${customer.id}`}>
+              <Link to={`/mypage/customer/edit/${id}`}>
                 <Box display="flex">
                   <Box
                     mt={10}

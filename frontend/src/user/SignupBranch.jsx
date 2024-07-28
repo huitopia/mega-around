@@ -91,7 +91,7 @@ export function SignUpBranch() {
     } else {
       setIsValidPassword(false);
     }
-  }, [password]);
+  }, [password, passwordPattern]);
 
   let isCheckedPassword;
   if (password === passwordCheck) {
@@ -192,6 +192,7 @@ export function SignUpBranch() {
                 <FormLabel>비밀번호 재입력</FormLabel>
                 <InputGroup>
                   <Input
+                    type="password"
                     onChange={(e) => setPasswordCheck(e.target.value)}
                     placeholder={"비밀번호를 한번 더 입력해주세요"}
                     sx={{ "::placeholder": { fontSize: "sm" } }}
