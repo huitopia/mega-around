@@ -20,21 +20,25 @@ export function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const account = useContext(LoginContext);
-  const { successToast, errorToast } = CustomToast();
+  const { successToast, errorToast, infoToast } = CustomToast();
   function handleCustomerLogin() {
     axios
       .post("/api/login/customer", { email, password })
       .then((res) => {
         account.login(res.data.token);
-        successToast(res.data.name + "님 환영합니다");
+        successToast(`${res.data.name}님! 환영합니다.`);
         navigate("/");
       })
       .catch((err) => {
         account.logout();
-        const errorMessage = err.response
-          ? err.response.data
-          : "로그인에 실패하였습니다.";
-        errorToast(errorMessage);
+        if (email.length === 0) {
+          errorToast("이메일을 입력해주세요.");
+        } else {
+          const errorMessage = err.response
+            ? err.response.data
+            : "로그인에 실패하였습니다.";
+          errorToast(errorMessage);
+        }
       });
   }
 
