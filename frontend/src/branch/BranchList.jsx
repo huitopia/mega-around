@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 export function BranchList() {
   const kakao_javasciprt_key = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY;
 
+  // 현재 위치
   const [location, setLocation] = useState(null);
   const [error, setError] = useState(null);
 
