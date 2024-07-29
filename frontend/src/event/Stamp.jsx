@@ -12,6 +12,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import axios from "axios";
+import longText from "./stampText.js";
 
 function Stamp(props) {
   const boxes = Array.from({ length: 10 }, (_, i) => i + 1);
@@ -93,6 +94,10 @@ function Stamp(props) {
         <Spacer />
         <Button>적립내역 보기</Button>
       </Flex>
+      <Box bg={"#f8f9fa"}>
+        <Text>유의사항</Text>
+        <Box whiteSpace="pre-line">{longText}</Box>
+      </Box>
     </Box>
   );
 }
