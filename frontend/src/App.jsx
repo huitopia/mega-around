@@ -21,6 +21,10 @@ import { OrderProvider } from "./order/component/OrderProvider.jsx";
 import { BranchPage } from "./order/BranchPage.jsx";
 import { Coupon } from "./event/Coupon.jsx";
 import axios from "axios";
+import { MyPageCustomer } from "./user/MyPageCustomer.jsx";
+import { MyPageBranch } from "./user/MyPageBranch.jsx";
+import { CustomerEdit } from "./CustomerEdit.jsx";
+import { BranchEdit } from "./BranchEdit.jsx";
 
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
@@ -58,6 +62,10 @@ const router = createBrowserRouter([
       { path: "signup/branch", element: <SignUpBranch /> },
       { path: "login", element: <Login /> },
       { path: "login/branch", element: <LoginBranch /> },
+      { path: "mypage/customer/:id", element: <MyPageCustomer /> },
+      { path: "mypage/branch/:id", element: <MyPageBranch /> },
+      { path: "mypage/customer/edit/:id", element: <CustomerEdit /> },
+      { path: "mypage/branch/edit/:id", element: <BranchEdit /> },
     ],
   },
 ]);

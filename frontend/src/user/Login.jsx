@@ -26,12 +26,19 @@ export function Login() {
       .post("/api/login/customer", { email, password })
       .then((res) => {
         account.login(res.data.token);
-        successToast("로그인 되었습니다");
+        successToast(`${res.data.name}님! 환영합니다.`);
         navigate("/");
       })
-      .catch(() => {
+      .catch((err) => {
         account.logout();
-        errorToast("로그인이 실패하였습니다");
+        if (email.length === 0) {
+          errorToast("이메일을 입력해주세요.");
+        } else {
+          const errorMessage = err.response
+            ? err.response.data
+            : "로그인에 실패하였습니다.";
+          errorToast(errorMessage);
+        }
       });
   }
 

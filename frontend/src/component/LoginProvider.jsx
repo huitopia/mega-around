@@ -4,13 +4,12 @@ import { jwtDecode } from "jwt-decode";
 export const LoginContext = createContext(null);
 
 export function LoginProvider({ children }) {
-  // email,nickName,branchName,isLoggedIn,hasAccess,login,logout
   const [id, setId] = useState("");
   const [email, setEmail] = useState("");
   const [nickName, setNickName] = useState("");
   const [branchName, setBranchName] = useState("");
+  const [auth, setAuth] = useState("");
   const [address, setAddress] = useState("");
-  const [subAddress, setSubAddress] = useState("");
   const [expired, setExpired] = useState(0);
 
   useEffect(() => {
@@ -32,23 +31,35 @@ export function LoginProvider({ children }) {
     setEmail(payload.email);
     setNickName(payload.nickName);
     setBranchName(payload.branchName);
+    setAuth(payload.scope);
     setAddress(payload.address);
-    setSubAddress(payload.subAddress);
   }
 
   function logout() {
     localStorage.removeItem("token");
     setExpired(0);
+    setAuth("");
     setId("");
     setEmail("");
     setNickName("");
     setBranchName("");
     setAddress("");
-    setSubAddress("");
   }
 
   function hasAccess(param) {
     return id == param; // 타입이 달라도 값이 같으면 같게 인식
+  }
+
+  // 권한 admin, customer, branch
+  function hasAuth() {
+    if (auth.includes("admin")) {
+      return "admin";
+    } else if (auth.includes("customer")) {
+      return "customer";
+    } else if (auth.includes("branch")) {
+      return "branch";
+    }
+    return null;
   }
 
   return (
@@ -59,11 +70,11 @@ export function LoginProvider({ children }) {
         nickName,
         branchName,
         address,
-        subAddress,
         login,
         logout,
         isLoggedIn,
         hasAccess,
+        hasAuth,
       }}
     >
       {children}

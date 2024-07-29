@@ -2,6 +2,7 @@ package com.backend.mapper.user;
 
 import com.backend.domain.user.Branch;
 import com.backend.domain.user.Customer;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
@@ -11,9 +12,11 @@ import java.util.List;
 
 @Mapper
 public interface UserMapper {
+
     @Insert("""
             INSERT INTO customer(email,password,nick_name) VALUES (#{email},#{password},#{nickName})
             """)
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertCustomer(Customer customer);
 
     @Insert("""
@@ -43,7 +46,17 @@ public interface UserMapper {
     Branch selectBranchByBranchName(String branchName);
 
     @Select("""
-            SELECT auth FROM branch WHERE auth = true
+            SELECT * FROM customer WHERE id = #{customerId}
             """)
-    List<String> selectAuthorityByBranchAuth(Boolean auth);
+    Customer selectCustomerById(Integer customerId);
+
+    @Select("""
+            SELECT * FROM branch WHERE id = #{branchId}
+            """)
+    Branch selectBranchById(Integer branchId);
+
+    @Update("""
+            UPDATE customer SET email=#{email},password=#{password} WHERE id=#{id}
+            """)
+    int updateCustomer(Customer customer);
 }

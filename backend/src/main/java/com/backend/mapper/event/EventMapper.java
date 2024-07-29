@@ -1,5 +1,6 @@
 package com.backend.mapper.event;
 
+import com.backend.domain.event.Notice;
 import org.apache.ibatis.annotations.*;
 
 @Mapper
@@ -20,18 +21,16 @@ public interface EventMapper {
     Integer selectCouponByCustomerId(Integer customerId);
 
     @Insert("""
-            INSERT INTO stmap
-            (count) VALUES (#{count})
-            WHERE customer_id = customerId
+            INSERT INTO stamp
+            (customer_id, count) VALUES (#{count}, #{customerId})
             """)
-    int insertStamp(Integer customerId);
+    int insertStamp(Integer customerId, Integer count);
 
     @Insert("""
-                INSERT INTO coupon
-                (count) VALUES (#{count})
-                WHERE customer_id = customerId
+            INSERT INTO coupon
+            (customer_id, count) VALUES (#{count}, #{customerId})
             """)
-    int insertCoupon(Integer customerId);
+    int insertCoupon(Integer customerId, Integer count);
 
     @Delete("""
                 DELETE FROM stamp
@@ -47,16 +46,16 @@ public interface EventMapper {
 
     @Update("""
                 UPDATE coupon
-                SET count = #{count}
+                SET count = count + #{newCount}
                 WHERE customer_id = #{customerId}
             """)
-    int updateCoupon(Integer customerId);
+    int updateCoupon(Integer customerId, Integer newCount);
 
     @Insert("""
                 INSERT INTO notice
                 (customer_id, tag, content) VALUES (#{customerId}, #{tag}, #{content})
             """)
-    int insertNotice(Integer customerId, Integer tag, Integer content);
+    int insertNotice(Integer customerId, String tag, String content);
 
     @Select("""
                 SELECT *
@@ -64,4 +63,11 @@ public interface EventMapper {
                 WHERE customer_id = #{customerId}
             """)
     Notice selectNoticeByCustomerId(Integer customerId);
+
+    @Update("""
+                UPDATE stamp
+                SET count = #{count}
+                WHERE customer_id = #{customerId}
+            """)
+    int updateStamp(Integer customerId, Integer count);
 }

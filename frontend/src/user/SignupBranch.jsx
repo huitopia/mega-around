@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import DaumPostcode from "react-daum-postcode";
 import {
   Box,
   Button,
   Center,
+  Flex,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -13,9 +13,10 @@ import {
   InputRightElement,
   Text,
 } from "@chakra-ui/react";
-import { CheckIcon, CloseIcon, Search2Icon } from "@chakra-ui/icons";
+import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import { CustomToast } from "../component/CustomToast.jsx";
+import { Postcode } from "./component/Postcode.jsx";
 
 export function SignUpBranch() {
   const [email, setEmail] = useState("");
@@ -27,61 +28,59 @@ export function SignUpBranch() {
   const [isValidPassword, setIsValidPassword] = useState(false);
   const [isCheckedBranchName, setIsCheckedBranchName] = useState(false);
   const [address, setAddress] = useState("");
-  const [subAddress, setSubAddress] = useState("");
-  const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState("");
   const navigate = useNavigate();
   const { successToast, errorToast, infoToast } = CustomToast();
-
-  const handleComplete = (data) => {
-    let fullAddress = data.address;
-    let extraAddress = "";
-
-    if (data.addressType === "R") {
-      if (data.bname !== "") {
-        extraAddress += data.bname;
-      }
-      if (data.buildingName !== "") {
-        extraAddress +=
-          extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
-      }
-      fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
-    }
+  const handleAddressSelect = (fullAddress) => {
     setAddress(fullAddress);
-    setSubAddress(extraAddress);
-    setIsPostcodeOpen(false); // 주소 선택 후 팝업 닫기
-    console.log(fullAddress); // e.g. '서울 성동구 왕십리로2길 20 (성수동1가)'
   };
 
   function handleSignup() {
-    axios
-      .post("/api/user/branch", {
-        email,
-        password,
-        branchName,
-        address,
-        subAddress,
-      })
-      .then(() => {
-        successToast("지점 가입에 성공하였습니다.");
-        navigate("/login");
-      })
-      .catch(() => errorToast("지점 가입에 실패하였습니다."));
+    {
+      isCheckedEmail
+        ? isValidPassword || isCheckedPassword
+          ? axios
+              .post("/api/user/branch", {
+                email,
+                password,
+                branchName,
+                address,
+              })
+              .then(() => {
+                successToast("지점 가입에 성공하였습니다.");
+                navigate("/login");
+              })
+              .catch((err) =>
+                err.response.status === 400
+                  ? errorToast("필수 입력사항을 확인해주세요")
+                  : errorToast("지점 가입에 실패하였습니다."),
+              )
+              .finally(() => setIsLoading(false))
+          : errorToast("비밀번호를 확인해주세요.")
+        : errorToast("이메일 중복확인을 진행해주세요.");
+    }
   }
 
   function handleBranchCheckEmail() {
-    axios
-      .get(`/api/user/branch/email/${email}`, email)
-      .then(() => {
-        successToast("회원가입 가능한 이메일입니다.");
-        setIsCheckedEmail(true);
-      })
-      .catch((err) => {
-        if (err.response.status === 409) {
-          errorToast("이미 존재하는 이메일입니다.");
-        } else {
-          infoToast("회원가입이 가능한 이메일입니다.");
-        }
-      });
+    {
+      isValidEmail
+        ? axios
+            .get(`/api/user/branch/email/${email}`, email)
+            .then(() => {
+              successToast("회원가입 가능한 이메일입니다.");
+              setIsCheckedEmail(true);
+            })
+            .catch((err) => {
+              if (err.response.status === 409) {
+                errorToast("이미 존재하는 이메일입니다.");
+              } else if (err.response.status === 404) {
+                errorToast("이메일을 입력해주세요.");
+              } else {
+                infoToast("회원가입이 가능한 이메일입니다.");
+              }
+            })
+        : errorToast("유효한 비밀번호를 입력해주세요.");
+    }
   }
 
   const passwordPattern =
@@ -92,7 +91,7 @@ export function SignUpBranch() {
     } else {
       setIsValidPassword(false);
     }
-  }, [password]);
+  }, [password, passwordPattern]);
 
   let isCheckedPassword;
   if (password === passwordCheck) {
@@ -115,6 +114,7 @@ export function SignUpBranch() {
       setIsCheckedBranchName(true);
     }
   }, [branchName]);
+
   return (
     <>
       <Center>
@@ -126,7 +126,7 @@ export function SignUpBranch() {
             <Box mb={7}>
               <FormControl isRequired>
                 <FormLabel>이메일</FormLabel>
-                <InputGroup>
+                <Flex>
                   <Input
                     type={"email"}
                     placeholder={"email@exmaple.com"}
@@ -136,23 +136,27 @@ export function SignUpBranch() {
                       setIsValidEmail(!e.target.validity.typeMismatch);
                     }}
                   />
-                  <InputRightElement w={"90px"} mr={1} colorScheme={"red"}>
-                    <Button
-                      isDisabled={!isValidEmail || email.trim().length == 0}
-                      onClick={handleBranchCheckEmail}
-                      size={"sm"}
-                      colorScheme={"blue"}
-                    >
-                      중복확인
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
-                {email.length > 0 &&
-                  (isCheckedEmail || (
-                    <FormHelperText color={"#dc7b84"}>
-                      유효한 이메일을 입력하고 중복확인 버튼을 눌러주세요.
-                    </FormHelperText>
-                  ))}
+                  <Box w={5} />
+                  <Button
+                    isDisabled={isCheckedEmail}
+                    // isDisabled={!isValidEmail || email.trim().length == 0}
+                    onClick={handleBranchCheckEmail}
+                    variant={"outline"}
+                    colorScheme={"purple"}
+                    fontSize={"sm"}
+                    width={"120px"}
+                    borderRadius={5}
+                  >
+                    중복확인
+                  </Button>
+                </Flex>
+                {email.length > 0 && (
+                  <FormHelperText color="#dc7b84">
+                    {isValidEmail
+                      ? isCheckedEmail || "중복확인 버튼을 눌러주세요."
+                      : "유효한 이메일을 입력해주세요."}
+                  </FormHelperText>
+                )}
               </FormControl>
             </Box>
             <Box mb={7}>
@@ -162,6 +166,7 @@ export function SignUpBranch() {
                   <Input
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder={"8-20자의 영문/숫자/특수문자 조합으로 입력"}
+                    sx={{ "::placeholder": { fontSize: "sm" } }}
                     value={password}
                   />
                   <InputRightElement>
@@ -187,8 +192,10 @@ export function SignUpBranch() {
                 <FormLabel>비밀번호 재입력</FormLabel>
                 <InputGroup>
                   <Input
+                    type="password"
                     onChange={(e) => setPasswordCheck(e.target.value)}
                     placeholder={"비밀번호를 한번 더 입력해주세요"}
+                    sx={{ "::placeholder": { fontSize: "sm" } }}
                   />
                   <InputRightElement>
                     {passwordCheck.length > 0 &&
@@ -214,6 +221,7 @@ export function SignUpBranch() {
                   <Input
                     value={branchName}
                     placeholder={"지점명을 입력해주세요"}
+                    sx={{ "::placeholder": { fontSize: "sm" } }}
                     onChange={(e) => {
                       setBranchName(e.target.value.trim());
                     }}
@@ -229,34 +237,26 @@ export function SignUpBranch() {
             <Box mb={7}>
               <FormControl isRequired>
                 <FormLabel>주소</FormLabel>
-                <Button
-                  type="button"
-                  onClick={() => setIsPostcodeOpen(true)}
-                  leftIcon={<Search2Icon />}
-                  cursor={"pointer"}
-                >
-                  주소 검색
-                </Button>
+                <Flex>
+                  <Input
+                    value={address}
+                    readOnly
+                    placeholder="주소"
+                    sx={{ "::placeholder": { fontSize: "sm" } }}
+                  />
+                  <Box w={5} />
+                  <Postcode onAddressSelect={handleAddressSelect} />
+                </Flex>
               </FormControl>
             </Box>
-            {isPostcodeOpen && (
-              <DaumPostcode
-                onComplete={handleComplete}
-                autoClose={false}
-                style={{ width: "100%", height: "400px" }}
-                scriptUrl="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
-              />
-            )}
-            <Input value={address} readOnly placeholder="주소" />
-            <Input value={subAddress} readOnly placeholder="상세주소" />
-            <Center mt={5} mb={5}>
+            <Center mt={10} mb={5}>
               <Button
                 bg={"black"}
                 color={"white"}
                 width={"200px"}
                 fontSize={"14px"}
                 borderRadius={"40"}
-                // isLoading={isLoading}
+                isLoading={isLoading}
                 // isDisabled={isDisabled}
                 onClick={handleSignup}
               >

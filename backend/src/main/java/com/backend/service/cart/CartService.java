@@ -36,10 +36,8 @@ public class CartService {
             CartProduct existProduct = cartMapper.selectCartByProductId(cartProduct.getCartId(), cartProduct.getProductId());
             System.out.println(existProduct == null);
             if (existProduct == null) {
-                System.out.println("null일때 실행됨");
                 cartMapper.insertCartProduct(cartProduct);
             } else {
-                System.out.println("null일때 실행안됨");
                 cartMapper.updateCartProduct(cartProduct);
             }
         }
@@ -55,6 +53,7 @@ public class CartService {
                 optionListString.add(productMapper.selectOptionById(id));
             }
             cartProduct.setOptionList(optionListString);
+            cartProduct.setOption(optionList);
         }
         cart.setCartProduct(cartProductList);
 
@@ -64,5 +63,12 @@ public class CartService {
     public void removeCartProduct(Integer customerId, Integer productId) {
         Integer cartId = cartMapper.selectCartIdByCustomerId(customerId);
         cartMapper.deleteCartProductByProductId(cartId, productId);
+    }
+
+    public void modifyCart(Cart cart) {
+        List<CartProduct> cartProductList = cart.getCartProduct();
+        for (CartProduct cartProduct : cartProductList) {
+            cartMapper.updateCartProductCount(cartProduct);
+        }
     }
 }

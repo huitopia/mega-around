@@ -21,9 +21,8 @@ public class EventController {
     @GetMapping("/event/{item}")
     @Description("스탬프/쿠폰 조회")
     public ResponseEntity getEvent(@PathVariable String item, Authentication authentication) {
-        if(eventService.checkItem(item)){
-//        Integer count = eventService.getEvent(item, Integer.valueOf(authentication.getName()));
-            Integer count = eventService.getEvent(item, 1);
+        if (eventService.checkItem(item)) {
+            Integer count = eventService.getEvent(item, Integer.valueOf(authentication.getName()));
             return ResponseEntity.ok(count);
         }
         return ResponseEntity.badRequest().build();
