@@ -3,7 +3,7 @@ import { createMultiStyleConfigHelpers, extendTheme } from "@chakra-ui/react";
 import { menuAnatomy } from "@chakra-ui/anatomy";
 
 const colors = {
-  yellow: "#ffde00", // 원하는 색상
+  yellow: "#ffde00", // Replace with your desired yellow color
   orange: "#401F02",
   pink: "#e8e4e0",
 };
@@ -78,6 +78,20 @@ const components = {
             },
           };
         }
+      },
+    },
+  },
+  Radio: {
+    baseStyle: {
+      control: {
+        borderColor: "gray.200",  // 원의 테두리 색상
+        _checked: {
+          bg: "black",  // 체크된 상태의 배경 색상
+          borderColor: "black", // 체크된 상태의 테두리 색상
+        },
+      },
+      label: {
+        color: "black",  // 라벨 색상
       },
     },
   },

@@ -19,19 +19,17 @@ public class OrderController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/orders")
     @Description("주문 생성")
-    public ResponseEntity addOrderItem(@RequestBody OrderItem orderItem) throws JsonProcessingException {
-        orderService.addOrderItem(orderItem);
-        // 스탬프 적립, 쿠폰 적립 로직 추가
-        // 주문 완료 알림 추가
-        return ResponseEntity.ok().build();
+    public ResponseEntity addOrderItem(@RequestBody OrderItem orderItem, Authentication authentication) throws JsonProcessingException {
+        Integer orderId = orderService.addOrderItem(orderItem, Integer.valueOf(authentication.getName()));
+        return ResponseEntity.ok(orderId);
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/orders/list")
     @Description("주문 리스트 조회")
     public ResponseEntity getOrderItemList(Authentication authentication, String period, Integer stateId, Integer branchId) throws JsonProcessingException {
-//        return ResponseEntity.ok(orderService.getOrderItemList(Integer.valueOf(authentication.getName()), stateId, branchId));
-        return ResponseEntity.ok(orderService.getOrderItemList(1, period, stateId, branchId));
+        System.out.println("a = " + authentication.getName());
+        return ResponseEntity.ok(orderService.getOrderItemList(Integer.valueOf(authentication.getName()), period, stateId, branchId));
     }
 
     @PreAuthorize("isAuthenticated()")

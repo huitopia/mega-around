@@ -9,10 +9,10 @@ export function Cart() {
       </Box>
       <Divider border={"1px solid black"} my={4} />
       <Box>
-        <Box bg={"black"} color={"white"}>
+        <Box bg={"black"} color={"white"} h={"40px"}>
           이대역사거리점
         </Box>
-        <Box>주문 상품</Box>
+        <Box fontWeight={"bold"} mt={5} fontSize={"1.2rem"} mb={5}>주문 상품</Box>
         <CartProductComp />
       </Box>
     </Box>

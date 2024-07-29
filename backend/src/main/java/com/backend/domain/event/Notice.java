@@ -1,4 +1,4 @@
-package com.backend.mapper.event;
+package com.backend.domain.event;
 
 import java.time.LocalDateTime;
 

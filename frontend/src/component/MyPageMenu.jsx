@@ -16,11 +16,13 @@ function MyPageMenu(props) {
         {account.branchName}&nbsp;님&nbsp;&nbsp;
         <FontAwesomeIcon icon={faCaretDown} />
       </MenuButton>
+
       <MenuList fontSize={"14px"} width="200px">
         {account.hasAuth() === "customer" && (
           <>
             <MenuItem onClick={() => navigate("/stamp")}>스탬프</MenuItem>
             <MenuItem onClick={() => navigate("/coupon")}>쿠폰</MenuItem>
+            <MenuItem onClick={() => navigate(`/cart`)}>장바구니</MenuItem>
             <MenuItem onClick={() => navigate(`/order/list`)}>
               주문 내역
             </MenuItem>
