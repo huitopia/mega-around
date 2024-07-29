@@ -37,7 +37,7 @@ public class UserController {
 
     // 지점 회원가입
     @PostMapping("/user/branch")
-    public ResponseEntity<Object> signupBranch(@RequestBody Branch branch) {
+    public ResponseEntity<Object> signupBranch(@RequestBody Branch branch) throws Exception {
         if (service.validate(branch.getEmail(), branch.getPassword(), branch.getBranchName()) &&
                 service.validateAddress(branch.getAddress())) {
             Boolean result = service.addBranch(branch);
