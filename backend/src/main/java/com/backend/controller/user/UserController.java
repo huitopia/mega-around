@@ -40,7 +40,10 @@ public class UserController {
     public ResponseEntity<Object> signupBranch(@RequestBody Branch branch) {
         if (service.validate(branch.getEmail(), branch.getPassword(), branch.getBranchName()) &&
                 service.validateAddress(branch.getAddress())) {
-            service.addBranch(branch);
+            Boolean result = service.addBranch(branch);
+            if (!result) {
+                return ResponseEntity.badRequest().build();
+            }
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.badRequest().build();

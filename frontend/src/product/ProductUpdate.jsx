@@ -232,7 +232,7 @@ export const ProductUpdate = () => {
                   Update
                 </Button>
                 <Button
-                  colorScheme={"red"}
+                  colorScheme={"pink"}
                   width={"200px"}
                   onClick={() => navigate(-1)}
                 >

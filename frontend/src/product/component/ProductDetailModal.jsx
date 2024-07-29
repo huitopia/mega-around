@@ -328,7 +328,7 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
         <ModalFooter>
           <VStack>
             <ButtonGroup>
-              <Button colorScheme={"red"} onClick={handleOrder}>
+              <Button colorScheme={"pink"} onClick={handleOrder}>
                 바로 주문
               </Button>
               <Button colorScheme={"orange"} onClick={handleAddCart}>
