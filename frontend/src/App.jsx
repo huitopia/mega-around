@@ -25,6 +25,7 @@ import { MyPageCustomer } from "./user/MyPageCustomer.jsx";
 import { MyPageBranch } from "./user/MyPageBranch.jsx";
 import { CustomerEdit } from "./CustomerEdit.jsx";
 import { BranchEdit } from "./BranchEdit.jsx";
+import { BranchList } from "./BranchList.jsx";
 
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
@@ -44,6 +45,8 @@ const router = createBrowserRouter([
       { path: "product", element: <ProductUpload /> },
       { path: "product/list", element: <ProductList /> },
       { path: "product/:productId", element: <ProductUpdate /> },
+      // branchSelect
+      { path: "branch/list", element: <BranchList /> },
       // event
       { path: "/stamp", element: <Stamp /> },
       { path: "/coupon", element: <Coupon /> },
