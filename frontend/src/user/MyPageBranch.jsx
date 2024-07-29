@@ -53,7 +53,7 @@ export function MyPageBranch() {
                   </Tr>
                   <Tr>
                     <Th>지점명</Th>
-                    <Td>{branch.nickName}</Td>
+                    <Td>{branch.branchName}</Td>
                   </Tr>
                   <Tr>
                     <Th>주소</Th>
