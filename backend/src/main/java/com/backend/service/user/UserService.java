@@ -9,12 +9,12 @@ import com.backend.mapper.user.UserMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -71,8 +71,8 @@ public class UserService {
     public void addCustomer(Customer customer) {
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         userMapper.insertCustomer(customer);
-        eventMapper.insertCoupon(customer.getId(),0);
-        eventMapper.insertStamp(customer.getId(),0);
+        eventMapper.insertCoupon(customer.getId(), 0);
+        eventMapper.insertStamp(customer.getId(), 0);
     }
 
     public Boolean addBranch(Branch branch) throws Exception {
@@ -83,7 +83,7 @@ public class UserService {
         if (branchGeocode.getLatitude() == 0.0) {
             return false;
         }
-        branchGeocode.setBranchId(branch);
+        branchGeocode.setBranchId(branch.getId());
         // mapper 저장
         int insertResult = branchMapper.insertGeocodeById(branchGeocode);
         return insertResult >= 1;
