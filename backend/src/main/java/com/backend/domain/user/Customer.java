@@ -10,13 +10,14 @@ public class Customer {
     private Integer id;
     private String email;
     private String password;
+    private String oldPassword;
     private String nickName;
     private String phone;
     private LocalDateTime createdAt;
     private Integer coupon;
     private Integer stamp;
 
-    public String getCreatedAt() {
+    public String getCreatedAtTime() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return createdAt.format(formatter);
     }

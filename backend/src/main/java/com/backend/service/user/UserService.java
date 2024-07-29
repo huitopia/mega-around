@@ -7,6 +7,7 @@ import com.backend.mapper.user.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
@@ -143,19 +144,58 @@ public class UserService {
         return result;
     }
 
-    public boolean hasAccess(String id, Authentication authentication) {
+    public boolean hasAccess(Integer id, Authentication authentication) {
         // id, authentication이 null 값이거나 front에서 넘어 온 id가 jwt토큰의 id와 같지 않으면 false 리턴
-        if (id == null || authentication == null || !id.equals(authentication.getName())) {
+        if (id == null || authentication == null || !id.equals(Integer.valueOf(authentication.getName()))) {
             return false;
         }
         return true;
     }
 
-    public Customer getCustomerById(String customerId) {
+    public Customer getCustomerById(Integer customerId) {
         return userMapper.selectCustomerById(customerId);
     }
 
-    public Branch getBranchById(String branchId) {
+    public Branch getBranchById(Integer branchId) {
         return userMapper.selectBranchById(branchId);
+    }
+
+    public boolean identificationToModify(Customer customer) {
+        Customer dbcustomer = userMapper.selectCustomerById(customer.getId());
+        return passwordEncoder.matches(customer.getOldPassword(), dbcustomer.getPassword());
+    }
+
+    public boolean updateVerification(Customer customer) {
+        if (!customer.getPassword().isEmpty()) {
+            String passwordPattern = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,20}$";
+            return customer.getPassword().trim().matches(passwordPattern);
+        }
+        if (customer.getNickName().isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    public Map<String, Object> updateCustomer(Customer customer, Authentication authentication) {
+        if (customer.getPassword() != null && customer.getPassword().isEmpty()) {
+            customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+        } // 입력한 비밀번호가 null이거나 비어있으면
+        else {
+            Customer dbcustomer = userMapper.selectCustomerById(customer.getId());
+            customer.setPassword(dbcustomer.getPassword());
+        }
+        userMapper.updateCustomer(customer);
+
+        String token = "";
+
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        Map<String, Object> claims = jwt.getClaims();
+        JwtClaimsSet.Builder jwtClaimsSetBuilder = JwtClaimsSet.builder();
+        claims.forEach(jwtClaimsSetBuilder::claim);
+        jwtClaimsSetBuilder.claim("nickName", customer.getNickName());
+
+        JwtClaimsSet jwtClaimsSet = jwtClaimsSetBuilder.build();
+        token = jwtEncoder.encode(JwtEncoderParameters.from(jwtClaimsSet)).getTokenValue();
+        return Map.of("token", token);
     }
 }

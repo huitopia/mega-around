@@ -58,7 +58,7 @@ export function MyPageCustomer() {
                   </Tr>
                   <Tr>
                     <Th>가입일</Th>
-                    <Td>{customer.createdAt}</Td>
+                    <Td>{customer.createdAtTime}</Td>
                   </Tr>
                 </Table>
               </Center>

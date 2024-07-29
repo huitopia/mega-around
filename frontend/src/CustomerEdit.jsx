@@ -100,28 +100,28 @@ export function CustomerEdit() {
 
   let isCheckedPassword = customer?.password === passwordCheck;
 
-  let disabledNickNameCheckButton = true;
+  // let disabledNickNameCheckButton = true;
   let disabled = false;
 
-  if (customer?.nickName.length === 0) {
-    disabledNickNameCheckButton = false;
-  }
+  // if (customer?.nickName.length === 0) {
+  //   disabledNickNameCheckButton = false;
+  // }
 
-  if (!isCheckedNickName) {
-    disabled = true;
-  }
+  // if (!isCheckedNickName) {
+  //   disabled = true;
+  // }
 
-  if (!isCheckedPassword) {
-    disabled = true;
-  }
+  // if (!isCheckedPassword) {
+  //   disabled = true;
+  // }
 
-  if (!disabledNickNameCheckButton) {
-    disabled = true;
-  }
+  // if (!disabledNickNameCheckButton) {
+  //   disabled = true;
+  // }
 
-  if (!isValidPassword && customer?.password?.length > 0) {
-    disabled = true;
-  }
+  // if (!isValidPassword && customer?.password?.length > 0) {
+  //   disabled = true;
+  // }
 
   if (customer === null) {
     return <Spinner />;
@@ -209,16 +209,16 @@ export function CustomerEdit() {
                         ...customer,
                         nickName: e.target.value.trim(),
                       });
-                      setIsCheckedNickName(false);
+                      // setIsCheckedNickName(false);
                     }}
                   />
                 </InputGroup>
 
-                {isCheckedNickName || (
-                  <FormHelperText color={"#dc7b84"}>
-                    중복된 닉네임입니다.
-                  </FormHelperText>
-                )}
+                {/*{isCheckedNickName || (*/}
+                {/*  <FormHelperText color={"#dc7b84"}>*/}
+                {/*    중복된 닉네임입니다.*/}
+                {/*  </FormHelperText>*/}
+                {/*)}*/}
               </FormControl>
             </Box>
 
@@ -229,7 +229,7 @@ export function CustomerEdit() {
                 width={"200px"}
                 fontSize={"14px"}
                 borderRadius={"40"}
-                isDisabled={disabled}
+                // isDisabled={disabled}
                 onClick={onOpen}
               >
                 수정

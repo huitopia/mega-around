@@ -118,7 +118,7 @@ public class UserController {
     // 고객 정보 읽기
     @GetMapping("/user/customer/{id}")
     @PreAuthorize("hasAuthority('SCOPE_customer')")
-    public ResponseEntity<Object> getCustomerById(@PathVariable String id, Authentication authentication) {
+    public ResponseEntity<Object> getCustomerById(@PathVariable Integer id, Authentication authentication) {
         if (!service.hasAccess(id, authentication)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -132,7 +132,7 @@ public class UserController {
     // 지점 정보 읽기
     @GetMapping("/user/branch/{id}")
     @PreAuthorize("hasAuthority('SCOPE_branch')")
-    public ResponseEntity<Object> getBranchById(@PathVariable String id, Authentication authentication) {
+    public ResponseEntity<Object> getBranchById(@PathVariable Integer id, Authentication authentication) {
         if (!service.hasAccess(id, authentication)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -141,5 +141,19 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(branch);
+    }
+
+    // 고객 정보 수정
+    @PutMapping("/user/customer/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_customer')")
+    public ResponseEntity<Object> updateCustomer(Customer customer, Authentication authentication) {
+        if (service.identificationToModify(customer)) {
+            if (service.updateVerification(customer)) {
+                Map<String, Object> token = service.updateCustomer(customer, authentication);
+                return ResponseEntity.ok(token);
+            }
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }

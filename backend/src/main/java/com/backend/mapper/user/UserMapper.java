@@ -2,10 +2,7 @@ package com.backend.mapper.user;
 
 import com.backend.domain.user.Branch;
 import com.backend.domain.user.Customer;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface UserMapper {
@@ -44,10 +41,15 @@ public interface UserMapper {
     @Select("""
             SELECT * FROM customer WHERE id = #{customerId}
             """)
-    Customer selectCustomerById(String customerId);
+    Customer selectCustomerById(Integer customerId);
 
     @Select("""
             SELECT * FROM branch WHERE id = #{branchId}
             """)
-    Branch selectBranchById(String branchId);
+    Branch selectBranchById(Integer branchId);
+
+    @Update("""
+            UPDATE customer SET email=#{email},password=#{password} WHERE id=#{id}
+            """)
+    int updateCustomer(Customer customer);
 }
