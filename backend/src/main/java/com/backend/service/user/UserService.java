@@ -265,6 +265,8 @@ public class UserService {
             return false;
         }
         System.out.println("db = " + db);
+        Boolean value = passwordEncoder.matches(password, db.getPassword());
+        System.out.println("value = " + value);
         return passwordEncoder.matches(password, db.getPassword());
     }
 }

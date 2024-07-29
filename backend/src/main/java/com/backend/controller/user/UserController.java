@@ -135,17 +135,15 @@ public class UserController {
     // 고객 암호 확인
     @PostMapping("/user/customer/password/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Object> getCustomerPasswordById(@PathVariable Integer id, @RequestBody String password, Authentication authentication) {
+    public ResponseEntity<Object> getCustomerPasswordById(@PathVariable Integer id, @RequestBody Map<String, String> requestBody, Authentication authentication) {
         if (!service.hasAccess(id, authentication)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        if (service.identifyCustomer(id, password)) {
-            System.out.println("service = " + service);
+        if (service.identifyCustomer(id, requestBody.get("password"))) {
+            System.out.println("requestBody = " + requestBody);
             return ResponseEntity.ok().build();
         }
-        System.out.println("id = " + id);
-        System.out.println("password = " + password);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
