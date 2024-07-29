@@ -54,8 +54,8 @@ public class UserService {
     public void addCustomer(Customer customer) {
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         userMapper.insertCustomer(customer);
-        eventMapper.insertCoupon(customer.getId());
-        eventMapper.insertStamp(customer.getId());
+        eventMapper.insertCoupon(customer.getId(),0);
+        eventMapper.insertStamp(customer.getId(),0);
     }
 
     public void addBranch(Branch branch) {
