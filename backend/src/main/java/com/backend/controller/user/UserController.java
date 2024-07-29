@@ -141,7 +141,6 @@ public class UserController {
         }
 
         if (service.identifyCustomer(id, requestBody.get("password"))) {
-            System.out.println("requestBody = " + requestBody);
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

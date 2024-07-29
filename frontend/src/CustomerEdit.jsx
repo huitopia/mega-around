@@ -21,7 +21,7 @@ import { LoginContext } from "./component/LoginProvider.jsx";
 import ConfirmationModal from "./user/component/CustomModal.jsx";
 
 export function CustomerEdit() {
-  const [customer, setCustomer] = useState(null);
+  const [customer, setCustomer] = useState({ password: "" });
   const [oldNickName, setOldNickName] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [isCheckedNickName, setIsCheckedNickName] = useState(false);
@@ -38,7 +38,7 @@ export function CustomerEdit() {
       .get(`/api/user/customer/${account.id}`)
       .then((res) => {
         const dbCustomer = res.data;
-        setCustomer({ ...dbCustomer });
+        setCustomer({ ...dbCustomer, password: dbCustomer.password || "" });
         setOldNickName(dbCustomer.nickName);
       })
       .catch((err) => {
@@ -61,7 +61,7 @@ export function CustomerEdit() {
     } else {
       setIsValidPassword(false);
     }
-  }, [customer, passwordPattern]);
+  }, [customer.password]);
 
   function handleCustomerUpdate() {
     setIsLoading(true);
@@ -87,43 +87,26 @@ export function CustomerEdit() {
       })
       .finally(() => {
         setOldPassword("");
-        onClose();
         setIsLoading(false);
         navigate(`/mypage/customer/${customer.id}`);
       });
   }
 
-  let isCheckedPassword = customer?.password === passwordCheck;
+  function handleCustomerDelete() {
+    setIsLoading(true);
+    axios
+      .delete(`/api/user/customer/${account.id}`)
+      .then(() => {
+        infoToast("탈퇴 되었습니다. 그동안 이용해 주셔서 감사합니다");
+      })
+      .catch(() => errorToast("회원 탈퇴 중 문제가 발생하였습니다"))
+      .finally(() => setIsLoading(false));
+  }
 
-  // let disabledNickNameCheckButton = true;
-  // let disabled = false;
-
-  // if (customer?.nickName.length === 0) {
-  //   disabledNickNameCheckButton = false;
-  // }
-
-  // if (!isCheckedNickName) {
-  //   disabled = true;
-  // }
-
-  // if (!isCheckedPassword) {
-  //   disabled = true;
-  // }
-
-  // if (!disabledNickNameCheckButton) {
-  //   disabled = true;
-  // }
-
-  // if (!isValidPassword && customer?.password?.length > 0) {
-  //   disabled = true;
-  // }
+  let isCheckedPassword = customer.password === passwordCheck;
 
   if (customer === null) {
     return <Spinner />;
-  }
-
-  function handleCustomerDelete() {
-    axios.delete("/api/user/customer/${account.id}", account.id);
   }
 
   return (
@@ -153,15 +136,17 @@ export function CustomerEdit() {
                     }
                   />
                   <InputRightElement>
-                    {customer?.password?.length > 0 &&
-                      (isValidPassword ? (
+                    {customer.password.length > 0 &&
+                      (customer.password !== "" && isValidPassword ? (
                         <CheckIcon color="green.500" />
                       ) : (
-                        <CloseIcon color="red.500" />
+                        customer.password !== "" && (
+                          <CloseIcon color="red.500" />
+                        )
                       ))}
                   </InputRightElement>
                 </InputGroup>
-                {customer?.password?.length > 0 &&
+                {customer.password.length > 0 &&
                   (isValidPassword || (
                     <FormHelperText color={"#dc7b84"}>
                       영문 대/소문자, 숫자, 특수문자를 하나 이상 포함하여 8-20자
@@ -179,6 +164,7 @@ export function CustomerEdit() {
                     onChange={(e) => setPasswordCheck(e.target.value)}
                     placeholder={"새 비밀번호를 다시 입력해 주세요"}
                     sx={{ "::placeholder": { fontSize: "sm" } }}
+                    value={passwordCheck}
                   />
                   <InputRightElement>
                     {passwordCheck.length > 0 &&
@@ -202,26 +188,17 @@ export function CustomerEdit() {
                 <FormLabel>닉네임</FormLabel>
                 <InputGroup>
                   <Input
-                    value={customer?.nickName || ""}
+                    value={customer.nickName || ""}
                     onChange={(e) => {
                       setCustomer({
                         ...customer,
                         nickName: e.target.value.trim(),
                       });
-                      // setIsCheckedNickName(false);
                     }}
                   />
                 </InputGroup>
-
-                {/*{isCheckedNickName || (*/}
-                {/*  <FormHelperText color={"#dc7b84"}>*/}
-                {/*    중복된 닉네임입니다.*/}
-                {/*  </FormHelperText>*/}
-                {/*)}*/}
               </FormControl>
             </Box>
-
-            {/*<Flex justifyContent={"space-between"} mt={10} alignItems={"end"}>*/}
             <Center mt={10}>
               <Button
                 bg={"black"}
@@ -229,13 +206,11 @@ export function CustomerEdit() {
                 width={"200px"}
                 fontSize={"14px"}
                 borderRadius={"40"}
-                // isDisabled={disabled}
-                onClick={onOpen}
+                onClick={handleCustomerUpdate}
               >
                 수정
               </Button>
             </Center>
-
             <Box display="flex">
               <Box
                 mt={3}
@@ -244,7 +219,7 @@ export function CustomerEdit() {
                 cursor="pointer"
                 as={"u"}
                 color={"gray.500"}
-                onClick={handleCustomerDelete}
+                onClick={onOpen}
               >
                 회원탈퇴
               </Box>
@@ -255,11 +230,10 @@ export function CustomerEdit() {
       <ConfirmationModal
         isOpen={isOpen}
         onClose={onClose}
-        onConfirm={handleCustomerUpdate}
+        onConfirm={handleCustomerDelete}
         isLoading={isLoading}
-        setPassword={setOldPassword}
-        modalheader={"수정하시겠습니까?"}
-        modalbody={"비밀번호를 입력해주세요"}
+        modalheader={" 확인요청 "}
+        modalbody={"정말로 탈퇴하시겠습니까?"}
       />
     </>
   );
