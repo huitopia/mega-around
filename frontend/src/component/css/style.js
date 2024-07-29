@@ -2,10 +2,10 @@ export const checkBoxStyle = {
   sx: {
     ".chakra-checkbox__control": {
       borderRadius: "50%", // 원형 모양
-      borderColor: "gray.400",
+      borderColor: "gray.200",
       _checked: {
-        bg: "blue.500",
-        borderColor: "blue.500",
+        bg: "black",
+        borderColor: "black",
         zIndex : -1,
         _before: {
           content: `""`,
