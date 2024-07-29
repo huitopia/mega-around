@@ -1,36 +1,43 @@
-import { Box, Spinner } from "@chakra-ui/react";
+import { Box, List, ListItem, Spinner, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
-export function BranchList() {
+export const BranchList = () => {
   const kakao_javasciprt_key = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY;
 
   // 현재 위치
   const [location, setLocation] = useState(null);
+  const [stores, setStores] = useState([]);
+  const [branches, setBranches] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const script = document.createElement("script");
-    script.async = true;
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakao_javasciprt_key}&autoload=false`;
-    document.head.appendChild(script);
+    const fetchLocationAndStores = async () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const { latitude, longitude } = position.coords;
+            setLocation({ latitude, longitude });
 
-    script.onload = () => {
-      window.kakao.maps.load(() => {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              const { latitude, longitude } = position.coords;
-              setLocation({ latitude, longitude });
-            },
-            (err) => {
-              setError(err.message);
-            },
-          );
-        } else {
-          setError("Geolocation is not supported by this browser.");
-        }
-      });
+            try {
+              const response = await axios.get("/api/location", {
+                params: { lat: latitude, lng: longitude },
+              });
+              setStores(response.data);
+            } catch (error) {
+              setError(error.message);
+            }
+          },
+          (err) => {
+            setError(err.message);
+          },
+        );
+      } else {
+        setError("Geolocation is not supported by this browser.");
+      }
     };
+
+    fetchLocationAndStores();
   }, []);
 
   useEffect(() => {
@@ -54,24 +61,44 @@ export function BranchList() {
       });
 
       marker.setMap(map);
-    }
-  }, [location]);
 
+      stores.forEach((store) => {
+        const storePosition = new window.kakao.maps.LatLng(
+          store.latitude,
+          store.longitude,
+        );
+        const storeMarker = new window.kakao.maps.Marker({
+          position: storePosition,
+        });
+        storeMarker.setMap(map);
+      });
+    }
+  }, [location, stores]);
+  console.log("store: ", stores);
   return (
     <Box
       width="100%"
-      height="350px"
+      height="100vh"
       display="flex"
-      justifyContent="center"
+      flexDirection="column"
       alignItems="center"
     >
       {error ? (
         <Text>{error}</Text>
-      ) : location ? (
-        <Box id="map" width="100%" height="100%" />
-      ) : (
+      ) : !location ? (
         <Spinner size="xl" />
+      ) : (
+        <>
+          <Box id="map" width="100%" height="70%" />
+          <Box width="100%" height="30%" overflowY="scroll">
+            <List>
+              {stores.map((store) => (
+                <ListItem key={store.branchId}>{store.name}</ListItem>
+              ))}
+            </List>
+          </Box>
+        </>
       )}
     </Box>
   );
-}
+};
