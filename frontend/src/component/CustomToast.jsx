@@ -10,7 +10,7 @@ export const CustomToast = () => {
       position: "top",
       isClosable: true,
       duration: 3000,
-      variant: "left-accent",
+      variant: "subtle",
     });
   };
 
@@ -21,7 +21,7 @@ export const CustomToast = () => {
       position: "top",
       isClosable: true,
       duration: 3000,
-      variant: "left-accent",
+      variant: "subtle",
     });
   };
 
@@ -32,7 +32,7 @@ export const CustomToast = () => {
       position: "top",
       isClosable: true,
       duration: 3000,
-      variant: "left-accent",
+      variant: "subtle",
     });
   };
 

@@ -19,19 +19,22 @@ export function LoginBranch() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const account = useContext(LoginContext);
-  const { successToast, errorToast, infoToast } = CustomToast();
+  const { successToast, errorToast } = CustomToast();
 
   function handleBranchLogin() {
     axios
       .post("/api/login/branch", { email, password })
       .then((res) => {
         account.login(res.data.token);
-        successToast("로그인 되었습니다");
+        successToast(res.data.name + "님 환영합니다");
         navigate("/");
       })
-      .catch(() => {
+      .catch((err) => {
         account.logout();
-        errorToast("로그인이 실패하였습니다");
+        const errorMessage = err.response
+          ? err.response.data
+          : "로그인에 실패하였습니다.";
+        errorToast(errorMessage);
       });
   }
 

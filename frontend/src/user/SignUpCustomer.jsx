@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Center,
+  Flex,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -25,20 +26,28 @@ export function SignUpCustomer() {
   const [isValidPassword, setIsValidPassword] = useState(false);
   const [nickName, setNickName] = useState("");
   const [isCheckedNickName, setIsCheckedNickName] = useState(false);
+  const [isLoading, setIsLoading] = useState("");
   const navigate = useNavigate();
   const { successToast, errorToast, infoToast } = CustomToast();
 
   function handleSignup() {
-    if (!isCheckedEmail) {
-      alert("이메일 중복확인을 실행해주세요");
-    } else {
-      axios
-        .post("/api/user/customer", { email, password, nickName })
-        .then(() => {
-          successToast("회원 가입에 성공하였습니다.");
-          navigate("/login");
-        })
-        .catch(() => errorToast("회원가입에 실패하였습니다."));
+    {
+      isCheckedEmail
+        ? isValidPassword || isCheckedPassword
+          ? axios
+              .post("/api/user/customer", { email, password, nickName })
+              .then(() => {
+                successToast("회원 가입에 성공하였습니다.");
+                navigate("/login");
+              })
+              .catch((err) =>
+                err.response.status === 400
+                  ? errorToast("필수 입력사항을 확인해주세요")
+                  : errorToast("회원 가입에 실패하였습니다."),
+              )
+              .finally(() => setIsLoading(false))
+          : errorToast("비밀번호를 확인해주세요.")
+        : errorToast("이메일 중복확인을 진행해주세요.");
     }
   }
 
@@ -101,7 +110,7 @@ export function SignUpCustomer() {
             <Box mb={7}>
               <FormControl isRequired>
                 <FormLabel>이메일</FormLabel>
-                <InputGroup>
+                <Flex>
                   <Input
                     type={"email"}
                     placeholder={"email@exmaple.com"}
@@ -111,23 +120,26 @@ export function SignUpCustomer() {
                       setIsValidEmail(!e.target.validity.typeMismatch);
                     }}
                   />
-                  <InputRightElement w={"90px"} mr={1}>
-                    <Button
-                      isDisabled={!isValidEmail || email.trim().length == 0}
-                      onClick={handleCustomerCheckEmail}
-                      size={"sm"}
-                      colorScheme={"teal"}
-                    >
-                      중복확인
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
-                {email.length > 0 &&
-                  (isCheckedEmail || (
-                    <FormHelperText color={"#dc7b84"}>
-                      유효한 이메일을 입력하고 중복확인 버튼을 눌러주세요.
-                    </FormHelperText>
-                  ))}
+                  <Box w={5} />
+                  <Button
+                    isDisabled={!isValidEmail || email.trim().length == 0}
+                    onClick={handleCustomerCheckEmail}
+                    variant={"outline"}
+                    colorScheme={"purple"}
+                    fontSize={"sm"}
+                    width={"120px"}
+                    borderRadius={5}
+                  >
+                    중복확인
+                  </Button>
+                </Flex>
+                {email.length > 0 && (
+                  <FormHelperText color="#dc7b84">
+                    {isValidEmail
+                      ? isCheckedEmail || "중복확인 버튼을 눌러주세요."
+                      : "유효한 이메일을 입력해주세요."}
+                  </FormHelperText>
+                )}
               </FormControl>
             </Box>
             <Box mb={7}>
@@ -137,6 +149,7 @@ export function SignUpCustomer() {
                   <Input
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder={"8-20자의 영문/숫자/특수문자 조합으로 입력"}
+                    sx={{ "::placeholder": { fontSize: "sm" } }}
                     value={password}
                   />
                   <InputRightElement>
@@ -162,8 +175,10 @@ export function SignUpCustomer() {
                 <FormLabel>비밀번호 재입력</FormLabel>
                 <InputGroup>
                   <Input
+                    type="password"
                     onChange={(e) => setPasswordCheck(e.target.value)}
                     placeholder={"비밀번호를 한번 더 입력해주세요"}
+                    sx={{ "::placeholder": { fontSize: "sm" } }}
                   />
                   <InputRightElement>
                     {passwordCheck.length > 0 &&
@@ -189,6 +204,7 @@ export function SignUpCustomer() {
                   <Input
                     value={nickName}
                     placeholder={"닉네임을 입력해주세요"}
+                    sx={{ "::placeholder": { fontSize: "sm" } }}
                     onChange={(e) => {
                       setNickName(e.target.value.trim());
                     }}
@@ -208,7 +224,7 @@ export function SignUpCustomer() {
                 width={"200px"}
                 fontSize={"14px"}
                 borderRadius={"40"}
-                // isLoading={isLoading}
+                isLoading={isLoading}
                 // isDisabled={isDisabled}
                 onClick={handleSignup}
               >

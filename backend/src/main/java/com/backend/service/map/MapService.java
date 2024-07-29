@@ -16,7 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
 public class MapService {
-
+//
 //    @Value("${kakao.api.key}")
 //    private String apiKey;
 //

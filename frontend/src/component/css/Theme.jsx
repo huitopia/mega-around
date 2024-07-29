@@ -1,4 +1,6 @@
-import { extendTheme } from "@chakra-ui/react";
+// Theme.jsx
+import { createMultiStyleConfigHelpers, extendTheme } from "@chakra-ui/react";
+import { menuAnatomy } from "@chakra-ui/anatomy";
 
 const colors = {
   yellow: "#ffde00", // Replace with your desired yellow color
@@ -6,13 +8,54 @@ const colors = {
   pink: "#e8e4e0",
 };
 
+const { definePartsStyle, defineMultiStyleConfig } =
+  createMultiStyleConfigHelpers(menuAnatomy.keys);
+
+// define the base component styles
+const baseStyle = definePartsStyle({
+  // define the part you're going to style
+  button: {
+    // as={Text}는 스타일 적용안됨
+    // this will style the MenuButton component
+    fontWeight: "medium",
+    // bg: "teal.500",
+    color: "gray.200",
+    _hover: {
+      bg: "teal.600",
+      color: "white",
+    },
+  },
+  list: {
+    // this will style the MenuList component
+    py: "0",
+    borderRadius: "l",
+    border: "1px solid #c3d2e4",
+    bg: "white",
+    width: `40px`,
+  },
+  item: {
+    // this will style the MenuItem and MenuItemOption components
+    color: "black",
+    _hover: {
+      bg: "gray.200",
+    },
+    // _focus: {
+    //   bg: "teal.600",
+    // },
+  },
+});
+
+const menuTheme = defineMultiStyleConfig({
+  baseStyle,
+});
+
 const components = {
   Button: {
     variants: {
       solid: (props) => {
         if (props.colorScheme === "orange") {
           return {
-            bg: "orange", // 원하는 새로운 색상
+            bg: "orange",
             color: "white",
             _hover: {
               bg: "orange",
@@ -20,7 +63,7 @@ const components = {
           };
         } else if (props.colorScheme === "pink") {
           return {
-            bg: "pink", // 원하는 새로운 색상
+            bg: "pink",
             color: "orange",
             _hover: {
               bg: "pink",
@@ -52,6 +95,7 @@ const components = {
       },
     },
   },
+  Menu: menuTheme,
 };
 
 export const theme = extendTheme({ colors, components });
