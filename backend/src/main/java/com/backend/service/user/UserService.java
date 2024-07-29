@@ -9,12 +9,12 @@ import com.backend.mapper.user.UserMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -71,8 +71,8 @@ public class UserService {
     public void addCustomer(Customer customer) {
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         userMapper.insertCustomer(customer);
-        eventMapper.insertCoupon(customer.getId(),0);
-        eventMapper.insertStamp(customer.getId(),0);
+        eventMapper.insertCoupon(customer.getId(), 0);
+        eventMapper.insertStamp(customer.getId(), 0);
     }
 
     public Boolean addBranch(Branch branch) throws Exception {
@@ -257,5 +257,14 @@ public class UserService {
         JwtClaimsSet jwtClaimsSet = jwtClaimsSetBuilder.build();
         token = jwtEncoder.encode(JwtEncoderParameters.from(jwtClaimsSet)).getTokenValue();
         return Map.of("token", token);
+    }
+
+    public boolean identifyCustomer(Integer id, String password) {
+        Customer db = userMapper.selectCustomerById(id);
+        if (password == null || password.isEmpty()) {
+            return false;
+        }
+        System.out.println("db = " + db);
+        return passwordEncoder.matches(password, db.getPassword());
     }
 }

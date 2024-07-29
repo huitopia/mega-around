@@ -132,6 +132,23 @@ public class UserController {
         return ResponseEntity.ok(customer);
     }
 
+    // 고객 암호 확인
+    @PostMapping("/user/customer/password/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Object> getCustomerPasswordById(@PathVariable Integer id, @RequestBody String password, Authentication authentication) {
+        if (!service.hasAccess(id, authentication)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        if (service.identifyCustomer(id, password)) {
+            System.out.println("service = " + service);
+            return ResponseEntity.ok().build();
+        }
+        System.out.println("id = " + id);
+        System.out.println("password = " + password);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
     // 지점 정보 읽기
     @GetMapping("/user/branch/{id}")
     @PreAuthorize("hasAuthority('SCOPE_branch')")

@@ -89,7 +89,7 @@ export function CustomerEdit() {
         setOldPassword("");
         onClose();
         setIsLoading(false);
-        navigate(`/myPage/customer/${customer.id}`);
+        navigate(`/mypage/customer/${customer.id}`);
       });
   }
 

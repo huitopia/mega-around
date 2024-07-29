@@ -36,7 +36,7 @@ const ConfirmationModal = ({
             mr={2}
             onClick={onConfirm}
             isLoading={isLoading}
-            variant="outline"
+            // variant="outline"
             colorScheme="blue"
             borderWidth={2}
           >
