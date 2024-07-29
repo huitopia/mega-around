@@ -115,11 +115,11 @@ export function CartProductComp(props) {
           </Box>
         </Flex>
       {cart.cartProduct.length - 1 > index && (
-        <Divider border={"1px solid gray.200"} my={4} ml={3} mr={6}/>
+        <Divider border={"1px solid gray.200"} my={4} ml={3} mr={6} mb={6}/>
   )}
   </Box>
       ))}
-      <Flex>
+      <Flex mt={12}>
         <Box>상품금액</Box>
         <Spacer />
         <Box fontSize={"lg"} color={"red"} fontWeight={"bold"}>
@@ -127,7 +127,7 @@ export function CartProductComp(props) {
         </Box>
       </Flex>
       {cart && (
-        <Center>
+        <Center mt={10}>
         <Button
           colorScheme={"orange"}
           w={"700px"}
