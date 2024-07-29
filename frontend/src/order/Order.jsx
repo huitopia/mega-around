@@ -162,7 +162,7 @@ export function Order() {
         <Heading>Order</Heading>
       </Box>
       <Divider border={"1px solid black"} my={4} />
-      <Box bg={"black"} color={"white"}>
+      <Box bg={"black"} color={"white"} h={"40px"}>
         이대역사거리점
       </Box>
       <Spacer />
@@ -171,8 +171,8 @@ export function Order() {
           <h2>
             <AccordionButton>
               <Flex gap={10}>
-                <Box>주문 상품</Box>
-                <Box>{orderItem.orderProduct[0].productName}</Box>
+                <Box fontWeight={"bold"} fontSiz={"xl"}>주문 상품</Box>
+                <Box as={"sub"}>{orderItem.orderProduct[0].productName}</Box>
               </Flex>
               <AccordionIcon />
             </AccordionButton>
@@ -214,20 +214,21 @@ export function Order() {
           </AccordionPanel>
         </AccordionItem>
       </Accordion>
-      <Box>
+      <Box ml={3}>
         <FormControl>
-          <FormLabel>매장 요청사항</FormLabel>
+          <FormLabel fontWeight={"bold"} color={"#777475"} mt={3}>매장 요청사항</FormLabel>
           <Input
+            border={"1px solid #5b5859"}
             placeholder={"매장 요청사항이 있으면 적어주세요."}
             onChange={(e) => setRequest(e.target.value)}
           />
         </FormControl>
-        <RadioGroup onChange={setIsTakeOut} value={isTakeOut}>
+        <RadioGroup onChange={setIsTakeOut} value={isTakeOut} mt={7} mb={7}>
           <Box>포장 요청사항</Box>
-          <Radio size="md" value={"1"}>
+          <Radio size="md" value={"1"}  colorScheme='black'>
             포장해주세요
           </Radio>
-          <Radio size="md" value={"2"}>
+          <Radio size="md" value={"2"}  colorScheme='black'>
             매장에서 먹고 갈게요
           </Radio>
         </RadioGroup>
@@ -252,22 +253,7 @@ export function Order() {
             </Checkbox>
           </CheckboxGroup>
         )}
-        <RadioGroup onChange={setProvider} value={provider}>
-          <Box>결제 수단</Box>
-          <Radio size="md" value="html5_inicis" defaultChecked>
-            신용카드
-          </Radio>
-          <Radio size="md" value={"kakaopay"}>
-            카카오페이
-          </Radio>
-          <Radio size="md" value={"payco"}>
-            페이코
-          </Radio>
-          <Radio size="md" value={"uplus"}>
-            토스페이
-          </Radio>
-        </RadioGroup>
-        <Accordion allowMultiple>
+        <Accordion allowMultiple mt={7}>
           <AccordionItem>
             <h2>
               <AccordionButton>
@@ -292,6 +278,21 @@ export function Order() {
             </h2>
           </AccordionItem>
         </Accordion>
+        <RadioGroup onChange={setProvider} value={provider} mt={7}>
+          <Box>결제 수단</Box>
+          <Radio size="md" value="html5_inicis" defaultChecked>
+            신용카드
+          </Radio>
+          <Radio size="md" value={"kakaopay"}>
+            카카오페이
+          </Radio>
+          <Radio size="md" value={"payco"}>
+            페이코
+          </Radio>
+          <Radio size="md" value={"uplus"}>
+            토스페이
+          </Radio>
+        </RadioGroup>
         <Box>
           <Flex>
             <Box>상품금액</Box>
@@ -320,7 +321,7 @@ export function Order() {
             </Box>
           </Flex>
         </Box>
-        <Button onClick={handlePayment}>결제하기</Button>
+        <Button onClick={handlePayment} colorScheme={"orange"}>결제하기</Button>
       </Box>
     </Box>
   );
