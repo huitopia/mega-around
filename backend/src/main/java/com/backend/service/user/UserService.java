@@ -167,6 +167,7 @@ public class UserService {
 
     public boolean updateVerification(Customer customer) {
         if (!customer.getPassword().isEmpty()) {
+            System.out.println("!customer.getPassword().isEmpty()");
             String passwordPattern = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,20}$";
             return customer.getPassword().trim().matches(passwordPattern);
         }
@@ -177,7 +178,7 @@ public class UserService {
     }
 
     public Map<String, Object> updateCustomer(Customer customer, Authentication authentication) {
-        if (customer.getPassword() != null && customer.getPassword().isEmpty()) {
+        if (customer.getPassword() != null && !customer.getPassword().isEmpty()) {
             customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         } // 입력한 비밀번호가 null이거나 비어있으면
         else {

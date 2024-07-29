@@ -9,8 +9,7 @@ export function MyPageCustomer() {
   const [customer, setCustomer] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
-  console.log(id);
-  console.log("customer 값 = ", customer);
+
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       return navigate("/login");

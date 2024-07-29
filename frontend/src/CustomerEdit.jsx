@@ -8,12 +8,6 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Spinner,
   Text,
   useDisclosure,
@@ -24,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import { CustomToast } from "./component/CustomToast.jsx";
 import { LoginContext } from "./component/LoginProvider.jsx";
+import ConfirmationModal from "./user/component/CustomModal.jsx";
 
 export function CustomerEdit() {
   const [customer, setCustomer] = useState(null);
@@ -36,7 +31,7 @@ export function CustomerEdit() {
   const navigate = useNavigate();
   const account = useContext(LoginContext);
   const { successToast, errorToast, infoToast } = CustomToast();
-  const { onClose, isOpen, onOpen } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     axios
@@ -55,7 +50,7 @@ export function CustomerEdit() {
           navigate("/");
         }
       });
-  }, [account.id, navigate]);
+  }, []);
 
   const passwordPattern =
     /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,20}$/;
@@ -101,7 +96,7 @@ export function CustomerEdit() {
   let isCheckedPassword = customer?.password === passwordCheck;
 
   // let disabledNickNameCheckButton = true;
-  let disabled = false;
+  // let disabled = false;
 
   // if (customer?.nickName.length === 0) {
   //   disabledNickNameCheckButton = false;
@@ -125,6 +120,10 @@ export function CustomerEdit() {
 
   if (customer === null) {
     return <Spinner />;
+  }
+
+  function handleCustomerDelete() {
+    axios.delete("/api/user/customer/${account.id}", account.id);
   }
 
   return (
@@ -222,6 +221,7 @@ export function CustomerEdit() {
               </FormControl>
             </Box>
 
+            {/*<Flex justifyContent={"space-between"} mt={10} alignItems={"end"}>*/}
             <Center mt={10}>
               <Button
                 bg={"black"}
@@ -235,42 +235,32 @@ export function CustomerEdit() {
                 수정
               </Button>
             </Center>
+
+            <Box display="flex">
+              <Box
+                mt={3}
+                fontSize="sm"
+                ml={"auto"}
+                cursor="pointer"
+                as={"u"}
+                color={"gray.500"}
+                onClick={handleCustomerDelete}
+              >
+                회원탈퇴
+              </Box>
+            </Box>
           </Box>
         </Box>
       </Center>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>수정하시겠습니까?</ModalHeader>
-          <ModalBody>기존 비밀번호를 입력해주세요</ModalBody>
-          <ModalFooter>
-            <Input
-              mr={2}
-              type={"password"}
-              variant="flushed"
-              onChange={(e) => setOldPassword(e.target.value)}
-            />
-            <Button
-              mr={2}
-              onClick={handleCustomerUpdate}
-              isLoading={isLoading}
-              variant="outline"
-              colorScheme="teal"
-              borderWidth={2}
-            >
-              확인
-            </Button>
-            <Button
-              onClick={onClose}
-              variant="outline"
-              colorScheme="gray"
-              borderWidth={2}
-            >
-              취소
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <ConfirmationModal
+        isOpen={isOpen}
+        onClose={onClose}
+        onConfirm={handleCustomerUpdate}
+        isLoading={isLoading}
+        setPassword={setOldPassword}
+        modalheader={"수정하시겠습니까?"}
+        modalbody={"비밀번호를 입력해주세요"}
+      />
     </>
   );
 }
