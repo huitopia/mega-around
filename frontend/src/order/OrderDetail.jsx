@@ -11,6 +11,7 @@ import {
   Spinner,
   Stack,
   StackDivider,
+  Text
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -29,7 +30,7 @@ export function OrderDetail() {
     });
   }, [id]);
 
-  const progressPercent = (progress / 2) * 100;
+  const progressPercent = ((progress - 1) / 2) * 100;
 
   if (order === null) {
     return <Spinner />;
@@ -53,6 +54,11 @@ export function OrderDetail() {
       default:
         return "알 수 없는 결제수단";
     }
+  }
+
+  function modifyTime(createdAtString) {
+    const time = createdAtString.substring(14).split(":")
+    return time[0]+"시 " + (parseInt(time[1]) + 5)+ "분";
   }
 
   return (
@@ -81,30 +87,33 @@ export function OrderDetail() {
               주문번호: {order.id}
             </Box>
             <Box color={"#656565"}>{order.createdAtString}</Box>
-            <Box
-              bg={"gray.100"}
-              h={"50px"}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              w={"400px"}
-            >
-              까지 제조가 완료될 예정입니다.
+            <Box bg={"gray.100"}
+                 h={"50px"}
+                 display="flex"
+                 alignItems="center"
+                 justifyContent="center"
+                 w={"400px"}>
+              <Text fontSize={"xl"} fontWeight={"bold"}>{modifyTime(order.createdAtString)}</Text>
+              <Text
+              >
+                까지 제조가 완료될 예정입니다.
+              </Text>
             </Box>
           </Box>
         </Center>
         <Box mb={4} mt={8}>
           <Flex justifyContent="space-between">
-            <Box>결제완료</Box>
-            <Box>제조중</Box>
-            <Box>제조완료</Box>
+            <Box color={progress == 1 ? "red" : "black"}>결제완료</Box>
+            <Box color={progress == 2 ? "red" : "black"}>주문확인</Box>
+            <Box color={progress == 3 ? "red" : "black"}>제조완료</Box>
           </Flex>
           <Progress
             colorScheme={"red"}
             mt={3}
             value={progressPercent}
-            height="3px"
+            height="7px"
             width="full"
+            borderRadius={"5px"}
           />
         </Box>
       </Card>
@@ -112,7 +121,7 @@ export function OrderDetail() {
         <Stack divider={<StackDivider />} spacing="4">
           {order.orderProduct.map((item, index) => (
             <Box key={index} mb={4}>
-              <Flex>
+              <Flex alignItems={"center"}>
                 <Image
                   w="50px"
                   h="50px"
@@ -132,16 +141,11 @@ export function OrderDetail() {
                   )}
                   <Box>{item.count}개</Box>
                 </Box>
+                <Spacer/>
+                <Box fontWeight={"bold"}>
+                  {(item.totalPrice * item.count).toLocaleString("ko-KR")}원
+                </Box>
               </Flex>
-              <Box mb={4}>
-                <Flex>
-                  <Box>총 금액</Box>
-                  <Spacer />
-                  <Box>
-                    {(item.totalPrice * item.count).toLocaleString("ko-KR")}원
-                  </Box>
-                </Flex>
-              </Box>
             </Box>
           ))}
         </Stack>
@@ -150,7 +154,7 @@ export function OrderDetail() {
         <Flex>
           <Box>결제수단</Box>
           <Spacer />
-          <Box fontWeight={"bold"}>{defineProvider(order.provider)}</Box>
+          <Box>{defineProvider(order.provider)}</Box>
         </Flex>
         <Flex>
           <Box>상품금액</Box>
@@ -179,7 +183,7 @@ export function OrderDetail() {
         <Flex mb={4}>
           <Box>스탬프 적립</Box>
           <Spacer />
-          <Box>{totalCount}개</Box>
+          <Box fontWeight={"bold"}>{totalCount}개</Box>
         </Flex>
       </Card>
     </Box>
