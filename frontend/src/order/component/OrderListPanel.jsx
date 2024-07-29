@@ -3,13 +3,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-export function OrderListPanel(period) {
+export function OrderListPanel({period}) {
   const [orderList, setOrderList] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const periodString = period.period;
-    axios.get(`/api/orders/list?period=${periodString}`).then((res) => {
+    axios.get(`/api/orders/list?period=${period}`).then((res) => {
       setOrderList(res.data);
       console.log(res.data);
     });
@@ -39,21 +38,21 @@ export function OrderListPanel(period) {
             onClick={() => navigate(`/order/${order.id}`)}
             cursor={"pointer"}
           >
-            <Box>{getStateMessage(order.stateId)}</Box>
-            <Box>{order.branchName}</Box>
-            <Flex gap={3}>
+            <Box fontWeight={"bold"} color={"#5b5859"}>{getStateMessage(order.stateId)}</Box>
+            <Box fontWeight={"bold"} fontSize={"lg"}>{order.branchName}</Box>
+            <Flex gap={3} fontSize={"sm"}>
               <Box>
                 {order.orderProduct[0].productName}
                 {order.orderProduct.length === 1 &&
                   `${order.orderProduct.length} 개`}
                 {order.orderProduct.length > 1 &&
-                  `외 ${order.orderProduct.length - 1}개`}
+                  ` 외 ${order.orderProduct.length - 1}개`}
               </Box>
               <Box>|</Box>
               <Box>{order.createdAtString.substring(0, 13)}</Box>
             </Flex>
             {orderList.length - 1 > index && (
-              <Divider border={"1px solid gray"} my={4} />
+              <Divider border={"1px solid gray.200"} my={4} />
             )}
           </Box>
         ))}

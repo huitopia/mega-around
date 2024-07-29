@@ -2,7 +2,7 @@ import {
   Box,
   Divider,
   Heading,
-  Tab,
+  Tab, TabIndicator,
   TabList,
   TabPanel,
   TabPanels,
@@ -12,7 +12,6 @@ import { useState } from "react";
 import { OrderListPanel } from "./component/OrderListPanel.jsx";
 
 export function OrderList() {
-  const [period, setPeriod] = useState("week");
 
   return (
     <Box maxWidth="1000px" mx={"auto"}>
@@ -20,18 +19,18 @@ export function OrderList() {
         <Heading>Order List</Heading>
       </Box>
       <Divider border={"1px solid black"} my={4} />
-      <Tabs isFitted variant="soft-rounded" colorScheme="red">
+      <Tabs isFitted variant="enclosed" colorScheme="red">
         <TabList mb="1em">
-          <Tab onClick={() => setPeriod("week")}>1주일</Tab>
-          <Tab onClick={() => setPeriod("month")}>1개월</Tab>
-          <Tab onClick={() => setPeriod("3-month")}>3개월</Tab>
-          <Tab onClick={() => setPeriod("all")}>전체</Tab>
+          <Tab>1주일</Tab>
+          <Tab>1개월</Tab>
+          <Tab>3개월</Tab>
+          <Tab>전체</Tab>
         </TabList>
         <TabPanels>
-          <TabPanel>{<OrderListPanel period={period} />}</TabPanel>
-          <TabPanel>{<OrderListPanel period={period} />}</TabPanel>
-          <TabPanel>{<OrderListPanel period={period} />}</TabPanel>
-          <TabPanel>{<OrderListPanel period={period} />}</TabPanel>
+          <TabPanel>{<OrderListPanel period={"week"} />}</TabPanel>
+          <TabPanel>{<OrderListPanel period={"month"} />}</TabPanel>
+          <TabPanel>{<OrderListPanel period={"3-month"} />}</TabPanel>
+          <TabPanel>{<OrderListPanel period={"all"} />}</TabPanel>
         </TabPanels>
       </Tabs>
     </Box>
