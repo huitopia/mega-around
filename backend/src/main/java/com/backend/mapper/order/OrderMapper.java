@@ -46,7 +46,7 @@ public interface OrderMapper {
                              <if test="stateId != null and branchId != null">
                                  AND oi.state_id = #{stateId} AND oi.branch_id = #{branchId}
                              </if>
-                             ORDER BY oi.id DESC
+                             ORDER BY oi.created_at DESC
                          </script>
             """)
     List<OrderItem> selectOrderItemList(Integer customerId, String period, Integer stateId, Integer branchId);
