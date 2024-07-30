@@ -103,8 +103,6 @@ export function CustomerEdit() {
     return <Spinner />;
   }
 
-  console.log(customer.password.length);
-  console.log(customer.password);
   return (
     <>
       <Center>
@@ -114,7 +112,7 @@ export function CustomerEdit() {
           </Center>
           <Box>
             <Box mb={7}>
-              <FormControl isRequired>
+              <FormControl>
                 <FormLabel>이메일</FormLabel>
                 <Input value={customer.email} readOnly />
               </FormControl>

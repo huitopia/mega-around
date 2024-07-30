@@ -136,8 +136,8 @@ export function SignUpCustomer() {
                 {email.length > 0 && (
                   <FormHelperText color="#dc7b84">
                     {isValidEmail
-                      ? isCheckedEmail || "중복확인 버튼을 눌러주세요."
-                      : "유효한 이메일을 입력해주세요."}
+                      ? isCheckedEmail || "중복확인 버튼을 눌러주세요"
+                      : "유효한 이메일을 입력해주세요"}
                   </FormHelperText>
                 )}
               </FormControl>
