@@ -89,7 +89,6 @@ export function MyPageCustomer() {
                   </Tr>
                 </Table>
               </Center>
-              {/*<Link to={`/mypage/customer/edit/${id}`}>*/}
               <Box display="flex">
                 <Box
                   mt={10}
@@ -104,7 +103,6 @@ export function MyPageCustomer() {
                   회원정보 수정
                 </Box>
               </Box>
-              {/*</Link>*/}
             </>
           )}
         </Box>

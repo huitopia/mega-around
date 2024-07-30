@@ -219,9 +219,12 @@ public class UserService {
         return userMapper.selectBranchById(branchId);
     }
 
-    public boolean identificationToModify(Customer customer) {
-        Customer dbcustomer = userMapper.selectCustomerById(customer.getId());
-        return passwordEncoder.matches(customer.getOldPassword(), dbcustomer.getPassword());
+    public boolean identifyCustomer(Integer id, String password) {
+        Customer db = userMapper.selectCustomerById(id);
+        if (password == null || password.isEmpty()) {
+            return false;
+        }
+        return passwordEncoder.matches(password, db.getPassword());
     }
 
     public boolean updateVerification(Customer customer) {
@@ -259,11 +262,4 @@ public class UserService {
         return Map.of("token", token);
     }
 
-    public boolean identifyCustomer(Integer id, String password) {
-        Customer db = userMapper.selectCustomerById(id);
-        if (password == null || password.isEmpty()) {
-            return false;
-        }
-        return passwordEncoder.matches(password, db.getPassword());
-    }
 }

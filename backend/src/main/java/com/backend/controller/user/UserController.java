@@ -132,14 +132,13 @@ public class UserController {
         return ResponseEntity.ok(customer);
     }
 
-    // 고객 암호 확인
+    // 고객 비밀번호 확인
     @PostMapping("/user/customer/password/{id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Object> getCustomerPasswordById(@PathVariable Integer id, @RequestBody Map<String, String> requestBody, Authentication authentication) {
         if (!service.hasAccess(id, authentication)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-
         if (service.identifyCustomer(id, requestBody.get("password"))) {
             return ResponseEntity.ok().build();
         }
@@ -164,13 +163,10 @@ public class UserController {
     @PutMapping("/user/customer/{id}")
     @PreAuthorize("hasAuthority('SCOPE_customer')")
     public ResponseEntity<Object> updateCustomer(Customer customer, Authentication authentication) {
-        if (service.identificationToModify(customer)) {
-            if (service.updateVerification(customer)) {
-                Map<String, Object> token = service.updateCustomer(customer, authentication);
-                return ResponseEntity.ok(token);
-            }
-            return ResponseEntity.badRequest().build();
+        if (service.updateVerification(customer)) {
+            Map<String, Object> token = service.updateCustomer(customer, authentication);
+            return ResponseEntity.ok(token);
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.badRequest().build();
     }
 }

@@ -108,6 +108,7 @@ export function CustomerEdit() {
   if (customer === null) {
     return <Spinner />;
   }
+  console.log(customer.password);
 
   return (
     <>
