@@ -124,7 +124,7 @@ export const BranchList = () => {
                   </CardHeader>
                   <CardBody>
                     <Flex>
-                      <Box>주소</Box>
+                      <Box>{store.address}</Box>
                       <Spacer />
                       <Box textColor={"red"}>거리</Box>
                     </Flex>
