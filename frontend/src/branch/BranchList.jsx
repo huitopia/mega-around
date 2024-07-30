@@ -1,4 +1,15 @@
-import { Box, List, ListItem, Spinner, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Card,
+  CardBody,
+  CardHeader,
+  Flex,
+  Heading,
+  SimpleGrid,
+  Spacer,
+  Spinner,
+  Text,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -77,11 +88,14 @@ export const BranchList = () => {
   console.log("store: ", stores);
   return (
     <Box
-      width="100%"
+      mt={"50px"}
+      maxWidth="1000px"
+      mx={"auto"}
       height="100vh"
       display="flex"
       flexDirection="column"
       alignItems="center"
+      border="1px solid blue"
     >
       {error ? (
         <Text>{error}</Text>
@@ -89,13 +103,35 @@ export const BranchList = () => {
         <Spinner size="xl" />
       ) : (
         <>
-          <Box id="map" width="100%" height="70%" />
-          <Box width="100%" height="30%" overflowY="scroll">
-            <List>
+          <Box id="map" width={"100%"} height="50%" border="1px solid red" />
+          <Box
+            mt={"20px"}
+            width={"100%"}
+            height="50%"
+            overflowY="auto"
+            border="1px solid gray"
+          >
+            <SimpleGrid
+              spacing={4}
+              columns={2}
+              // templateColumns="repeat(auto-fill, minmax(400px, 1fr))"
+              // templateColumns="repeat(2, 1fr)"
+            >
               {stores.map((store) => (
-                <ListItem key={store.branchId}>{store.name}</ListItem>
+                <Card key={store.branchId} height={"120px"}>
+                  <CardHeader>
+                    <Heading size={"md"}>{store.branchName}</Heading>
+                  </CardHeader>
+                  <CardBody>
+                    <Flex>
+                      <Box>주소</Box>
+                      <Spacer />
+                      <Box textColor={"red"}>거리</Box>
+                    </Flex>
+                  </CardBody>
+                </Card>
               ))}
-            </List>
+            </SimpleGrid>
           </Box>
         </>
       )}
