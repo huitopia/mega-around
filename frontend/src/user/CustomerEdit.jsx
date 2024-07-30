@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Center,
+  Flex,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -10,6 +11,7 @@ import {
   InputRightElement,
   Spinner,
   Text,
+  Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
@@ -19,13 +21,15 @@ import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import { CustomToast } from "../component/CustomToast.jsx";
 import { LoginContext } from "../component/LoginProvider.jsx";
 import ConfirmationModal from "./component/CustomModal.jsx";
+import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function CustomerEdit() {
   const [customer, setCustomer] = useState({ password: "" });
   const [oldNickName, setOldNickName] = useState("");
-  const [isCheckedNickName, setIsCheckedNickName] = useState(false);
   const [passwordCheck, setPasswordCheck] = useState("");
   const [isValidPassword, setIsValidPassword] = useState(false);
+  const [disableNickNameButton, setDisableNickNameButton] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const account = useContext(LoginContext);
@@ -38,6 +42,7 @@ export function CustomerEdit() {
       .then((res) => {
         const dbCustomer = res.data;
         setCustomer({ ...dbCustomer, password: "" });
+        setOldNickName(dbCustomer.nickName);
       })
       .catch((err) => {
         if (err.response.status === 403) {
@@ -103,6 +108,22 @@ export function CustomerEdit() {
     return <Spinner />;
   }
 
+  function handleCustomerCheckNickName() {
+    axios
+      .get(
+        `/api/user/customer/nickName/${customer.nickName}`,
+        customer.nickName,
+      )
+      .then(() => infoToast("사용 가능한 닉네임입니다"))
+      .catch((err) => {
+        if (err.response.status === 409) {
+          errorToast("이미 존재하는 닉네임입니다");
+        } else {
+          errorToast("유효하지 않은 닉네임입니다");
+        }
+      });
+  }
+
   return (
     <>
       <Center>
@@ -119,7 +140,20 @@ export function CustomerEdit() {
             </Box>
             <Box mb={7}>
               <FormControl>
-                <FormLabel>새로운 비밀번호</FormLabel>
+                <FormLabel>
+                  새 비밀번호{" "}
+                  <Tooltip
+                    hasArrow
+                    label="비밀번호 변경 시에만 입력해주세요"
+                    placement="right"
+                    closeDelay={1000}
+                  >
+                    <FontAwesomeIcon
+                      icon={faCircleInfo}
+                      style={{ color: "#638097" }}
+                    />
+                  </Tooltip>
+                </FormLabel>
                 <InputGroup>
                   <Input
                     type="password"
@@ -138,17 +172,18 @@ export function CustomerEdit() {
                       ))}
                   </InputRightElement>
                 </InputGroup>
-                <FormHelperText color={"#dc7b84"}>
-                  {customer.password.length === 0
-                    ? "비밀번호 변경 시에만 입력해 주세요"
-                    : !isValidPassword &&
-                      "영문 대/소문자, 숫자, 특수문자를 하나 이상 포함하여 8-20자 이내로 입력해 주세요."}
-                </FormHelperText>
+                {customer.password.length === 0 ||
+                  (!isValidPassword && (
+                    <FormHelperText color={"#dc7b84"}>
+                      영문 대/소문자, 숫자, 특수문자를 하나 이상 포함하여 8-20자
+                      이내로 입력해 주세요.
+                    </FormHelperText>
+                  ))}
               </FormControl>
             </Box>
             <Box mb={7}>
               <FormControl>
-                <FormLabel>비밀번호 재입력</FormLabel>
+                <FormLabel>새 비밀번호 확인</FormLabel>
                 <InputGroup>
                   <Input
                     type="password"
@@ -175,9 +210,9 @@ export function CustomerEdit() {
               </FormControl>
             </Box>
             <Box mb={7}>
-              <FormControl isRequired>
+              <FormControl>
                 <FormLabel>닉네임</FormLabel>
-                <InputGroup>
+                <Flex>
                   <Input
                     value={customer.nickName}
                     onChange={(e) => {
@@ -185,9 +220,24 @@ export function CustomerEdit() {
                         ...customer,
                         nickName: e.target.value.trim(),
                       });
+                      setDisableNickNameButton(false);
                     }}
                   />
-                </InputGroup>
+                  <Box w={5} />
+                  <Button
+                    isDisabled={
+                      disableNickNameButton || oldNickName === customer.nickName
+                    }
+                    onClick={handleCustomerCheckNickName}
+                    variant={"outline"}
+                    colorScheme={"purple"}
+                    fontSize={"sm"}
+                    width={"120px"}
+                    borderRadius={5}
+                  >
+                    중복확인
+                  </Button>
+                </Flex>
               </FormControl>
             </Box>
             <Center mt={10}>
