@@ -10,13 +10,16 @@ import {
   Spacer,
   Spinner,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
 import longText from "./stampText.js";
+import { StampModal } from "./component/StampModal.jsx";
 
 function Stamp(props) {
   const boxes = Array.from({ length: 10 }, (_, i) => i + 1);
   const [stampCount, setStampCount] = useState(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     axios.get("/api/event/stamp").then((res) => {
@@ -92,12 +95,13 @@ function Stamp(props) {
           </Flex>
         </Box>
         <Spacer />
-        <Button>적립내역 보기</Button>
+        <Button onClick={() => onOpen()}>적립내역 보기</Button>
       </Flex>
       <Box bg={"#f8f9fa"}>
         <Text>유의사항</Text>
         <Box whiteSpace="pre-line">{longText}</Box>
       </Box>
+      <StampModal isOpen={isOpen} onClose={onClose} />
     </Box>
   );
 }
