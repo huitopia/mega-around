@@ -25,8 +25,8 @@ public interface BranchMapper {
     List<BranchGeocode> selectAroundBranchList(double lat, double lng);
 
     @Select("""
-            SELECT branch_name
+            SELECT branch_name, address
             FROM branch WHERE id = #{id}
             """)
-    String selectBranchNameById(Integer id);
+    BranchGeocode selectBranchInfoById(Integer id);
 }

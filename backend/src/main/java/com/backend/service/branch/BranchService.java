@@ -17,8 +17,11 @@ public class BranchService {
     public List<BranchGeocode> selectAroundBranchList(double lat, double lng) {
         List<BranchGeocode> branchGeocodes = mapper.selectAroundBranchList(lat, lng);
         branchGeocodes.forEach(branch -> {
-            branch.setBranchName(mapper.selectBranchNameById(branch.getBranchId()));
+            BranchGeocode branchGeocode = mapper.selectBranchInfoById(branch.getBranchId());
+            branch.setBranchName(branchGeocode.getBranchName());
+            branch.setAddress(branchGeocode.getAddress());
         });
+        System.out.println("branchGeocodes = " + branchGeocodes);
         return branchGeocodes;
     }
 }
