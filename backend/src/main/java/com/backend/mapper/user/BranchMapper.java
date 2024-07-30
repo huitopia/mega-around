@@ -23,4 +23,10 @@ public interface BranchMapper {
             ORDER BY distance LIMIT 10
             """)
     List<BranchGeocode> selectAroundBranchList(double lat, double lng);
+
+    @Select("""
+            SELECT branch_name
+            FROM branch WHERE id = #{id}
+            """)
+    String selectBranchNameById(Integer id);
 }
