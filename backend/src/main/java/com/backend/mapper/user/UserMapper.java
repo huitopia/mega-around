@@ -50,7 +50,7 @@ public interface UserMapper {
     Branch selectBranchById(Integer branchId);
 
     @Update("""
-            UPDATE customer SET email=#{email},password=#{password} WHERE id=#{id}
+            UPDATE customer SET nick_name=#{nickName},password=#{password} WHERE id=#{id}
             """)
     int updateCustomer(Customer customer);
 }

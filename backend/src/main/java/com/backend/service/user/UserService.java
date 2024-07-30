@@ -221,36 +221,26 @@ public class UserService {
 
     public boolean identifyCustomer(Integer id, String password) {
         Customer db = userMapper.selectCustomerById(id);
-        if (password == null || password.isEmpty()) {
+        if (password == null || password.isBlank()) {
             return false;
         }
         return passwordEncoder.matches(password, db.getPassword());
     }
 
-    public boolean updateVerification(Customer customer) {
-        if (!customer.getPassword().isEmpty()) {
-            System.out.println("!customer.getPassword().isEmpty()");
-            String passwordPattern = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,20}$";
-            return customer.getPassword().trim().matches(passwordPattern);
-        }
-        if (customer.getNickName().isEmpty()) {
-            return false;
-        }
-        return true;
-    }
-
     public Map<String, Object> updateCustomer(Customer customer, Authentication authentication) {
-        if (customer.getPassword() != null && !customer.getPassword().isEmpty()) {
-            customer.setPassword(passwordEncoder.encode(customer.getPassword()));
-        } // 입력한 비밀번호가 null이거나 비어있으면
-        else {
+        System.out.println("updateCustomer() customer = " + customer);
+        // 입력한 비밀번호가 null이거나 공백 문자열이면 기존 비밀번호 유지
+        if (customer.getPassword() == null || customer.getPassword().isBlank()) {
             Customer dbcustomer = userMapper.selectCustomerById(customer.getId());
             customer.setPassword(dbcustomer.getPassword());
+        } else { // 아니면 입력된 비밀번호 암호화
+            customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         }
+
+        // password, nick_name 업데이트
         userMapper.updateCustomer(customer);
 
-        String token = "";
-
+        // 토큰 생성하고 nickName 받아오기
         Jwt jwt = (Jwt) authentication.getPrincipal();
         Map<String, Object> claims = jwt.getClaims();
         JwtClaimsSet.Builder jwtClaimsSetBuilder = JwtClaimsSet.builder();
@@ -258,8 +248,26 @@ public class UserService {
         jwtClaimsSetBuilder.claim("nickName", customer.getNickName());
 
         JwtClaimsSet jwtClaimsSet = jwtClaimsSetBuilder.build();
-        token = jwtEncoder.encode(JwtEncoderParameters.from(jwtClaimsSet)).getTokenValue();
+        String token = jwtEncoder.encode(JwtEncoderParameters.from(jwtClaimsSet)).getTokenValue();
         return Map.of("token", token);
     }
 
+    public boolean isNameEmpty(String name) {
+        // null이거나 비어있으면 true
+        return name == null || name.isBlank();
+    }
+
+    public boolean isPasswordValid(String password) {
+        // 패스워드가 비어 있으면 true
+        if (password.isBlank()) {
+            return true;
+        }
+        // 패스워드가 비어 있지 않으면 유효성 검사
+        else {
+            System.out.println("empty()가 아니면 password = " + password);
+            String passwordPattern = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,20}$";
+            System.out.println(password.trim().matches(passwordPattern));
+            return password.trim().matches(passwordPattern);
+        }
+    }
 }

@@ -23,7 +23,6 @@ import ConfirmationModal from "./component/CustomModal.jsx";
 export function CustomerEdit() {
   const [customer, setCustomer] = useState({ password: "" });
   const [oldNickName, setOldNickName] = useState("");
-  const [oldPassword, setOldPassword] = useState("");
   const [isCheckedNickName, setIsCheckedNickName] = useState(false);
   const [passwordCheck, setPasswordCheck] = useState("");
   const [isValidPassword, setIsValidPassword] = useState(false);
@@ -38,8 +37,7 @@ export function CustomerEdit() {
       .get(`/api/user/customer/${account.id}`)
       .then((res) => {
         const dbCustomer = res.data;
-        setCustomer({ ...dbCustomer, password: dbCustomer.password || "" });
-        setOldNickName(dbCustomer.nickName);
+        setCustomer({ ...dbCustomer, password: "" });
       })
       .catch((err) => {
         if (err.response.status === 403) {
@@ -67,28 +65,24 @@ export function CustomerEdit() {
     setIsLoading(true);
     const customerCopy = { ...customer };
     axios
-      .putForm(`/api/user/customer/${account.id}`, {
+      .put(`/api/user/customer/${account.id}`, {
         ...customerCopy,
-        oldPassword,
       })
       .then((res) => {
         account.logout();
         account.login(res.data.token);
         successToast("회원 정보가 수정되었습니다");
+        navigate(`/mypage/customer/${customer.id}`);
       })
       .catch((err) => {
-        if (err.response.status === 401) {
-          errorToast("비밀번호가 다릅니다");
-        } else if (err.response.status === 400) {
-          errorToast("사용할 수 없는 비밀번호이거나 닉네임입니다");
+        if (err.response.status === 400) {
+          errorToast(err.response.data);
         } else {
           errorToast("회원 정보 수정 중 문제가 발생했습니다");
         }
       })
       .finally(() => {
-        setOldPassword("");
         setIsLoading(false);
-        navigate(`/mypage/customer/${customer.id}`);
       });
   }
 
@@ -108,8 +102,9 @@ export function CustomerEdit() {
   if (customer === null) {
     return <Spinner />;
   }
-  console.log(customer.password);
 
+  console.log(customer.password.length);
+  console.log(customer.password);
   return (
     <>
       <Center>
@@ -119,13 +114,13 @@ export function CustomerEdit() {
           </Center>
           <Box>
             <Box mb={7}>
-              <FormControl>
+              <FormControl isRequired>
                 <FormLabel>이메일</FormLabel>
                 <Input value={customer.email} readOnly />
               </FormControl>
             </Box>
             <Box mb={7}>
-              <FormControl isRequired>
+              <FormControl>
                 <FormLabel>새로운 비밀번호</FormLabel>
                 <InputGroup>
                   <Input
@@ -137,27 +132,24 @@ export function CustomerEdit() {
                     }
                   />
                   <InputRightElement>
-                    {customer.password.length > 0 &&
-                      (customer.password !== "" && isValidPassword ? (
+                    {customer.password.length === 0 ||
+                      (isValidPassword ? (
                         <CheckIcon color="green.500" />
                       ) : (
-                        customer.password !== "" && (
-                          <CloseIcon color="red.500" />
-                        )
+                        <CloseIcon color="red.500" />
                       ))}
                   </InputRightElement>
                 </InputGroup>
-                {customer.password.length > 0 &&
-                  (isValidPassword || (
-                    <FormHelperText color={"#dc7b84"}>
-                      영문 대/소문자, 숫자, 특수문자를 하나 이상 포함하여 8-20자
-                      이내로 입력해 주세요.
-                    </FormHelperText>
-                  ))}
+                <FormHelperText color={"#dc7b84"}>
+                  {customer.password.length === 0
+                    ? "비밀번호 변경 시에만 입력해 주세요"
+                    : !isValidPassword &&
+                      "영문 대/소문자, 숫자, 특수문자를 하나 이상 포함하여 8-20자 이내로 입력해 주세요."}
+                </FormHelperText>
               </FormControl>
             </Box>
             <Box mb={7}>
-              <FormControl isRequired>
+              <FormControl>
                 <FormLabel>비밀번호 재입력</FormLabel>
                 <InputGroup>
                   <Input
@@ -189,7 +181,7 @@ export function CustomerEdit() {
                 <FormLabel>닉네임</FormLabel>
                 <InputGroup>
                   <Input
-                    value={customer.nickName || ""}
+                    value={customer.nickName}
                     onChange={(e) => {
                       setCustomer({
                         ...customer,

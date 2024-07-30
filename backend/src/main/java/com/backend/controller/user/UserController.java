@@ -162,11 +162,15 @@ public class UserController {
     // 고객 정보 수정
     @PutMapping("/user/customer/{id}")
     @PreAuthorize("hasAuthority('SCOPE_customer')")
-    public ResponseEntity<Object> updateCustomer(Customer customer, Authentication authentication) {
-        if (service.updateVerification(customer)) {
-            Map<String, Object> token = service.updateCustomer(customer, authentication);
-            return ResponseEntity.ok(token);
+    public ResponseEntity<Object> updateCustomer(@RequestBody Customer customer, Authentication authentication) {
+        if (service.isNameEmpty(customer.getNickName())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("닉네임을 입력해 주세요");
         }
-        return ResponseEntity.badRequest().build();
+        if (!service.isPasswordValid(customer.getPassword())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("유효한 비밀번호를 입력해 주세요");
+        }
+        Map<String, Object> token = service.updateCustomer(customer, authentication);
+        System.out.println("ok() customer = " + customer);
+        return ResponseEntity.ok(token);
     }
 }
