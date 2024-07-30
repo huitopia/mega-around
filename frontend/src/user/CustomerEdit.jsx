@@ -16,9 +16,9 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
-import { CustomToast } from "./component/CustomToast.jsx";
-import { LoginContext } from "./component/LoginProvider.jsx";
-import ConfirmationModal from "./user/component/CustomModal.jsx";
+import { CustomToast } from "../component/CustomToast.jsx";
+import { LoginContext } from "../component/LoginProvider.jsx";
+import ConfirmationModal from "./component/CustomModal.jsx";
 
 export function CustomerEdit() {
   const [customer, setCustomer] = useState({ password: "" });

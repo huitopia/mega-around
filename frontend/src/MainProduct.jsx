@@ -1,11 +1,13 @@
 import { Box, Center } from "@chakra-ui/react";
 import { useContext } from "react";
 import { LoginContext } from "./component/LoginProvider.jsx";
+import SimpleSlider from "./component/SimpleSlider.jsx";
 
 export function MainProduct() {
   const account = useContext(LoginContext);
   return (
     <>
+      <SimpleSlider />
       <Center p={20} flexDirection={"column"}>
         {account.isLoggedIn() && (
           <Box fontWeight={"bold"}>

@@ -23,8 +23,8 @@ import { Coupon } from "./event/Coupon.jsx";
 import axios from "axios";
 import { MyPageCustomer } from "./user/MyPageCustomer.jsx";
 import { MyPageBranch } from "./user/MyPageBranch.jsx";
-import { CustomerEdit } from "./CustomerEdit.jsx";
-import { BranchEdit } from "./BranchEdit.jsx";
+import { CustomerEdit } from "./user/CustomerEdit.jsx";
+import { BranchEdit } from "./user/BranchEdit.jsx";
 
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
