@@ -8,6 +8,7 @@ public class BranchGeocode {
     private Double latitude; // 위도
     private Double longitude; // 경도
     private String branchName;
+    private String address;
 }
 
 
