@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { ProductDetailModal } from "./ProductDetailModal.jsx";
 
 // TODO : 품절 체크
-export function ProductBodyComp({ mainCategory, subCategory }) {
+export function ProductBodyComp({ branchId, mainCategory, subCategory }) {
   const [data, setData] = useState([]);
   const [productId, setProductId] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
