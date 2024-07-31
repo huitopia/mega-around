@@ -278,4 +278,28 @@ public class UserService {
             return password.trim().matches(passwordPattern);
         }
     }
+
+    public Map<String, Object> updateBranch(Branch branch, Authentication authentication) {
+        // 입력한 비밀번호가 null이거나 공백 문자열이면 기존 비밀번호 유지
+        if (branch.getPassword() == null || branch.getPassword().isBlank()) {
+            Branch dbbranch = userMapper.selectBranchById(branch.getId());
+            branch.setPassword(dbbranch.getPassword());
+        } else { // 아니면 입력된 비밀번호 암호화
+            branch.setPassword(passwordEncoder.encode(branch.getPassword()));
+        }
+
+        // password, branch_name, address 업데이트
+        userMapper.updateBranch(branch);
+
+        // 토큰 생성하고 branchName 받아오기
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        Map<String, Object> claims = jwt.getClaims();
+        JwtClaimsSet.Builder jwtClaimsSetBuilder = JwtClaimsSet.builder();
+        claims.forEach(jwtClaimsSetBuilder::claim);
+        jwtClaimsSetBuilder.claim("branchName", branch.getBranchName());
+
+        JwtClaimsSet jwtClaimsSet = jwtClaimsSetBuilder.build();
+        String token = jwtEncoder.encode(JwtEncoderParameters.from(jwtClaimsSet)).getTokenValue();
+        return Map.of("token", token);
+    }
 }

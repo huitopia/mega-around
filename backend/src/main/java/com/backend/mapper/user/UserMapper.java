@@ -53,4 +53,9 @@ public interface UserMapper {
             UPDATE customer SET nick_name=#{nickName},password=#{password} WHERE id=#{id}
             """)
     int updateCustomer(Customer customer);
+
+    @Update("""
+            UPDATE branch SET branch_name=#{branchName},password=#{password},address=#{address} WHERE id=#{id}
+            """)
+    int updateBranch(Branch branch);
 }

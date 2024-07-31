@@ -186,4 +186,19 @@ public class UserController {
         System.out.println("ok() customer = " + customer);
         return ResponseEntity.ok(token);
     }
+
+    // 지점 정보 수정
+    @PutMapping("/user/branch/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_branch')")
+    public ResponseEntity<Object> updateBranch(@RequestBody Branch branch, Authentication authentication) {
+        if (service.isNameEmpty(branch.getBranchName())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("닉네임을 입력해 주세요");
+        }
+        if (!service.isPasswordValid(branch.getPassword())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("유효한 비밀번호를 입력해 주세요");
+        }
+        Map<String, Object> token = service.updateBranch(branch, authentication);
+        System.out.println("ok() branch = " + branch);
+        return ResponseEntity.ok(token);
+    }
 }

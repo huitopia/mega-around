@@ -89,7 +89,7 @@ export function MyPageBranch() {
                   </Tr>
                   <Tr>
                     <Th>가입일</Th>
-                    <Td>{branch.createdAt}</Td>
+                    <Td>{branch.createdAtTime}</Td>
                   </Tr>
                 </Table>
               </Center>

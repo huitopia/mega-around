@@ -10,7 +10,6 @@ public class Customer {
     private Integer id;
     private String email;
     private String password;
-    private String oldPassword;
     private String nickName;
     private String phone;
     private LocalDateTime createdAt;
