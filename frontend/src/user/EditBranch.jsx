@@ -23,6 +23,7 @@ import { LoginContext } from "../component/LoginProvider.jsx";
 import ConfirmationModal from "./component/CustomModal.jsx";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Postcode } from "./component/Postcode.jsx";
 
 export function EditBranch() {
   const [branch, setBranch] = useState({ password: "" });
@@ -76,14 +77,14 @@ export function EditBranch() {
       .then((res) => {
         account.logout();
         account.login(res.data.token);
-        successToast("회원 정보가 수정되었습니다");
+        successToast("지점 정보가 수정되었습니다");
         navigate(`/mypage/branch/${branch.id}`);
       })
       .catch((err) => {
         if (err.response.status === 400) {
           errorToast(err.response.data);
         } else {
-          errorToast("회원 정보 수정 중 문제가 발생했습니다");
+          errorToast("지점 정보 수정 중 문제가 발생했습니다");
         }
       })
       .finally(() => {
@@ -98,7 +99,7 @@ export function EditBranch() {
       .then(() => {
         infoToast("탈퇴 되었습니다. 그동안 이용해 주셔서 감사합니다");
       })
-      .catch(() => errorToast("회원 탈퇴 중 문제가 발생하였습니다"))
+      .catch(() => errorToast("지점 탈퇴 중 문제가 발생하였습니다"))
       .finally(() => setIsLoading(false));
   }
 
@@ -114,22 +115,26 @@ export function EditBranch() {
         `/api/user/branch/branchName/${branch.branchName}`,
         branch.branchName,
       )
-      .then(() => infoToast("사용 가능한 닉네임입니다"))
+      .then(() => infoToast("사용 가능한 지점명입니다"))
       .catch((err) => {
         if (err.response.status === 409) {
-          errorToast("이미 존재하는 닉네임입니다");
+          errorToast("이미 존재하는 지점명입니다");
         } else {
-          errorToast("유효하지 않은 닉네임입니다");
+          errorToast("유효하지 않은 지점명입니다");
         }
       });
   }
+
+  const handleAddressSelect = (fullAddress) => {
+    branch.address = fullAddress;
+  };
 
   return (
     <>
       <Center>
         <Box w={520} mt={10}>
           <Center mt={5} mb={10} fontSize={"25px"} fontWeight={"bold"}>
-            <Text>개인 회원정보 수정</Text>
+            <Text>지점 정보 수정</Text>
           </Center>
           <Box>
             <Box mb={7}>
@@ -211,7 +216,7 @@ export function EditBranch() {
             </Box>
             <Box mb={7}>
               <FormControl>
-                <FormLabel>닉네임</FormLabel>
+                <FormLabel>지점명</FormLabel>
                 <Flex>
                   <Input
                     value={branch.branchName}
@@ -241,6 +246,22 @@ export function EditBranch() {
                 </Flex>
               </FormControl>
             </Box>
+            <Box mb={7}>
+              <FormControl>
+                <FormLabel>주소</FormLabel>
+                <Flex>
+                  <Input
+                    value={branch.address}
+                    readOnly
+                    placeholder="주소가 변경되었을 경우에만 입력해주세요"
+                    sx={{ "::placeholder": { fontSize: "sm" } }}
+                  />
+                  <Box w={5} />
+                  <Postcode onAddressSelect={handleAddressSelect} />
+                </Flex>
+              </FormControl>
+            </Box>
+
             <Center mt={10}>
               <Button
                 bg={"black"}
