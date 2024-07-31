@@ -20,7 +20,6 @@ public class BranchController {
     @GetMapping("/location")
     public ResponseEntity getUserAroundBranch(@RequestParam double lat, @RequestParam double lng) {
         List<BranchGeocode> branchGeocodes = service.selectAroundBranchList(lat, lng);
-        System.out.println("branchGeocodes = " + branchGeocodes);
         return ResponseEntity.ok().body(branchGeocodes);
     }
 }
