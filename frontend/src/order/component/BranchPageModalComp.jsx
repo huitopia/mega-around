@@ -41,11 +41,15 @@ export function BranchPageModalComp({
 
   function handleStateChange() {
     axios
-      .put(`/api/orders/${orderItem.id}`, stateId + 1, {
-        headers: {
-          "Content-Type": "application/json",
+      .put(
+        `/api/orders/${orderItem.id}`,
+        { stateId: stateId + 1, customerId: orderItem.customerId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      })
+      )
       .then(() => {
         onClose();
         successToast("변경되었습니다");

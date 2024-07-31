@@ -67,7 +67,7 @@ export function OrderDetail() {
         <Heading>Order Detail</Heading>
       </Box>
       <Divider border="1px solid black" my={4} />
-      <Card variant={"outline"} mb={4}>
+      <Card variant={"outline"} mb={4} pl={3} pr={3}>
         <Center
           mb={2}
           color={"white"}
@@ -78,30 +78,31 @@ export function OrderDetail() {
           1시간 이내에 찾아가지 않으실 경우 품질 및 보관 문제로 폐기 될 수
           있습니다.
         </Center>
-        <Center mb={2} mt={5}>
+        <Center mb={2} mt={7}>
           <Box textAlign="center">
-            <Box fontWeight={"bold"} fontSize={"lg"}>
+            <Box fontSize={"20px"}>
               {order.branchName}
             </Box>
-            <Box fontWeight={"bold"} fontSize={"xl"}>
+            <Box fontWeight={"bold"} fontSize={"22px"} mt={1}>
               주문번호: {order.id}
             </Box>
-            <Box color={"#656565"}>{order.createdAtString}</Box>
-            <Box bg={"gray.100"}
+            <Box color={"#656565"} mt={2}>{order.createdAtString}</Box>
+            <Box bg={"#f8f9fa"}
                  h={"50px"}
                  display="flex"
                  alignItems="center"
                  justifyContent="center"
-                 w={"400px"}>
+                 w={"400px"}
+            mt={3}>
               <Text fontSize={"xl"} fontWeight={"bold"}>{modifyTime(order.createdAtString)}</Text>
-              <Text
+              <Text fontSize={"16px"}
               >
                 까지 제조가 완료될 예정입니다.
               </Text>
             </Box>
           </Box>
         </Center>
-        <Box mb={4} mt={8}>
+        <Box mb={4} mt={4} p={7}>
           <Flex justifyContent="space-between">
             <Box color={progress == 1 ? "red" : "black"}>결제완료</Box>
             <Box color={progress == 2 ? "red" : "black"}>주문확인</Box>
@@ -111,38 +112,38 @@ export function OrderDetail() {
             colorScheme={"red"}
             mt={3}
             value={progressPercent}
-            height="7px"
+            height="9px"
             width="full"
             borderRadius={"5px"}
           />
         </Box>
       </Card>
       <Card variant={"outline"}>
-        <Stack divider={<StackDivider />} spacing="4">
+        <Stack divider={<StackDivider />} spacing="">
           {order.orderProduct.map((item, index) => (
-            <Box key={index} mb={4}>
-              <Flex alignItems={"center"}>
+            <Box key={index} mb={2}>
+              <Flex alignItems={"center"} p={5}>
                 <Image
-                  w="50px"
-                  h="50px"
+                  w="120px"
+                  h="120px"
                   src={
                     "https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/" +
                     item.filePath
                   }
                 />
                 <Box ml={4}>
-                  <Box>{item.productName}</Box>
+                  <Box fontSize={"18px"}>{item.productName}</Box>
                   {item.optionList && (
                     <Box>
                       {item.optionList.map((option, idx) => (
-                        <Box key={idx}>{option}</Box>
+                        <Box key={idx} fontSize={"sm"}>{option}</Box>
                       ))}
                     </Box>
                   )}
-                  <Box>{item.count}개</Box>
+                  <Box mt={3} fontSize={"21px"}>{item.count}개</Box>
                 </Box>
                 <Spacer/>
-                <Box fontWeight={"bold"}>
+                <Box fontWeight={"bold"} fontSize={"23px"} mt={14}>
                   {(item.totalPrice * item.count).toLocaleString("ko-KR")}원
                 </Box>
               </Flex>
@@ -150,7 +151,7 @@ export function OrderDetail() {
           ))}
         </Stack>
       </Card>
-      <Card variant={"outline"} mb={4}>
+      <Card variant={"outline"} mb={4} mt={5} p={5} gap={2}>
         <Flex>
           <Box>결제수단</Box>
           <Spacer />
@@ -159,21 +160,21 @@ export function OrderDetail() {
         <Flex>
           <Box>상품금액</Box>
           <Spacer />
-          <Box fontWeight={"bold"}>
+          <Box fontWeight={"bold"} fontSize={"18px"}>
             {order.totalPrice.toLocaleString("ko-KR")}원
           </Box>
         </Flex>
         <Flex>
           <Box>할인금액</Box>
           <Spacer />
-          <Box fontWeight={"bold"}>
+          <Box fontWeight={"bold"} fontSize={"18px"}>
             -{(order.couponCount * 2000).toLocaleString("ko-KR")}원
           </Box>
         </Flex>
         <Flex>
           <Box>결제금액</Box>
           <Spacer />
-          <Box color={"red"} fontSize={"xl"} fontWeight={"bold"}>
+          <Box color={"red"} fontSize={"23px"} fontWeight={"bold"}>
             {(order.totalPrice - order.couponCount * 2000).toLocaleString(
               "ko-KR",
             )}

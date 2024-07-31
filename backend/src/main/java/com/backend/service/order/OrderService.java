@@ -88,9 +88,7 @@ public class OrderService {
         return orderItem;
     }
 
-    public void modifyOrderItemState(Integer id, Integer stateId) {
-        orderMapper.updateOrderItemState(id, stateId);
-        // 상태 변경 알림 추가
-//        orderMapper.insertNotice();
+    public boolean modifyOrderItemState(Integer id, Integer stateId) {
+        return orderMapper.updateOrderItemState(id, stateId) == 1;
     }
 }

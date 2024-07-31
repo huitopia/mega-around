@@ -204,7 +204,8 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
         successToast("상품을 장바구니에 담았습니다");
         onClose();
       })
-      .catch(() => errorToast("오류 : 장바구니 담기에 실패했습니다"));
+      .catch(() => errorToast("오류 : 장바구니 담기에 실패했습니다"))
+      .finally(() => setCheckedItems({}));
   }
 
   // TODO. branchId 수정

@@ -19,8 +19,8 @@ public interface CartMapper {
 
     @Insert("""
                 INSERT INTO cart_product
-                (cart_id, product_id, count, options)
-                VALUES (#{cartId}, #{productId}, #{count}, #{options})
+                (cart_id, product_id, count, options, total_price)
+                VALUES (#{cartId}, #{productId}, #{count}, #{options}, #{totalPrice})
             """)
     int insertCartProduct(CartProduct cartProduct);
 
