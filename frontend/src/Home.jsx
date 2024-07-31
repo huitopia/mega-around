@@ -9,7 +9,7 @@ export function Home() {
       <Box>
         <Navbar />
       </Box>
-      <Box>
+      <Box minHeight={"100vh"} position={"relative"} paddingBottom={"70px"}>
         <Outlet />
       </Box>
       <Box>
