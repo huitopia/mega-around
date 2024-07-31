@@ -23,8 +23,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export const BranchList = () => {
-  // const kakao_javasciprt_key = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY;
-
   // 현재 위치
   const [location, setLocation] = useState(null);
   const [selectedBranchId, setSelectedBranchId] = useState(0);
@@ -71,7 +69,7 @@ export const BranchList = () => {
           location.latitude,
           location.longitude,
         ),
-        level: 3,
+        level: 4,
       };
       const map = new window.kakao.maps.Map(container, options);
 
@@ -79,8 +77,15 @@ export const BranchList = () => {
         location.latitude,
         location.longitude,
       );
+      // 현재 위치 마커 아이콘 설정
+      const currentMarkerImage = new window.kakao.maps.MarkerImage(
+        "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png", // 커스텀 아이콘 URL
+        new window.kakao.maps.Size(24, 35), // 마커 이미지 크기
+      );
+
       const marker = new window.kakao.maps.Marker({
         position: position,
+        image: currentMarkerImage,
       });
 
       marker.setMap(map);
@@ -94,8 +99,33 @@ export const BranchList = () => {
           position: position,
         });
         marker.setMap(map);
+
+        // CustomOverlay 생성 및 스타일 설정
+        const content = `<span class="left"></span><span class="center" style="background-color: #ffde00; border: 2px solid #e8e4e0; padding: 5px; border-radius: 12px; color: #401F02; font-weight: 500;">${branch.branchName}</span><span class="right"></span>`;
+
+        const customOverlay = new window.kakao.maps.CustomOverlay({
+          position: position,
+          content: content,
+          xAnchor: 0.5,
+          yAnchor: 3,
+        });
+
+        // mouseover - CustomOverlay 표시
+        window.kakao.maps.event.addListener(marker, "mouseover", () => {
+          customOverlay.setMap(map);
+        });
+
+        // mouseout - CustomOverlay 닫기
+        window.kakao.maps.event.addListener(marker, "mouseout", () => {
+          customOverlay.setMap(null);
+        });
+
+        // click- CustomOverlay 표시, 상태 업데이트, modal open
         window.kakao.maps.event.addListener(marker, "click", () => {
           setSelectedBranchId(branch.branchId);
+          setSelectedBranchName(branch.branchName);
+          customOverlay.setMap(map);
+          onOpen();
         });
       });
     }
