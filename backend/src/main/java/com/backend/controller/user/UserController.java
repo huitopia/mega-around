@@ -201,4 +201,15 @@ public class UserController {
         System.out.println("ok() branch = " + branch);
         return ResponseEntity.ok(token);
     }
+
+    // 고객 회원 탈퇴
+    @DeleteMapping("/user/customer/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_customer')")
+    public ResponseEntity<Object> deleteCustomer(@PathVariable Integer id, Authentication authentication) {
+        if (service.hasAccess(id, authentication)) {
+            service.deleteCustomer(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
 }

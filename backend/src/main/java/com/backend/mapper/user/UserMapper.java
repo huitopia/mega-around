@@ -58,4 +58,9 @@ public interface UserMapper {
             UPDATE branch SET branch_name=#{branchName},password=#{password},address=#{address} WHERE id=#{id}
             """)
     int updateBranch(Branch branch);
+
+    @Delete("""
+            DELETE FROM customer WHERE id=#{customerId}
+            """)
+    void deleteCustomerById(Integer id);
 }

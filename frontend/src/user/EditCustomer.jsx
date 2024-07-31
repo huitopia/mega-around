@@ -103,9 +103,14 @@ export function EditCustomer() {
       .delete(`/api/user/customer/${account.id}`)
       .then(() => {
         infoToast("탈퇴 되었습니다. 그동안 이용해 주셔서 감사합니다");
+        account.logout();
+        navigate("/");
       })
       .catch(() => errorToast("회원 탈퇴 중 문제가 발생하였습니다"))
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        setIsLoading(false);
+        onClose();
+      });
   }
 
   let isCheckedPassword = customer.password === passwordCheck;

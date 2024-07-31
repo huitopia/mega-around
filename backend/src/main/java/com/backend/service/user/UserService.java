@@ -302,4 +302,15 @@ public class UserService {
         String token = jwtEncoder.encode(JwtEncoderParameters.from(jwtClaimsSet)).getTokenValue();
         return Map.of("token", token);
     }
+
+    public void deleteCustomer(Integer id) {
+        // 쿠폰 지우기
+        eventMapper.deleteCoupon(id);
+
+        // 스탬프 지우기
+        eventMapper.deleteStamp(id);
+
+        // 고객 지우기
+        userMapper.deleteCustomerById(id);
+    }
 }
