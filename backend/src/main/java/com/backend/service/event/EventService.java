@@ -4,6 +4,7 @@ import com.backend.domain.event.Notice;
 import com.backend.mapper.event.EventMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Description;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,5 +58,9 @@ public class EventService {
 
     public List<Notice> getNotice(String item, Integer customerId) {
         return eventMapper.selectNoticeByCustomerId(customerId, item);
+    }
+
+    public List<Notice> getAlarm(Integer customerId) {
+        return eventMapper.selectAllNoticeByCustomerId(customerId);
     }
 }

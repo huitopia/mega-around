@@ -98,3 +98,9 @@ VALUES (12, 0);
 UPDATE coupon
 SET count = 3
 WHERE customer_id = 12;
+
+UPDATE notice
+SET is_read = false;
+
+ALTER TABLE notice
+MODIFY COLUMN is_read BOOLEAN NOT NULL DEFAULT FALSE;

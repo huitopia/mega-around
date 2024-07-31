@@ -63,6 +63,7 @@ export function BranchPageModalComp({
       <ModalContent>
         <ModalHeader>주문 상세</ModalHeader>
         <ModalBody>
+          {orderItem.isTakeOut == 1 ? "포장해주세요." : "매장에서 먹고 갈게요"}
           {orderItem.orderProduct.map((item, index) => (
             <Box key={index} mb={4}>
               <Flex>
