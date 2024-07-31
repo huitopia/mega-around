@@ -12,7 +12,7 @@ export function Cart() {
         <Flex bg={"black"} color={"white"} h={"50px"} align={"center"} p={3}>
           이대역사거리점
         </Flex>
-        <Box fontWeight={"bold"} mt={5} fontSize={"30px"} mb={5}>주문 상품</Box>
+        <Box fontWeight={"bold"} mt={5} fontSize={"20px"} mb={5}>주문 상품</Box>
         <CartProductComp />
       </Box>
     </Box>

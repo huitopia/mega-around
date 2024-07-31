@@ -86,22 +86,23 @@ export function CartProductComp(props) {
             }
           />
           <Box ml={4} mt={5}>
-            <Box fontWeight={"bold"} fontSize={"23px"}>{product.productName}</Box>
+            <Box fontWeight={"bold"} fontSize={"23px"} mb={2}>{product.productName}</Box>
             {product.optionList.map((item, index) => (
-              <Text fontSize={"sm"} key={index}>{item}</Text>
+              <Text fontSize={"sm"} key={index} mt={1}>{item}</Text>
             ))}
-
+            <Flex alignItems="center" mt={7} mr={12} gap={8}>
+              <Button onClick={() => handleReduceCount(index)} {...RoundBlackButtonStyle}>-</Button>
+              <Box mx={4} textAlign="center" fontSize={"lg"}>
+                {product.count}
+              </Box>
+              <Button onClick={() => handlePlusCount(index)} {...RoundBlackButtonStyle}>+</Button>
+            </Flex>
           </Box>
 
           <Spacer/>
-          <Flex alignItems="center" mt={7} mr={12}>
-            <Button onClick={() => handleReduceCount(index)} {...RoundBlackButtonStyle}>-</Button>
-            <Box mx={4} textAlign="center" fontSize={"lg"}>
-              {product.count}
-            </Box>
-            <Button onClick={() => handlePlusCount(index)} {...RoundBlackButtonStyle}>+</Button>
-          </Flex>
+
           <Box>
+            <Flex justify={"right"}>
             <Button
               onClick={() =>
                 handleRemoveProduct(cart.cartProduct[index].productId)
@@ -111,28 +112,32 @@ export function CartProductComp(props) {
             >
               X
             </Button>
-            <Box fontSize={"xl"} fontWeight={"bold"} mt={10}>
+            </Flex>
+            <Box fontSize={"35px"} fontWeight={"bold"} mt={10}>
               {(product.totalPrice * product.count).toLocaleString("ko-KR")}원
             </Box>
           </Box>
         </Flex>
       {cart.cartProduct.length - 1 > index && (
-        <Divider border={"1px solid gray.200"} my={4} ml={3} mr={6} mb={6}/>
+        <Divider border={"1px solid gray.200"} my={4} ml={3} mr={6} mt={9}/>
   )}
   </Box>
       ))}
-      <Flex mt={12}>
-        <Box>상품금액</Box>
+      <Box bg={"#f8f9fa"} h={"30px"} w={"100%"}/>
+      <Flex mt={"60px"} align={"center"}>
+        <Box fontSize={"20px"}>상품금액</Box>
         <Spacer />
-        <Box fontSize={"lg"} color={"red"} fontWeight={"bold"}>
+        <Box fontSize={"25px"} color={"red"} fontWeight={"bold"}>
           {calculateTotalPrice(cart.cartProduct).toLocaleString("ko-KR")}원
         </Box>
       </Flex>
       {cart && (
-        <Center mt={10}>
+        <Center mt={"100px"} mb={"100px"}>
         <Button
           colorScheme={"orange"}
-          w={"700px"}
+          w={"650px"}
+          h={"60px"}
+          fontSize={"19px"}
           onClick={() =>
             axios
               .put("/api/carts", cart)
