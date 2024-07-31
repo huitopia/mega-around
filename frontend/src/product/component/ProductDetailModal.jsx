@@ -161,7 +161,6 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
           status: "success",
           position: "top",
           duration: 1500,
-          isClosable: true,
         });
       })
       .catch((error) => {
