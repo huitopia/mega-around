@@ -132,19 +132,6 @@ public class UserController {
         return ResponseEntity.ok(customer);
     }
 
-    // 고객 비밀번호 확인
-    @PostMapping("/user/customer/password/{id}")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Object> getCustomerPasswordById(@PathVariable Integer id, @RequestBody Map<String, String> requestBody, Authentication authentication) {
-        if (!service.hasAccess(id, authentication)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        if (service.identifyCustomer(id, requestBody.get("password"))) {
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
-
     // 지점 정보 읽기
     @GetMapping("/user/branch/{id}")
     @PreAuthorize("hasAuthority('SCOPE_branch')")
@@ -157,6 +144,19 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(branch);
+    }
+
+    // 고객 비밀번호 확인
+    @PostMapping("/user/customer/password/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Object> getCustomerPasswordById(@PathVariable Integer id, @RequestBody Map<String, String> requestBody, Authentication authentication) {
+        if (!service.hasAccess(id, authentication)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        if (service.identifyCustomer(id, requestBody.get("password"))) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     // 고객 정보 수정
