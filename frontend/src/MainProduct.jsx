@@ -75,6 +75,12 @@ export function MainProduct() {
           </>
         )}
       </Center>
+      <Box mt={4} ml={"100px"}>
+        <Box fontSize="1.4rem" fontWeight={600}>
+          {account.nickName}님을 위한 추천메뉴
+        </Box>
+        <Box></Box>
+      </Box>
     </>
   );
 }
