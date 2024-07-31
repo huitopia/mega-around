@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class ModifyOrderDTO {
-    private Integer stateId;
+    private String stateId;
     private Integer customerId;
 }

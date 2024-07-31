@@ -1,5 +1,6 @@
 package com.backend.controller.order;
 
+import com.backend.domain.event.Notice;
 import com.backend.domain.order.ModifyOrderDTO;
 import com.backend.domain.order.OrderItem;
 import com.backend.service.order.OrderService;
@@ -11,6 +12,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,10 +51,11 @@ public class OrderController {
     @PutMapping("/orders/{id}")
     @Description("주문 상태 변경")
     public ResponseEntity modifyOrderItemState(@RequestBody ModifyOrderDTO modifyOrderDTO, @PathVariable Integer id) {
-        Integer stateId = modifyOrderDTO.getStateId();
+        String stateId = modifyOrderDTO.getStateId();
         Integer customerId = modifyOrderDTO.getCustomerId();
-        if (orderService.modifyOrderItemState(id, stateId)) {
-            messagingTemplate.convertAndSend(STR."/sub/\{customerId}", stateId);
+        if (orderService.modifyOrderItemState(id, Integer.valueOf(stateId))) {
+            List<Notice> noticeList = orderService.addStateNotice(customerId, stateId, String.valueOf(id));
+            messagingTemplate.convertAndSend(STR."/sub/\{customerId}", noticeList);
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.internalServerError().build();

@@ -223,6 +223,7 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
     directOrder.setItem({
       branchId: 1,
       branchName: "메가커피",
+      totalPrice,
       orderProduct: [
         {
           count: count,

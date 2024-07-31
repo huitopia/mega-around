@@ -33,9 +33,16 @@ public class EventController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/notice/{item}")
-    @Description("알림 조회")
+    @Description("스탬프/쿠폰 내역 조회")
     public ResponseEntity getNotice(@PathVariable String item, Authentication authentication) {
         List<Notice> noticeList = eventService.getNotice(item, Integer.valueOf(authentication.getName()));
         return ResponseEntity.ok(noticeList);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/event/notice/{customerId}")
+    @Description("네브바 알림 조회")
+    public ResponseEntity getAlarm(@PathVariable Integer customerId) {
+        return ResponseEntity.ok(eventService.getAlarm(customerId));
     }
 }

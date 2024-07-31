@@ -1,7 +1,9 @@
 package com.backend.service.order;
 
+import com.backend.domain.event.Notice;
 import com.backend.domain.order.OrderItem;
 import com.backend.domain.order.OrderProduct;
+import com.backend.mapper.event.EventMapper;
 import com.backend.mapper.order.OrderMapper;
 import com.backend.mapper.product.ProductMapper;
 import com.backend.service.event.EventService;
@@ -22,6 +24,7 @@ public class OrderService {
     private final ObjectMapper objectMapper;
     private final ProductMapper productMapper;
     private final EventService eventService;
+    private final EventMapper eventMapper;
 
     public Integer addOrderItem(OrderItem orderItem, Integer customerId) throws JsonProcessingException {
         // 포장 옵션
@@ -90,5 +93,14 @@ public class OrderService {
 
     public boolean modifyOrderItemState(Integer id, Integer stateId) {
         return orderMapper.updateOrderItemState(id, stateId) == 1;
+    }
+
+    public List<Notice> addStateNotice(Integer customerId, String stateId, String orderId) {
+        Notice notice = new Notice();
+        notice.setCustomerId(customerId);
+        notice.setTag(orderId);
+        notice.setContent(stateId);
+        eventMapper.insertStateNotice(notice);
+        return eventMapper.selectAllNoticeByCustomerId(customerId);
     }
 }
