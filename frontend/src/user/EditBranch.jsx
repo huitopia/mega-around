@@ -71,7 +71,7 @@ export function EditBranch() {
     setIsLoading(true);
     const branchCopy = { ...branch };
     axios
-      .put(`/api/user/brach/${account.id}`, {
+      .put(`/api/user/branch/${account.id}`, {
         ...branchCopy,
       })
       .then((res) => {
@@ -124,9 +124,9 @@ export function EditBranch() {
         }
       });
   }
-
+  // 주소 선택 핸들러에서 branch 상태 업데이트
   const handleAddressSelect = (fullAddress) => {
-    branch.address = fullAddress;
+    setBranch((prevBranch) => ({ ...prevBranch, address: fullAddress }));
   };
 
   return (
@@ -238,7 +238,7 @@ export function EditBranch() {
                     variant={"outline"}
                     colorScheme={"purple"}
                     fontSize={"sm"}
-                    width={"120px"}
+                    width={"150px"}
                     borderRadius={5}
                   >
                     중복확인
@@ -250,12 +250,7 @@ export function EditBranch() {
               <FormControl>
                 <FormLabel>주소</FormLabel>
                 <Flex>
-                  <Input
-                    value={branch.address}
-                    readOnly
-                    placeholder="주소가 변경되었을 경우에만 입력해주세요"
-                    sx={{ "::placeholder": { fontSize: "sm" } }}
-                  />
+                  <Input value={branch.address} readOnly />
                   <Box w={5} />
                   <Postcode onAddressSelect={handleAddressSelect} />
                 </Flex>
