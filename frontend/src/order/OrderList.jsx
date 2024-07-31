@@ -19,7 +19,7 @@ export function OrderList() {
         <Heading>Order List</Heading>
       </Box>
       <Divider border={"1px solid black"} my={4} />
-      <Tabs isFitted variant="enclosed" colorScheme="red">
+      <Tabs isFitted variant="enclosed" colorScheme="#401F02">
         <TabList mb="1em">
           <Tab>1주일</Tab>
           <Tab>1개월</Tab>

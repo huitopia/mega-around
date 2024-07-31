@@ -1,10 +1,13 @@
 package com.backend.service.event;
 
+import com.backend.domain.event.Notice;
 import com.backend.mapper.event.EventMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Description;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -50,5 +53,9 @@ public class EventService {
         if (couponCount != null) {
             eventMapper.insertNotice(customerId, "coupon", "쿠폰을 " + couponCount + "개 사용하였습니다.");
         }
+    }
+
+    public List<Notice> getNotice(String item, Integer customerId) {
+        return eventMapper.selectNoticeByCustomerId(customerId, item);
     }
 }
