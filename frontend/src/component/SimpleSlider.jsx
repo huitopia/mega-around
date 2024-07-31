@@ -4,7 +4,7 @@ import { Box, Flex, Image } from "@chakra-ui/react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-const bannerData = [
+const bannerList = [
   {
     id: 1,
     src: "https://img.79plus.co.kr/megahp/manager/upload/main/20240703135039_1719982239946_0Bk6ojXQ9v.jpg?ver=202207071306",
@@ -30,7 +30,7 @@ export default function SimpleSlider() {
   const settings = {
     dots: true,
     infinite: true,
-    speed: 500,
+    speed: 1000,
     arrows: true,
     autoplay: true,
     slidesToShow: 1,
@@ -46,7 +46,7 @@ export default function SimpleSlider() {
 
   return (
     <Slider {...settings} style={{ width: "100%", height: "100%" }}>
-      {bannerData.map((banner) => (
+      {bannerList.map((banner) => (
         <Box key={banner.id} width="100%" height="100%">
           <Image
             src={banner.src}
