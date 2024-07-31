@@ -12,7 +12,7 @@ import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../component/LoginProvider.jsx";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import ConfirmationModal from "./component/CustomModal.jsx";
+import ConfirmationModal from "./component/ConfirmationModal.jsx";
 import { CustomToast } from "../component/CustomToast.jsx";
 
 export function MyPageBranch() {

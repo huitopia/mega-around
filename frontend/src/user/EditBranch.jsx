@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import { CustomToast } from "../component/CustomToast.jsx";
 import { LoginContext } from "../component/LoginProvider.jsx";
-import ConfirmationModal from "./component/CustomModal.jsx";
+import ConfirmationModal from "./component/ConfirmationModal.jsx";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Postcode } from "./component/Postcode.jsx";
@@ -256,7 +256,6 @@ export function EditBranch() {
                 </Flex>
               </FormControl>
             </Box>
-
             <Center mt={10}>
               <Button
                 bg={"black"}
@@ -277,6 +276,7 @@ export function EditBranch() {
             <Box display="flex">
               <Box
                 mt={3}
+                mb={5}
                 fontSize="sm"
                 ml={"auto"}
                 cursor="pointer"

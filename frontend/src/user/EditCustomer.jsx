@@ -9,6 +9,13 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Spinner,
   Text,
   Tooltip,
@@ -20,7 +27,6 @@ import { useNavigate } from "react-router-dom";
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import { CustomToast } from "../component/CustomToast.jsx";
 import { LoginContext } from "../component/LoginProvider.jsx";
-import ConfirmationModal from "./component/CustomModal.jsx";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -273,14 +279,36 @@ export function EditCustomer() {
           </Box>
         </Box>
       </Center>
-      <ConfirmationModal
-        isOpen={isOpen}
-        onClose={onClose}
-        onConfirm={handleCustomerDelete}
-        isLoading={isLoading}
-        modalheader={" 확인요청 "}
-        modalbody={"정말로 탈퇴하시겠습니까?"}
-      />
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>탈퇴 확인</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={5} pt={3} ml={10}>
+            <Text fontWeight="bold" mb="1rem">
+              정말로 탈퇴하시겠어요?
+            </Text>
+            <Text mb={"1rem"}>탈퇴 시 계정은 삭제되며 복구되지 않습니다.</Text>
+          </ModalBody>
+          <Center>
+            <ModalFooter display={"flex"}>
+              <Button onClick={onClose} width={"100px"} mr={3}>
+                취소
+              </Button>
+              <Button
+                mr={2}
+                onClick={handleCustomerDelete}
+                isLoading={isLoading}
+                colorScheme="red"
+                width={"100px"}
+              >
+                확인
+              </Button>
+            </ModalFooter>
+          </Center>
+        </ModalContent>
+      </Modal>
     </>
   );
 }
