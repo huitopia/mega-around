@@ -159,6 +159,19 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
+    // 지점 비밀번호 확인
+    @PostMapping("/user/branch/password/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Object> getBranchPasswordById(@PathVariable Integer id, @RequestBody Map<String, String> requestBody, Authentication authentication) {
+        if (!service.hasAccess(id, authentication)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        if (service.identifyBranch(id, requestBody.get("password"))) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
     // 고객 정보 수정
     @PutMapping("/user/customer/{id}")
     @PreAuthorize("hasAuthority('SCOPE_customer')")

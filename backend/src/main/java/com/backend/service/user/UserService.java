@@ -227,6 +227,14 @@ public class UserService {
         return passwordEncoder.matches(password, db.getPassword());
     }
 
+    public boolean identifyBranch(Integer id, String password) {
+        Branch dbBranch = userMapper.selectBranchById(id);
+        if (password == null || password.isBlank()) {
+            return false;
+        }
+        return passwordEncoder.matches(password, dbBranch.getPassword());
+    }
+
     public Map<String, Object> updateCustomer(Customer customer, Authentication authentication) {
         System.out.println("updateCustomer() customer = " + customer);
         // 입력한 비밀번호가 null이거나 공백 문자열이면 기존 비밀번호 유지
