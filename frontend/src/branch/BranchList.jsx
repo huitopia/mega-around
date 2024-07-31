@@ -75,12 +75,12 @@ export const BranchList = () => {
       };
       const map = new window.kakao.maps.Map(container, options);
 
-      const markerPosition = new window.kakao.maps.LatLng(
+      const position = new window.kakao.maps.LatLng(
         location.latitude,
         location.longitude,
       );
       const marker = new window.kakao.maps.Marker({
-        position: markerPosition,
+        position: position,
       });
 
       marker.setMap(map);
