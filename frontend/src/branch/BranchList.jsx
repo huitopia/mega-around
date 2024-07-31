@@ -13,11 +13,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 export const BranchList = () => {
-  const kakao_javasciprt_key = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY;
+  // const kakao_javasciprt_key = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY;
 
   // 현재 위치
   const [location, setLocation] = useState(null);
-  const [stores, setStores] = useState([]);
   const [branches, setBranches] = useState([]);
   const [error, setError] = useState(null);
 
@@ -33,7 +32,7 @@ export const BranchList = () => {
               const response = await axios.get("/api/location", {
                 params: { lat: latitude, lng: longitude },
               });
-              setStores(response.data);
+              setBranches(response.data);
             } catch (error) {
               setError(error.message);
             }
@@ -72,19 +71,21 @@ export const BranchList = () => {
 
       marker.setMap(map);
 
-      stores.forEach((store) => {
-        const storePosition = new window.kakao.maps.LatLng(
-          store.latitude,
-          store.longitude,
+      branches.forEach((branch) => {
+        const position = new window.kakao.maps.LatLng(
+          branch.latitude,
+          branch.longitude,
         );
-        const storeMarker = new window.kakao.maps.Marker({
-          position: storePosition,
+        const marker = new window.kakao.maps.Marker({
+          position: position,
         });
-        storeMarker.setMap(map);
+        marker.setMap(map);
       });
     }
-  }, [location, stores]);
-  console.log("store: ", stores);
+  }, [location, branches]);
+
+  console.log("branches: ", branches);
+
   return (
     <Box
       mt={"50px"}
@@ -111,21 +112,21 @@ export const BranchList = () => {
             border="1px solid gray"
           >
             <SimpleGrid spacing={4} columns={2}>
-              {stores.map((store) => (
-                <Card key={store.branchId} height={"120px"}>
+              {branches.map((branch) => (
+                <Card key={branch.branchId} height={"120px"}>
                   <CardHeader>
                     <Text size={"md"} as={"b"}>
-                      {store.branchName}
+                      {branch.branchName}
                     </Text>
                   </CardHeader>
                   <CardBody>
                     <Flex>
                       <Box>
-                        <Text>{store.address}</Text>
+                        <Text>{branch.address}</Text>
                       </Box>
                       <Spacer />
                       <Box textColor={"red"}>
-                        <Text>거리</Text>
+                        <Text>{branch.distance.toFixed()} m</Text>
                       </Box>
                     </Flex>
                   </CardBody>
