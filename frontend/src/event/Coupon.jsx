@@ -31,12 +31,12 @@ export function Coupon() {
         <Box>Loading...</Box>
       ) : couponCount > 0 ? (
         <Box ml={3}>
-          <Flex fontWeight={"bold"} fontSize={"xl"} alignItems="center" mb={3}>
-            <Text>사용할 수 있는 쿠폰이</Text>
-            <Text fontSize={"2xl"} color={"red"}>
+          <Flex fontWeight={"bold"} fontSize={"xl"} alignItems="center" mb={3} gap={1}>
+            <Text fontSize={"27px"}>사용할 수 있는 쿠폰이</Text>
+            <Text fontSize={"30px"} color={"red"}>
               {couponCount}
             </Text>
-            <Text>장 있어요!</Text>
+            <Text fontSize={"27px"}>장 있어요!</Text>
           </Flex>
           <CouponComp />
         </Box>
@@ -50,7 +50,7 @@ export function Coupon() {
         {couponList.map((coupon, index) => (
           <Box key={index} ml={5}>
             <Box>{coupon.content}</Box>
-            <Box>{coupon.createdAtString}</Box>
+            <Box fontSize={"sm"}>{coupon.createdAtString}</Box>
             {index < couponList.length - 1 && (
               <Divider borderColor="gray.200" my={4} />
             )}

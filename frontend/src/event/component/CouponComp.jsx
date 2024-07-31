@@ -1,27 +1,43 @@
-import { Box, Flex, Image } from "@chakra-ui/react";
+import {Box, Flex, Image, Spacer} from "@chakra-ui/react";
 
 export function CouponComp() {
   return (
     <Flex
-      border={"1px solid black"}
-      w={"500px"}
-      h={"100px"}
+      border={"1px solid #adb5bd"}
+      w={"950px"}
+      h={"250px"}
       alignItems={"center"}
     >
-      <Box>
+      <Box ml={5}>
         <Image
-          w={"70px"}
-          h={"70px"}
+          w={"200px"}
+          h={"200px"}
           src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbhB2Nb%2FbtsIQHw0raP%2FGUCqmIclgTJka0PmcJRQGK%2Fimg.jpg"
         />
       </Box>
       <Box>
-        <Box as={"mark"} fontSize="14px">
+        <Box as={"mark"} fontSize="20px">
           메가어라운드
         </Box>
-        <Box fontWeight={"bold"}>아메리카노(HOT/ICE) 1잔 무료</Box>
-        <Box fontSize="12px">또는 2,000원 할인을 적용해드립니다.</Box>
+        <Box fontSize={"35px"} fontWeight={"bold"}>아메리카노(HOT/ICE) 1잔 무료</Box>
+        <Box ml={1} fontSize="17px">또는 2,000원 할인</Box>
       </Box>
+      <Spacer/>
+      <Flex
+        pr={3}
+        bg={"#401F02"} w={"190px"} h={"100%"} color={"white"} whiteSpace="pre-line" align={"center"} justify={"center"} fontWeight={"bold"} fontSize={"20px"}
+      >C O U P O N  </Flex>
+      <Box
+        position="absolute"
+        top="41%"
+        right="260px"
+        width="50px"
+        height="50px"
+        backgroundColor="white"
+        borderRadius="50%"
+        transform="translateY(-50%)"
+        zIndex="1" // 원형이 다른 내용 위에 나타나게
+      />
     </Flex>
   );
 }
