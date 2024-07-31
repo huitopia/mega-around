@@ -4,7 +4,6 @@ import {
   CardBody,
   CardHeader,
   Flex,
-  Heading,
   SimpleGrid,
   Spacer,
   Spinner,
@@ -111,22 +110,23 @@ export const BranchList = () => {
             overflowY="auto"
             border="1px solid gray"
           >
-            <SimpleGrid
-              spacing={4}
-              columns={2}
-              // templateColumns="repeat(auto-fill, minmax(400px, 1fr))"
-              // templateColumns="repeat(2, 1fr)"
-            >
+            <SimpleGrid spacing={4} columns={2}>
               {stores.map((store) => (
                 <Card key={store.branchId} height={"120px"}>
                   <CardHeader>
-                    <Heading size={"md"}>{store.branchName}</Heading>
+                    <Text size={"md"} as={"b"}>
+                      {store.branchName}
+                    </Text>
                   </CardHeader>
                   <CardBody>
                     <Flex>
-                      <Box>{store.address}</Box>
+                      <Box>
+                        <Text>{store.address}</Text>
+                      </Box>
                       <Spacer />
-                      <Box textColor={"red"}>거리</Box>
+                      <Box textColor={"red"}>
+                        <Text>거리</Text>
+                      </Box>
                     </Flex>
                   </CardBody>
                 </Card>
