@@ -9,6 +9,7 @@ public class BranchGeocode {
     private Double longitude; // 경도
     private String branchName;
     private String address;
+    private Double distance; // 거리
 }
 
 
