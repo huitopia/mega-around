@@ -24,7 +24,7 @@ import ConfirmationModal from "./component/CustomModal.jsx";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export function CustomerEdit() {
+export function EditCustomer() {
   const [customer, setCustomer] = useState({ password: "" });
   const [oldNickName, setOldNickName] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
