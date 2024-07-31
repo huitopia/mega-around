@@ -247,6 +247,11 @@ export function CustomerEdit() {
                 width={"200px"}
                 fontSize={"14px"}
                 borderRadius={"40"}
+                isDisabled={
+                  customer.password.length > 0 &&
+                  !isCheckedPassword &&
+                  !isValidPassword
+                }
                 onClick={handleCustomerUpdate}
               >
                 수정
