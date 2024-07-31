@@ -78,27 +78,29 @@ export function CartProductComp(props) {
         <Box  key={index} ml={3} mb={7} mr={6}>
         <Flex>
           <Image
-            w="120px"
-            h={"120px"}
+            w="150px"
+            h={"150px"}
             src={
               "https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/" +
               product.filePath
             }
           />
           <Box ml={4} mt={5}>
-            <Box fontWeight={"bold"}>{product.productName}</Box>
+            <Box fontWeight={"bold"} fontSize={"23px"}>{product.productName}</Box>
             {product.optionList.map((item, index) => (
               <Text fontSize={"sm"} key={index}>{item}</Text>
             ))}
-            <Flex alignItems="center" mt={7}>
-              <Button onClick={() => handleReduceCount(index)} {...RoundBlackButtonStyle}>-</Button>
-              <Box mx={4} textAlign="center" fontSize={"lg"}>
-                {product.count}
-              </Box>
-              <Button onClick={() => handlePlusCount(index)} {...RoundBlackButtonStyle}>+</Button>
-            </Flex>
+
           </Box>
+
           <Spacer/>
+          <Flex alignItems="center" mt={7} mr={12}>
+            <Button onClick={() => handleReduceCount(index)} {...RoundBlackButtonStyle}>-</Button>
+            <Box mx={4} textAlign="center" fontSize={"lg"}>
+              {product.count}
+            </Box>
+            <Button onClick={() => handlePlusCount(index)} {...RoundBlackButtonStyle}>+</Button>
+          </Flex>
           <Box>
             <Button
               onClick={() =>
