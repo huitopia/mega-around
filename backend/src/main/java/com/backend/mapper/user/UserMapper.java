@@ -40,12 +40,12 @@ public interface UserMapper {
     Branch selectBranchByBranchName(String branchName);
 
     @Select("""
-            SELECT * FROM customer WHERE id = #{customerId}
+            SELECT * FROM customer WHERE id = #{id}
             """)
     Customer selectCustomerById(Integer customerId);
 
     @Select("""
-            SELECT * FROM branch WHERE id = #{branchId}
+            SELECT * FROM branch WHERE id = #{id}
             """)
     Branch selectBranchById(Integer branchId);
 
@@ -60,7 +60,12 @@ public interface UserMapper {
     int updateBranch(Branch branch);
 
     @Delete("""
-            DELETE FROM customer WHERE id=#{customerId}
+            DELETE FROM customer WHERE id=#{id}
             """)
     void deleteCustomerById(Integer id);
+
+    @Delete("""
+            DELETE FROM branch WHERE id=#{id};
+            """)
+    void deleteBranchById(Integer id);
 }

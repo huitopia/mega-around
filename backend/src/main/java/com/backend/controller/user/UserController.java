@@ -212,4 +212,15 @@ public class UserController {
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
+
+    // 지점 회원 탈퇴
+    @DeleteMapping("/user/branch/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_branch')")
+    public ResponseEntity<Object> deleteBranch(@PathVariable Integer id, Authentication authentication) {
+        if (service.hasAccess(id, authentication)) {
+            service.deleteBranch(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
 }

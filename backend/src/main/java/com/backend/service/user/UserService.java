@@ -313,4 +313,10 @@ public class UserService {
         // 고객 지우기
         userMapper.deleteCustomerById(id);
     }
+
+    public void deleteBranch(Integer id) {
+
+        // 지점 지우기
+        userMapper.deleteBranchById(id);
+    }
 }
