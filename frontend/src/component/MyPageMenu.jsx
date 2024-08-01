@@ -25,6 +25,7 @@ function MyPageMenu({ setIsChanged, updateAlarm }) {
   const navigate = useNavigate();
   const account = useContext(LoginContext);
   const [noticeList, setNoticeList] = useState({});
+  const [unreadNoticeCount, setUnreadNoticeCount] = useState(0);
 
   useEffect(() => {
     const stompClient = new Client({
@@ -62,15 +63,23 @@ function MyPageMenu({ setIsChanged, updateAlarm }) {
     if (account.isLoggedIn()) {
       axios.get(`/api/event/notice/${account.id}`).then((res) => {
         setNoticeList(res.data);
+        console.log(res.data);
       });
     }
   }, [updateAlarm]);
+
+  function getUnreadNoticeCount(item){
+    item
+  }
 
   return (
     <Flex>
       <Popover>
         <PopoverTrigger>
+          <Flex alignItems={"center"} mr={2} gap={1}>
+          <Box color={"white"} bg={"red"} w="20px" h={"20px"} borderRadius={"full"} fontSize={"sm"} textAlign={"center"}>{unreadNoticeCount}</Box>
           <FontAwesomeIcon icon={faBell} />
+          </Flex>
         </PopoverTrigger>
         <PopoverContent>
           <PopoverArrow />
