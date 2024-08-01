@@ -7,19 +7,19 @@ import {
   Spinner,
   Text,
   useDisclosure,
-  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ProductDetailModal } from "./ProductDetailModal.jsx";
+import { CustomToast } from "../../component/CustomToast.jsx";
 
 export function ProductBodyComp({ branchId, mainCategory, subCategory }) {
   const [data, setData] = useState([]);
   const [productId, setProductId] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const toast = useToast();
+  const { successToast, errorToast } = CustomToast();
   const navigate = useNavigate();
   useEffect(() => {
     axios
@@ -30,12 +30,7 @@ export function ProductBodyComp({ branchId, mainCategory, subCategory }) {
         }
       })
       .catch((error) => {
-        toast({
-          status: "error",
-          description: "상품 조회 중 문제가 발생하였습니다.",
-          position: "top",
-          duration: 1500,
-        });
+        errorToast("상품 조회 중 문제가 발생하였습니다.");
         console.error("Error:", error);
       })
       .finally();
@@ -48,12 +43,10 @@ export function ProductBodyComp({ branchId, mainCategory, subCategory }) {
 
   return (
     <Box mt={"50px"}>
-      <SimpleGrid
-        spacing={4}
-        templateColumns="repeat(auto-fill, minmax(200px, 1fr))"
-      >
+      <SimpleGrid templateColumns="repeat(4, 1fr)" gap={6}>
         {data.map((product) => (
           <Card
+            width={"250px"}
             value={product.id}
             key={product.id}
             height={"330px"}
@@ -62,12 +55,12 @@ export function ProductBodyComp({ branchId, mainCategory, subCategory }) {
               setProductId(product.id);
               onOpen();
             }}
+            mb={"20px"}
           >
             <CardBody>
               <VStack spacing={4}>
                 <Image
                   height={"200px"}
-                  border={"1px solid red"}
                   objectFit="cover"
                   src={`https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/${product.file_path}`}
                 />
