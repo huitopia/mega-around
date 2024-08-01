@@ -3,7 +3,6 @@ import {
   Button,
   ButtonGroup,
   Center,
-  Divider,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -130,94 +129,104 @@ export const ProductUpdate = () => {
   };
 
   return (
-    <Box maxWidth="1200px" mx={"auto"}>
-      <Box mt={"60px"} mb={"60px"}>
-        <Center>
-          <Heading size={"xl"}>상품 수정</Heading>
-        </Center>
+    <Box>
+      <Box
+        height={"280px"}
+        backgroundColor={"#444444"}
+        textAlign={"center"}
+        display={"flex"}
+        alignItems={"center"}
+        justifyContent="center"
+      >
+        <Box>
+          <Heading size="2xl" textColor={"pink"}>
+            Product Update
+          </Heading>
+        </Box>
       </Box>
-      <Divider />
-      <Box maxWidth="700px" mx={"auto"}>
-        <Box mt={"40px"}>
-          <FormControl>
+      <Box maxWidth="1200px" mx={"auto"} mt={"50px"}>
+        <Box maxWidth="700px" mx={"auto"}>
+          <Box mt={"40px"}>
+            <FormControl>
+              <Center>
+                <Image height={"300px"} objectFit="cover" src={imgSrc}></Image>
+              </Center>
+              <FormLabel mt={"20px"}>썸네일</FormLabel>
+              <Input
+                multiple
+                type={"file"}
+                accept="image/*"
+                onChange={(event) => onUpload(event)}
+              />
+              <FormHelperText>
+                총 용량은 10MB, 한 파일은 1MB를 초과할 수 없습니다.
+              </FormHelperText>
+            </FormControl>
+          </Box>
+          <Box mt={"25px"}>
+            <FormControl>
+              <FormLabel>상품명</FormLabel>
+              <Input
+                type="text"
+                placeholder={"30자 이내 작성"}
+                value={title}
+                onChange={handleTitleChange}
+              />
+            </FormControl>
+          </Box>
+          <Box mt={"25px"}>
+            <CategoryComp
+              category={category}
+              checkMain={mainCategory}
+              checkSub={subCategory}
+            />
+          </Box>
+          <Box mt={"25px"}>
+            <FormControl>
+              <FormLabel>상세 내용</FormLabel>
+              <Textarea
+                type="text"
+                placeholder={"100자 이내 작성"}
+                value={content}
+                onChange={handleContentChange}
+              />
+            </FormControl>
+          </Box>
+          <Box mt={"25px"}>
+            <OptionComp options={options} option={option} />
+          </Box>
+          <Box maxWidth="60%" mt={"25px"}>
+            <FormControl>
+              <FormLabel>가격</FormLabel>
+              <NumberInput value={price} min={0} max={100000}>
+                <NumberInputField onChange={handlePriceChange} />
+              </NumberInput>
+              <FormHelperText>가격은 0원 이상부터 가능합니다.</FormHelperText>
+            </FormControl>
+          </Box>
+          <Box mt={"50px"}>
             <Center>
-              <Image height={"300px"} objectFit="cover" src={imgSrc}></Image>
+              <ButtonGroup variant="solid">
+                <HStack>
+                  <Button
+                    isLoading={loading}
+                    colorScheme={"orange"}
+                    width={"200px"}
+                    onClick={handleUpdateClick}
+                  >
+                    Update
+                  </Button>
+                  <Button
+                    colorScheme={"pink"}
+                    width={"200px"}
+                    onClick={() => navigate(-1)}
+                  >
+                    Cancel
+                  </Button>
+                </HStack>
+              </ButtonGroup>
             </Center>
-            <FormLabel mt={"20px"}>썸네일</FormLabel>
-            <Input
-              multiple
-              type={"file"}
-              accept="image/*"
-              onChange={(event) => onUpload(event)}
-            />
-            <FormHelperText>
-              총 용량은 10MB, 한 파일은 1MB를 초과할 수 없습니다.
-            </FormHelperText>
-          </FormControl>
-        </Box>
-        <Box mt={"25px"}>
-          <FormControl>
-            <FormLabel>상품명</FormLabel>
-            <Input
-              type="text"
-              placeholder={"30자 이내 작성"}
-              value={title}
-              onChange={handleTitleChange}
-            />
-          </FormControl>
-        </Box>
-        <Box mt={"25px"}>
-          <CategoryComp
-            category={category}
-            checkMain={mainCategory}
-            checkSub={subCategory}
-          />
-        </Box>
-        <Box mt={"25px"}>
-          <FormControl>
-            <FormLabel>상세 내용</FormLabel>
-            <Textarea
-              type="text"
-              placeholder={"100자 이내 작성"}
-              value={content}
-              onChange={handleContentChange}
-            />
-          </FormControl>
-        </Box>
-        <Box mt={"25px"}>
-          <OptionComp options={options} option={option} />
-        </Box>
-        <Box maxWidth="60%" mt={"25px"}>
-          <FormControl>
-            <FormLabel>가격</FormLabel>
-            <NumberInput value={price} min={0} max={100000}>
-              <NumberInputField onChange={handlePriceChange} />
-            </NumberInput>
-            <FormHelperText>가격은 0원 이상부터 가능합니다.</FormHelperText>
-          </FormControl>
-        </Box>
-        <Box mt={"50px"}>
-          <Center>
-            <ButtonGroup variant="solid">
-              <HStack>
-                <Button
-                  isLoading={loading}
-                  colorScheme={"orange"}
-                  width={"200px"}
-                  onClick={handleUpdateClick}
-                >
-                  Update
-                </Button>
-                <Button
-                  colorScheme={"pink"}
-                  width={"200px"}
-                  onClick={() => navigate(-1)}
-                >
-                  Cancel
-                </Button>
-              </HStack>
-            </ButtonGroup>
-          </Center>
+          </Box>
         </Box>
       </Box>
     </Box>
