@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -21,8 +22,8 @@ public class UserController {
 
     // 메인페이지
     @GetMapping("/")
-    public ResponseEntity main(Authentication authentication) {
-        return null;
+    public List<Map<String, Object>> list() {
+        return service.getList();
     }
 
     // 고객 회원가입
@@ -146,17 +147,81 @@ public class UserController {
         return ResponseEntity.ok(branch);
     }
 
+    // 고객 비밀번호 확인
+    @PostMapping("/user/customer/password/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Object> getCustomerPasswordById(@PathVariable Integer id, @RequestBody Map<String, String> requestBody, Authentication authentication) {
+        if (!service.hasAccess(id, authentication)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        if (service.identifyCustomer(id, requestBody.get("password"))) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    // 지점 비밀번호 확인
+    @PostMapping("/user/branch/password/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Object> getBranchPasswordById(@PathVariable Integer id, @RequestBody Map<String, String> requestBody, Authentication authentication) {
+        if (!service.hasAccess(id, authentication)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        if (service.identifyBranch(id, requestBody.get("password"))) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
     // 고객 정보 수정
     @PutMapping("/user/customer/{id}")
     @PreAuthorize("hasAuthority('SCOPE_customer')")
-    public ResponseEntity<Object> updateCustomer(Customer customer, Authentication authentication) {
-        if (service.identificationToModify(customer)) {
-            if (service.updateVerification(customer)) {
-                Map<String, Object> token = service.updateCustomer(customer, authentication);
-                return ResponseEntity.ok(token);
-            }
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<Object> updateCustomer(@RequestBody Customer customer, Authentication authentication) {
+        if (service.isNameEmpty(customer.getNickName())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("닉네임을 입력해 주세요");
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        if (!service.isPasswordValid(customer.getPassword())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("유효한 비밀번호를 입력해 주세요");
+        }
+        Map<String, Object> token = service.updateCustomer(customer, authentication);
+        System.out.println("ok() customer = " + customer);
+        return ResponseEntity.ok(token);
+    }
+
+    // 지점 정보 수정
+    @PutMapping("/user/branch/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_branch')")
+    public ResponseEntity<Object> updateBranch(@RequestBody Branch branch, Authentication authentication) {
+        if (service.isNameEmpty(branch.getBranchName())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("닉네임을 입력해 주세요");
+        }
+        if (!service.isPasswordValid(branch.getPassword())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("유효한 비밀번호를 입력해 주세요");
+        }
+        Map<String, Object> token = service.updateBranch(branch, authentication);
+        System.out.println("ok() branch = " + branch);
+        return ResponseEntity.ok(token);
+    }
+
+    // 고객 회원 탈퇴
+    @DeleteMapping("/user/customer/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_customer')")
+    public ResponseEntity<Object> deleteCustomer(@PathVariable Integer id, Authentication authentication) {
+        if (service.hasAccess(id, authentication)) {
+            service.deleteCustomer(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
+    // 지점 회원 탈퇴
+    @DeleteMapping("/user/branch/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_branch')")
+    public ResponseEntity<Object> deleteBranch(@PathVariable Integer id, Authentication authentication) {
+        if (service.hasAccess(id, authentication)) {
+            service.deleteBranch(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 }

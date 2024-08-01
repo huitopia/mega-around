@@ -26,7 +26,7 @@ export function LoginBranch() {
       .post("/api/login/branch", { email, password })
       .then((res) => {
         account.login(res.data.token);
-        successToast(res.data.name + "님 환영합니다");
+        successToast(res.data.name + "님! 환영합니다");
         navigate("/");
       })
       .catch((err) => {

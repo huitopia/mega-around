@@ -166,7 +166,7 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
     axios
       .post("/api/carts", {
         // TODO. 나중에 변경
-        branchId: 1,
+        branchId: branchId,
         totalPrice,
         cartProduct: [
           {
@@ -182,10 +182,12 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
         onClose();
       })
       .catch(() => errorToast("오류 : 장바구니 담기에 실패했습니다"))
-      .finally(() => setCheckedItems({}));
+      .finally(() => {
+        setCheckedItems({});
+        setCount(1);
+      });
   }
 
-  // TODO. branchId 수정
   function handleOrder() {
     const option = Object.values(checkedItems);
     const optionList = option.map((id) => {
@@ -198,7 +200,7 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
     });
 
     directOrder.setItem({
-      branchId: 1,
+      branchId: branchId,
       branchName: "메가커피",
       totalPrice,
       orderProduct: [

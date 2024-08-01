@@ -4,6 +4,9 @@ import com.backend.domain.user.Branch;
 import com.backend.domain.user.Customer;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+import java.util.Map;
+
 @Mapper
 public interface UserMapper {
 
@@ -40,17 +43,40 @@ public interface UserMapper {
     Branch selectBranchByBranchName(String branchName);
 
     @Select("""
-            SELECT * FROM customer WHERE id = #{customerId}
+            SELECT * FROM customer WHERE id = #{id}
             """)
     Customer selectCustomerById(Integer customerId);
 
     @Select("""
-            SELECT * FROM branch WHERE id = #{branchId}
+            SELECT * FROM branch WHERE id = #{id}
             """)
     Branch selectBranchById(Integer branchId);
 
     @Update("""
-            UPDATE customer SET email=#{email},password=#{password} WHERE id=#{id}
+            UPDATE customer SET nick_name=#{nickName},password=#{password} WHERE id=#{id}
             """)
     int updateCustomer(Customer customer);
+
+    @Update("""
+            UPDATE branch SET branch_name=#{branchName},password=#{password},address=#{address} WHERE id=#{id}
+            """)
+    int updateBranch(Branch branch);
+
+    @Delete("""
+            DELETE FROM customer WHERE id=#{id}
+            """)
+    int deleteCustomerById(Integer id);
+
+    @Delete("""
+            DELETE FROM branch WHERE id=#{id};
+            """)
+    int deleteBranchById(Integer id);
+
+    @Select("""
+            SELECT p.id, i.file_path, p.title, p.content
+            FROM product p
+                LEFT JOIN product_img i ON p.id = i.product_id
+            ORDER BY RAND() LIMIT 12;
+            """)
+    List<Map<String, Object>> selectRecommendList();
 }

@@ -26,7 +26,7 @@ import { useContext, useEffect, useState } from "react";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import { checkBoxStyle } from "../component/css/style.js";
 import axios from "axios";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import {useNavigate, useOutletContext, useSearchParams} from "react-router-dom";
 import { OrderContext } from "./component/OrderProvider.jsx";
 import { LoginContext } from "../component/LoginProvider.jsx";
 import { CustomToast } from "../component/CustomToast.jsx";
@@ -44,6 +44,7 @@ export function Order() {
   const account = useContext(LoginContext);
   const navigate = useNavigate();
   const { errorToast } = CustomToast();
+  const { setUpdateAlarm } = useOutletContext();
 
   useEffect(() => {
     const iamport = document.createElement("script");
@@ -59,7 +60,6 @@ export function Order() {
       setCouponCount(res.data);
       console.log(res.data);
     });
-    console.log(searchParams);
     if (searchParams.get("type") === "cart") {
       axios.get(`/api/carts`).then((res) => {
         const data = res.data;
@@ -98,24 +98,21 @@ export function Order() {
       },
       function (rsp) {
         const merchantUid = rsp.merchant_uid;
-        console.log(rsp);
-        console.log("----orderItem");
-        console.log(orderItem);
         if (rsp.success) {
-          console.log("실행이 외않되");
           axios
             .post("/api/payments", {
               orderItem: {
                 ...orderItem,
                 customerId: account.id,
                 branchId: orderItem.branchId,
-                totalPrice: orderItem.totalPrice,
+                totalPrice: calculateTotalPrice(orderItem.orderProduct),
                 request,
                 isTakeOut,
                 option,
+                couponCount: useCouponCount,
               },
               payment: {
-                totalPrice: orderItem.totalPrice,
+                totalPrice: calculateTotalPrice(orderItem.orderProduct),
                 provider,
                 merchantUid,
                 couponCount: useCouponCount,
@@ -123,6 +120,7 @@ export function Order() {
             })
             .then((res) => {
               navigate(`/order/${res.data}`);
+              setUpdateAlarm(true);
             })
             .catch(() => errorToast("결제 실패했습니다"));
         }
@@ -130,8 +128,8 @@ export function Order() {
     );
   }
 
-  function calculateTotalPrice(cartProduct) {
-    return cartProduct.reduce((prev, cur) => {
+  function calculateTotalPrice(orderProduct) {
+    return orderProduct.reduce((prev, cur) => {
       return (prev += cur.totalPrice * cur.count);
     }, 0);
   }
@@ -143,17 +141,15 @@ export function Order() {
   function reduceCouponCount() {
     const newCouponCount = useCouponCount > 0 ? useCouponCount - 1 : 0;
     setUseCouponCount(newCouponCount);
-    console.log(newCouponCount);
   }
 
   function plusCouponCount() {
     const newCouponCount =
       useCouponCount < couponCount &&
-      orderItem.totalPrice > useCouponCount * 2000
+      calculateTotalPrice(orderItem.orderProduct) > (useCouponCount + 1) * 2000
         ? useCouponCount + 1
         : useCouponCount;
     setUseCouponCount(newCouponCount);
-    console.log(newCouponCount);
   }
 
   return (

@@ -91,6 +91,7 @@ export function ProductBodyComp({ branchId, mainCategory, subCategory }) {
         isOpen={isOpen}
         onClose={onClose}
         productId={productId}
+        branchId={branchId}
       />
     </Box>
   );
