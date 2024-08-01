@@ -26,6 +26,7 @@ import { MyPageBranch } from "./user/MyPageBranch.jsx";
 import { EditCustomer } from "./user/EditCustomer.jsx";
 import { EditBranch } from "./user/EditBranch.jsx";
 import { BranchList } from "./branch/BranchList.jsx";
+import "./fonts.css";
 
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
