@@ -4,7 +4,7 @@ import {useContext, useEffect, useState} from "react";
 import { LoginContext } from "./LoginProvider.jsx";
 import MyPageMenu from "./MyPageMenu.jsx";
 
-export function Navbar() {
+export function Navbar({updateAlarm}) {
   const account = useContext(LoginContext);
   const navigate = useNavigate();
   // const [showTabs, setShowTabs] = useState(false);
@@ -54,7 +54,7 @@ export function Navbar() {
           {/*{account.branchName}&nbsp;님*/}
           {/*</Box>*/}
           {/*{showTabs && <MyPageMenu />}*/}
-          <MyPageMenu setIsChanged={setIsChanged}/>
+          <MyPageMenu setIsChanged={setIsChanged} updateAlarm={updateAlarm}/>
           <Box
             onClick={() => {
               account.logout();
