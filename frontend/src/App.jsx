@@ -58,7 +58,7 @@ const router = createBrowserRouter([
       // cart
       { path: "cart", element: <Cart /> },
       // branch_order
-      { path: "branch/order", element: <BranchPage /> },
+      { path: "branch/order/:id", element: <BranchPage /> },
 
       // user
       { path: "signup", element: <SignUp /> },

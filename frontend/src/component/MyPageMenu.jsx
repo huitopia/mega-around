@@ -91,18 +91,22 @@ function MyPageMenu({ isChanged, setIsChanged, updateAlarm }) {
       <Popover>
         <PopoverTrigger>
           <Flex alignItems={"center"} mr={2} gap={1} onClick={handleReadNotice}>
-            <Box
-              color={"white"}
-              bg={"red"}
-              w="20px"
-              h={"20px"}
-              borderRadius={"full"}
-              fontSize={"sm"}
-              textAlign={"center"}
-            >
-              {unreadNoticeCount}
-            </Box>
-            <FontAwesomeIcon icon={faBell} />
+            {account.hasAuth() === "customer" && (
+              <>
+                <Box
+                  color={"white"}
+                  bg={"red"}
+                  w="20px"
+                  h={"20px"}
+                  borderRadius={"full"}
+                  fontSize={"sm"}
+                  textAlign={"center"}
+                >
+                  {unreadNoticeCount}
+                </Box>
+                <FontAwesomeIcon icon={faBell} />
+              </>
+            )}
           </Flex>
         </PopoverTrigger>
         <PopoverContent w={"350px"}>
@@ -153,9 +157,16 @@ function MyPageMenu({ isChanged, setIsChanged, updateAlarm }) {
             </>
           )}
           {account.hasAuth() === "branch" && (
-            <MenuItem onClick={() => navigate(`/mypage/branch/${account.id}`)}>
-              내 정보(지점)
-            </MenuItem>
+            <>
+              <MenuItem
+                onClick={() => navigate(`/mypage/branch/${account.id}`)}
+              >
+                내 정보(지점)
+              </MenuItem>
+              <MenuItem onClick={() => navigate(`/branch/order/${account.id}`)}>
+                주문 관리
+              </MenuItem>
+            </>
           )}
           {account.hasAuth() === "customer" || (
             <MenuItem onClick={() => navigate(`/product/list`)}>

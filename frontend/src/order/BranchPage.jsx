@@ -1,11 +1,11 @@
 import { Box, Center, Divider, Heading } from "@chakra-ui/react";
 import { OrderManageComp } from "./component/OrderManageComp.jsx";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 export function BranchPage() {
   const [isChanged, setIsChanged] = useState(false);
-
-  const branchId = 3;
+  const { id } = useParams();
 
   return (
     <Box mx={"auto"}>
@@ -18,21 +18,21 @@ export function BranchPage() {
       <Box>
         <OrderManageComp
           stateId={1}
-          branchId={branchId}
+          branchId={id}
           text={"신규주문"}
           isChanged={isChanged}
           setIsChanged={setIsChanged}
         />
         <OrderManageComp
           stateId={2}
-          branchId={branchId}
+          branchId={id}
           text={"제조중"}
           isChanged={isChanged}
           setIsChanged={setIsChanged}
         />
         <OrderManageComp
           stateId={3}
-          branchId={branchId}
+          branchId={id}
           text={"제조완료"}
           isChanged={isChanged}
           setIsChanged={setIsChanged}
