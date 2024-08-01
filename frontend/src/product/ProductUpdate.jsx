@@ -14,26 +14,20 @@ import {
   NumberInput,
   NumberInputField,
   Textarea,
-  useToast,
 } from "@chakra-ui/react";
 import { CategoryComp } from "./component/CategoryComp.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { OptionComp } from "./component/OptionComp.jsx";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { LoginContext } from "../component/LoginProvider.jsx";
+import { CustomToast } from "../component/CustomToast.jsx";
 
 export const ProductUpdate = () => {
   const params = useParams();
   const productId = params.productId;
+  const account = useContext(LoginContext);
   const [loading, setLoading] = useState(false);
-  // const [data, setData] = useState({
-  //   id: 0,
-  //   title: "",
-  //   content: "",
-  //   filePath: "",
-  //   price: 0,
-  //   options: [],
-  // });
   const [option, setOption] = useState([]);
   const [mainCategory, setMainCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
@@ -44,9 +38,13 @@ export const ProductUpdate = () => {
   const [filePath, setFilePath] = useState("");
   const [files, setFiles] = useState([]);
   const navigate = useNavigate();
-  const toast = useToast();
+  const { successToast, errorToast } = CustomToast();
 
   useEffect(() => {
+    if (account.hasAuth() !== "admin") {
+      errorToast("접근 권한이 없습니다.");
+      navigate("/");
+    }
     axios
       .get(`/api/products/${productId}`)
       .then((response) => {
@@ -68,14 +66,7 @@ export const ProductUpdate = () => {
         }
       })
       .catch((error) => {
-        toast({
-          title: "상품 상세 조회 실패",
-          description: "Unable to fetch data.",
-          status: "error",
-          duration: 1500,
-          position: "top",
-          isClosable: true,
-        });
+        errorToast("상품 상세 조회 실패");
         console.error("Error:", error);
       })
       .finally();
@@ -126,23 +117,11 @@ export const ProductUpdate = () => {
         files,
       })
       .then(() => {
-        toast({
-          title: "상품 수정 성공",
-          status: "success",
-          position: "top",
-          duration: 1500,
-          isClosable: true,
-        });
+        successToast("상품 수정 성공");
         navigate("/product/list");
       })
       .catch((error) => {
-        toast({
-          title: "상품 수정 실패",
-          status: "error",
-          position: "top",
-          duration: 1500,
-          isClosable: true,
-        });
+        errorToast("상품 수정 실패");
         console.error("Error:", error);
       })
       .finally(() => {
@@ -153,20 +132,21 @@ export const ProductUpdate = () => {
   return (
     <Box maxWidth="1000px" mx={"auto"}>
       <Box>
-        <Heading>Update</Heading>
+        <Heading>상품 수정</Heading>
       </Box>
       <Divider border={"1px solid black"} my={4} />
       <Box maxWidth="700px" mx={"auto"}>
-        <Box>
+        <Box mt={"40px"}>
           <FormControl>
-            {/* TODO : 썸네일 크기 수정 */}
-            <FormLabel>썸네일</FormLabel>
-            <Image
-              height={"300px"}
-              border={"1px solid red"}
-              objectFit="cover"
-              src={imgSrc}
-            ></Image>
+            <Center>
+              <Image
+                height={"300px"}
+                border={"1px solid red"}
+                objectFit="cover"
+                src={imgSrc}
+              ></Image>
+            </Center>
+            <FormLabel mt={"15px"}>썸네일</FormLabel>
             <Input
               multiple
               type={"file"}
@@ -178,7 +158,7 @@ export const ProductUpdate = () => {
             </FormHelperText>
           </FormControl>
         </Box>
-        <Box>
+        <Box mt={"20px"}>
           <FormControl>
             <FormLabel>상품명</FormLabel>
             <Input
@@ -189,14 +169,14 @@ export const ProductUpdate = () => {
             />
           </FormControl>
         </Box>
-        <Box>
+        <Box mt={"20px"}>
           <CategoryComp
             category={category}
             checkMain={mainCategory}
             checkSub={subCategory}
           />
         </Box>
-        <Box>
+        <Box mt={"20px"}>
           <FormControl>
             <FormLabel>상세 내용</FormLabel>
             <Textarea
@@ -207,10 +187,10 @@ export const ProductUpdate = () => {
             />
           </FormControl>
         </Box>
-        <Box>
+        <Box mt={"20px"}>
           <OptionComp options={options} option={option} />
         </Box>
-        <Box maxWidth="60%">
+        <Box maxWidth="60%" mt={"20px"}>
           <FormControl>
             <FormLabel>가격</FormLabel>
             <NumberInput value={price} min={0} max={100000}>
@@ -219,7 +199,7 @@ export const ProductUpdate = () => {
             <FormHelperText>가격은 0원 이상부터 가능합니다.</FormHelperText>
           </FormControl>
         </Box>
-        <Box mb={"100px"}>
+        <Box mt={"40px"}>
           <Center>
             <ButtonGroup variant="solid">
               <HStack>

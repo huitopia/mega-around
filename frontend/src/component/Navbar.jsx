@@ -28,16 +28,6 @@ export function Navbar({updateAlarm}) {
           <Text>메가오더</Text>
         </Center>
       </Box>
-      <Box>
-        <Center onClick={() => navigate("/product")} cursor={"pointer"}>
-          <Text>상품등록</Text>
-        </Center>
-      </Box>
-      <Box>
-        <Center onClick={() => navigate("/product/list")} cursor={"pointer"}>
-          <Text>상품리스트</Text>
-        </Center>
-      </Box>
       {!account.isLoggedIn() ? (
         <>
           <Box onClick={() => navigate("/signup")} cursor={"pointer"}>

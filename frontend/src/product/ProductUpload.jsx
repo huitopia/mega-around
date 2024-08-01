@@ -8,29 +8,22 @@ import {
   FormHelperText,
   FormLabel,
   Heading,
+  HStack,
   Img,
   Input,
   NumberInput,
   NumberInputField,
   Textarea,
-  useToast,
-  VStack,
 } from "@chakra-ui/react";
 import { CategoryComp } from "./component/CategoryComp.jsx";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { OptionComp } from "./component/OptionComp.jsx";
 import { useNavigate } from "react-router-dom";
+import { CustomToast } from "../component/CustomToast.jsx";
+import { LoginContext } from "../component/LoginProvider.jsx";
 import axios from "axios";
 
-export function ProductUpload() {
-  // const [product, setProduct] = useState({
-  //   title: "",
-  //   content: "",
-  //   mainCategory: "",
-  //   subCategory: "",
-  //   option: [],
-  //   price: 0,
-  // });
+export const ProductUpload = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [mainCategory, setMainCategory] = useState("");
@@ -41,13 +34,22 @@ export function ProductUpload() {
   const [imageSrc, setImageSrc] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const toast = useToast();
+  const { successToast, errorToast } = CustomToast();
+  const account = useContext(LoginContext);
 
-  // TODO : admin 권한만 접근 가능하게 수정
-  //  빈 값 전송 금지
-  //  가격 0원 이하 전송 금지
+  useEffect(() => {
+    if (account.hasAuth() !== "admin") {
+      errorToast("접근 권한이 없습니다.");
+      return navigate("/");
+    }
+  }, []);
+
   const handleSaveClick = () => {
     setLoading(true);
+    if (!checkValidation()) {
+      setLoading(false);
+      return false;
+    }
     axios
       .postForm("/api/products/add", {
         title,
@@ -59,28 +61,40 @@ export function ProductUpload() {
         files,
       })
       .then(() => {
-        toast({
-          title: "상품 등록 성공",
-          status: "success",
-          position: "top",
-          duration: 1500,
-          isClosable: true,
-        });
+        successToast("상품 등록 성공");
         navigate("/product/list");
       })
       .catch((error) => {
-        toast({
-          title: "상품 등록 실패",
-          status: "error",
-          position: "top",
-          duration: 1500,
-          isClosable: true,
-        });
+        errorToast("상품 등록 실패");
         console.error("Error:", error);
       })
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  const checkValidation = () => {
+    if (title.length === 0 && title.length <= 30) {
+      errorToast("상품명은 30자 이내로 입력해주세요.");
+      return false;
+    }
+    if (mainCategory.length === 0 || subCategory.length === 0) {
+      errorToast("카테고리를 선택해주세요.");
+      return false;
+    }
+    if (content.length === 0 && content.length <= 100) {
+      errorToast("상세 내용을 100자 이내로 입력해주세요.");
+      return false;
+    }
+    if (option.length === 0) {
+      errorToast("퍼스널 옵션을 선택해주세요.");
+      return false;
+    }
+    if (price >= 0) {
+      errorToast("가격을 입력해주세요.");
+      return false;
+    }
+    return true;
   };
 
   const category = (category) => {
@@ -117,15 +131,16 @@ export function ProductUpload() {
   return (
     <Box maxWidth="1000px" mx={"auto"}>
       <Box>
-        <Heading>Upload</Heading>
+        <Heading>상품 등록</Heading>
       </Box>
       <Divider border={"1px solid black"} my={4} />
       <Box maxWidth="700px" mx={"auto"}>
-        <Box>
+        <Box mt={"40px"}>
           <FormControl>
-            {/* TODO : 썸네일 크기 수정 */}
-            <FormLabel>썸네일</FormLabel>
-            <Img src={imageSrc}></Img>
+            <Center>
+              <Img src={imageSrc} height={"300px"}></Img>
+            </Center>
+            <FormLabel mt={"15px"}>썸네일</FormLabel>
             <Input
               multiple
               type={"file"}
@@ -137,7 +152,7 @@ export function ProductUpload() {
             </FormHelperText>
           </FormControl>
         </Box>
-        <Box>
+        <Box mt={"20px"}>
           <FormControl>
             <FormLabel>상품명</FormLabel>
             <Input
@@ -147,10 +162,10 @@ export function ProductUpload() {
             />
           </FormControl>
         </Box>
-        <Box>
+        <Box mt={"20px"}>
           <CategoryComp category={category} />
         </Box>
-        <Box>
+        <Box mt={"20px"}>
           <FormControl>
             <FormLabel>상세 내용</FormLabel>
             <Textarea
@@ -160,10 +175,10 @@ export function ProductUpload() {
             />
           </FormControl>
         </Box>
-        <Box>
+        <Box mt={"20px"}>
           <OptionComp options={options} />
         </Box>
-        <Box maxWidth="60%">
+        <Box maxWidth="60%" mt={"20px"}>
           <FormControl>
             <FormLabel>가격</FormLabel>
             <NumberInput defaultValue={0} min={0} max={100000}>
@@ -172,10 +187,10 @@ export function ProductUpload() {
             <FormHelperText>가격은 0원 이상부터 가능합니다.</FormHelperText>
           </FormControl>
         </Box>
-        <Box>
+        <Box mt={"40px"}>
           <Center>
             <ButtonGroup variant="solid">
-              <VStack>
+              <HStack>
                 <Button
                   isLoading={loading}
                   colorScheme={"orange"}
@@ -191,11 +206,11 @@ export function ProductUpload() {
                 >
                   Cancel
                 </Button>
-              </VStack>
+              </HStack>
             </ButtonGroup>
           </Center>
         </Box>
       </Box>
     </Box>
   );
-}
+};

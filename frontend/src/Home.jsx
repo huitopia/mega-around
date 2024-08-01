@@ -11,7 +11,7 @@ export function Home() {
       <Box>
         <Navbar updateAlarm={updateAlarm}/>
       </Box>
-      <Box>
+      <Box minHeight={"100vh"} position={"relative"} paddingBottom={"70px"}>
         <Outlet context={{ setUpdateAlarm }}/>
       </Box>
       <Box>

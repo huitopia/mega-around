@@ -142,11 +142,19 @@ public class ProductService {
         return true;
     }
 
-    public ProductFile deleteProductById(Integer id) {
-        int deleteProduct = mapper.deleteProductById(id);
-        if (deleteProduct < 1) {
-            return null;
+    public Boolean deleteProductById(Integer id) {
+        // 이미지 정보 받아오기
+        ProductFile productFile = mapper.selectProductImgById(id);
+        if (productFile.getFilePath() == null) {
+            return false;
         }
-        return mapper.selectProductImgById(id);
+        // 이미지 삭제
+        Boolean deleteProductImg = deleteProductImgById(productFile.getProductId(), productFile.getFilePath());
+        if (!deleteProductImg) {
+            return false;
+        }
+        // 상품 삭제
+        int deleteProduct = mapper.deleteProductById(id);
+        return deleteProduct >= 1;
     }
 }

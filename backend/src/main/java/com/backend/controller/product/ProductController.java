@@ -1,7 +1,6 @@
 package com.backend.controller.product;
 
 import com.backend.domain.product.Product;
-import com.backend.domain.product.ProductFile;
 import com.backend.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Description;
@@ -78,12 +77,8 @@ public class ProductController {
     @Description("상품 삭제")
     // TODO : admin 권한 확인
     public ResponseEntity deleteProductDetail(@PathVariable Integer id) throws IOException {
-        ProductFile deleteProduct = service.deleteProductById(id);
-        if (deleteProduct.getFilePath() == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        Boolean deleteProductImg = service.deleteProductImgById(deleteProduct.getProductId(), deleteProduct.getFilePath());
-        if (!deleteProductImg) {
+        Boolean result = service.deleteProductById(id);
+        if (!result) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.status(HttpStatus.OK).build();

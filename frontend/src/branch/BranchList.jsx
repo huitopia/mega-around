@@ -17,18 +17,19 @@ import {
   Spinner,
   Text,
   useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { LoginContext } from "../component/LoginProvider.jsx";
 
 export const BranchList = () => {
-  // const kakao_javasciprt_key = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY;
-
-  // 현재 위치
+  const account = useContext(LoginContext);
   const [location, setLocation] = useState(null);
   const [selectedBranchId, setSelectedBranchId] = useState(0);
   const [selectedBranchName, setSelectedBranchName] = useState("");
+  const [branchLocation, setBranchLocation] = useState(null);
   const [branches, setBranches] = useState([]);
   const [error, setError] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -71,7 +72,7 @@ export const BranchList = () => {
           location.latitude,
           location.longitude,
         ),
-        level: 3,
+        level: 4,
       };
       const map = new window.kakao.maps.Map(container, options);
 
@@ -79,8 +80,15 @@ export const BranchList = () => {
         location.latitude,
         location.longitude,
       );
+      // 현재 위치 마커 아이콘 설정
+      const currentMarkerImage = new window.kakao.maps.MarkerImage(
+        "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png", // 커스텀 아이콘 URL
+        new window.kakao.maps.Size(24, 35), // 마커 이미지 크기
+      );
+
       const marker = new window.kakao.maps.Marker({
         position: position,
+        image: currentMarkerImage,
       });
 
       marker.setMap(map);
@@ -94,14 +102,83 @@ export const BranchList = () => {
           position: position,
         });
         marker.setMap(map);
+
+        // CustomOverlay 생성 및 스타일 설정
+        const content = `<span class="left"></span><span class="center" style="background-color: rgba(5,5,5,0.68); border: 2px solid #401f02; padding: 5px; border-radius: 15px; color: #f8f8f8; font-weight: 500;">${branch.branchName}</span><span class="right"></span>`;
+
+        const customOverlay = new window.kakao.maps.CustomOverlay({
+          position: position,
+          content: content,
+          xAnchor: 0.5,
+          yAnchor: 3,
+        });
+
+        // mouseover - CustomOverlay 표시
+        window.kakao.maps.event.addListener(marker, "mouseover", () => {
+          customOverlay.setMap(map);
+        });
+
+        // mouseout - CustomOverlay 닫기
+        window.kakao.maps.event.addListener(marker, "mouseout", () => {
+          customOverlay.setMap(null);
+        });
+
+        // click- CustomOverlay 표시, 상태 업데이트, modal open
         window.kakao.maps.event.addListener(marker, "click", () => {
-          setSelectedBranchId(branch.branchId);
+          customOverlay.setMap(map);
+          handleModalOpen(
+            branch.branchId,
+            branch.branchName,
+            branch.latitude,
+            branch.longitude,
+          );
         });
       });
     }
   }, [location, branches]);
 
-  console.log("branches: ", branches);
+  const handleModalOpen = (branchId, branchName, latitude, longitude) => {
+    setSelectedBranchId(branchId);
+    setSelectedBranchName(branchName);
+    setBranchLocation({
+      latitude: latitude,
+      longitude: longitude,
+    });
+    onOpen();
+  };
+
+  useEffect(() => {
+    if (branchLocation && isOpen) {
+      setTimeout(() => {
+        const staticPosition = new window.kakao.maps.LatLng(
+          branchLocation.latitude,
+          branchLocation.longitude,
+        );
+
+        const staticMarker = new window.kakao.maps.Marker({
+          position: staticPosition,
+        });
+
+        const staticMapContainer = document.getElementById("staticMap");
+
+        const staticMapOption = {
+          center: new window.kakao.maps.LatLng(
+            branchLocation.latitude,
+            branchLocation.longitude,
+          ),
+          level: 3,
+          marker: staticMarker,
+        };
+
+        const staticMap = new window.kakao.maps.Map(
+          staticMapContainer,
+          staticMapOption,
+        );
+
+        staticMarker.setMap(staticMap);
+      }, 100); // 100ms 딜레이 추가
+    }
+  }, [branchLocation, isOpen]);
 
   return (
     <Box
@@ -139,9 +216,12 @@ export const BranchList = () => {
                   cursor={"pointer"}
                   _hover={{ backgroundColor: "yellow" }}
                   onClick={() => {
-                    setSelectedBranchName(branch.branchName);
-                    setSelectedBranchId(branch.branchId);
-                    onOpen();
+                    handleModalOpen(
+                      branch.branchId,
+                      branch.branchName,
+                      branch.latitude,
+                      branch.longitude,
+                    );
                   }}
                 >
                   <CardHeader>
@@ -171,8 +251,18 @@ export const BranchList = () => {
         <ModalContent>
           <ModalHeader>{selectedBranchName}에서 주문하시겠습니까?</ModalHeader>
           <ModalCloseButton />
-          <ModalBody textColor={"red"}>
-            주문 확인 후 취소가 불가합니다.
+          <ModalBody>
+            <VStack>
+              <Box
+                id={"staticMap"}
+                width={"100%"}
+                height={"200px"}
+                border="1px solid red"
+              />
+              <Box mt={"20px"}>
+                <Text color={"red"}>주문 확인 후 취소가 불가합니다.</Text>
+              </Box>
+            </VStack>
           </ModalBody>
           <ModalFooter justifyContent="center">
             <Button
@@ -189,7 +279,10 @@ export const BranchList = () => {
               colorScheme={"orange"}
               mr={"5%"}
               onClick={() => {
-                navigate(`/product/list?branchId=${selectedBranchId}`);
+                account.hasAuth() === "customer"
+                  ? navigate(`/product/list?branchId=${selectedBranchId}`)
+                  : alert("회원 로그인이 필요한 서비스입니다.");
+                navigate("/login");
               }}
             >
               주문하기
