@@ -10,6 +10,7 @@ import {
   Center,
   Checkbox,
   CheckboxGroup,
+  Divider,
   Flex,
   FormControl,
   FormLabel,
@@ -165,6 +166,7 @@ export function Order() {
           <Heading>Order</Heading>
         </Center>
       </Box>
+      <Divider border={"1px solid black"} my={4} />
       <Flex
         bg={"black"}
         color={"white"}
