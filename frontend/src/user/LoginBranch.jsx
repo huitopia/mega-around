@@ -83,6 +83,7 @@ export function LoginBranch() {
               width={"400px"}
               fontSize={"14px"}
               borderRadius={"40"}
+              _hover={{ backgroundColor: "gray.300" }}
             >
               지점 로그인
             </Button>

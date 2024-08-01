@@ -260,6 +260,7 @@ export function SignUpBranch() {
                 isLoading={isLoading}
                 // isDisabled={isDisabled}
                 onClick={handleSignup}
+                _hover={{ backgroundColor: "gray.600" }}
               >
                 가입하기
               </Button>

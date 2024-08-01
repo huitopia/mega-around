@@ -79,7 +79,8 @@ export function Login() {
               </InputGroup>
             </FormControl>
           </Box>
-          <Box mt={10}>
+
+          <Box mt={8}>
             <Button
               onClick={handleCustomerLogin}
               bg={"black"}
@@ -87,22 +88,27 @@ export function Login() {
               width={"400px"}
               fontSize={"14px"}
               borderRadius={"40"}
+              _hover={{ backgroundColor: "gray.600" }}
             >
               이메일로 로그인
             </Button>
           </Box>
-          {/*<Box position="relative" padding="10" mt={5}>*/}
-          {/*  <Divider />*/}
-          {/*  <AbsoluteCenter bg="white" px="4">*/}
-          {/*    또는*/}
-          {/*  </AbsoluteCenter>*/}
-          {/*</Box>*/}
-          <Box display="flex">
+
+          <Box display="flex" mt={6}>
             <Box
-              mt={5}
               fontSize="sm"
               ml={"auto"}
-              mr={12}
+              cursor="pointer"
+              as={"u"}
+              color={"gray.500"}
+              onClick={() => navigate("/find-customerEmail")}
+            >
+              이메일 찾기
+            </Box>
+            <Box
+              fontSize="sm"
+              ml={"auto"}
+              mr="80px"
               cursor="pointer"
               as={"u"}
               color={"gray.500"}
@@ -111,11 +117,18 @@ export function Login() {
               비밀번호 찾기
             </Box>
           </Box>
-          <Divider mt={5} />
+
+          {/*<Box position="relative" padding="10" mt={0}>*/}
+          {/*  <Divider />*/}
+          {/*  <AbsoluteCenter bg="white" px="4">*/}
+          {/*    또는*/}
+          {/*  </AbsoluteCenter>*/}
+          {/*</Box>*/}
+          <Divider mt={6} />
 
           <Center>
             <Button
-              mt={10}
+              mt={6}
               borderColor={"#fdd000"}
               variant={"outline"}
               bg={"white"}

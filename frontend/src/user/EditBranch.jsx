@@ -274,6 +274,7 @@ export function EditBranch() {
                   !isValidPassword
                 }
                 onClick={handleBranchUpdate}
+                _hover={{ backgroundColor: "gray.600" }}
               >
                 수정
               </Button>

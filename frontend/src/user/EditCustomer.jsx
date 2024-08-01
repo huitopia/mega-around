@@ -258,6 +258,7 @@ export function EditCustomer() {
                   !isValidPassword
                 }
                 onClick={handleCustomerUpdate}
+                _hover={{ backgroundColor: "gray.600" }}
               >
                 수정
               </Button>
