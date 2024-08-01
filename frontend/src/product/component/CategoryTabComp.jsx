@@ -65,6 +65,7 @@ export function CategoryTabComp(props) {
       <TabList height={"60px"} mb={"20px"}>
         {mainCategoryOption.map((category) => (
           <Tab
+            fontSize={"18px"}
             cursor={"pointer"}
             as={"b"}
             key={category}
