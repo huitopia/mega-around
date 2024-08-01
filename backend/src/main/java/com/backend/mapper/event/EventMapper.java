@@ -76,18 +76,19 @@ public interface EventMapper {
     int updateStamp(Integer customerId, Integer count);
 
     @Insert("""
-    INSERT INTO notice
-    (customer_id, tag, content) VALUES (#{customerId}, #{tag}, #{content})
-""")
+                INSERT INTO notice
+                (customer_id, tag, content) VALUES (#{customerId}, #{tag}, #{content})
+            """)
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int insertStateNotice(Notice notice);
 
     @Select("""
-    SELECT *
-    FROM notice
-    WHERE customer_id = #{customerId}
-    ORDER BY created_at DESC
-""")
+                SELECT *
+                FROM notice
+                WHERE customer_id = #{customerId}
+                ORDER BY created_at DESC
+                LIMIT 6;
+            """)
     List<Notice> selectAllNoticeByCustomerId(Integer customerId);
 
     @Update("""
@@ -98,9 +99,9 @@ public interface EventMapper {
     int addStamp(Integer customerId, Integer count);
 
     @Update("""
-    UPDATE notice
-    SET is_read = true
-    WHERE customer_id = #{customerId}
-""")
+                UPDATE notice
+                SET is_read = true
+                WHERE customer_id = #{customerId}
+            """)
     void updateNotice(Integer customerId);
 }
