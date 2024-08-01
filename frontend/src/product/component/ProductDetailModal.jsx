@@ -35,7 +35,7 @@ import { OrderContext } from "../../order/component/OrderProvider.jsx";
 import { LoginContext } from "../../component/LoginProvider.jsx";
 import { CustomAlert } from "../../component/CustomAlert.jsx";
 
-export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
+export const ProductDetailModal = ({ isOpen, onClose, productId, branchId }) => {
   const account = useContext(LoginContext);
   const [data, setData] = useState({
     id: 0,
