@@ -1,4 +1,4 @@
-import { Box, Divider, Heading } from "@chakra-ui/react";
+import { Box, Center, Divider, Heading } from "@chakra-ui/react";
 import { OrderManageComp } from "./component/OrderManageComp.jsx";
 import { useState } from "react";
 
@@ -9,8 +9,10 @@ export function BranchPage() {
 
   return (
     <Box maxWidth="1000px" mx={"auto"}>
-      <Box>
-        <Heading>Branch Page</Heading>
+      <Box mt={"50px"} mb={"50px"}>
+        <Center>
+          <Heading>Branch Page</Heading>
+        </Center>
       </Box>
       <Divider border={"1px solid black"} my={4} />
       <Box>

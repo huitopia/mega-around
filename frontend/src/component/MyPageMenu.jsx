@@ -105,7 +105,7 @@ function MyPageMenu({ isChanged, setIsChanged, updateAlarm }) {
             <FontAwesomeIcon icon={faBell} />
           </Flex>
         </PopoverTrigger>
-        <PopoverContent>
+        <PopoverContent w={"350px"}>
           <PopoverArrow />
           <PopoverCloseButton />
           <PopoverBody mt={6}>
