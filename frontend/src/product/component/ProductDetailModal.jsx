@@ -205,10 +205,12 @@ export const ProductDetailModal = ({ isOpen, onClose, productId, branchId }) => 
         onClose();
       })
       .catch(() => errorToast("오류 : 장바구니 담기에 실패했습니다"))
-      .finally(() => setCheckedItems({}));
+      .finally(() => {
+        setCheckedItems({});
+        setCount(1);
+      });
   }
 
-  // TODO. branchId 수정
   function handleOrder() {
     const option = Object.values(checkedItems);
     const optionList = option.map((id) => {
