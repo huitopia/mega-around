@@ -43,7 +43,7 @@ export const ProductUpload = () => {
   useEffect(() => {
     if (account.hasAuth() !== "admin") {
       errorToast("접근 권한이 없습니다.");
-      navigate("/");
+      return navigate("/");
     }
   }, []);
   const handleSaveClick = () => {
