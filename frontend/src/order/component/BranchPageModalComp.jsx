@@ -42,8 +42,8 @@ export function BranchPageModalComp({
   function handleStateChange() {
     axios
       .put(
-        `/api/orders/${orderItem.id}`,
-        { stateId: stateId + 1, customerId: orderItem.customerId },
+        `/api/orders`,
+        orderItem,
         {
           headers: {
             "Content-Type": "application/json",
