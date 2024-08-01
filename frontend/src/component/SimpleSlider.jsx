@@ -43,15 +43,20 @@ export default function SimpleSlider() {
       </Flex>
     ),
   };
-
+  // // useBreakpointValue를 사용하여 반응형 높이 설정
+  // const imageHeight = useBreakpointValue({
+  //   base: "600px",
+  //   md: "500px",
+  //   lg: "700px",
+  // });
   return (
-    <Slider {...settings} style={{ width: "100%", height: "100%" }}>
+    <Slider {...settings}>
       {bannerList.map((banner) => (
         <Box key={banner.id} width="100%" height="100%">
           <Image
             src={banner.src}
             width="100%"
-            height="100%"
+            height={"100%"} // 반응형 높이 설정
             objectFit="contain"
           />
         </Box>

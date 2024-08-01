@@ -62,10 +62,10 @@ public interface UserMapper {
     @Delete("""
             DELETE FROM customer WHERE id=#{id}
             """)
-    void deleteCustomerById(Integer id);
+    int deleteCustomerById(Integer id);
 
     @Delete("""
             DELETE FROM branch WHERE id=#{id};
             """)
-    void deleteBranchById(Integer id);
+    int deleteBranchById(Integer id);
 }

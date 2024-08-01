@@ -26,12 +26,14 @@ export function MainProduct() {
 
   return (
     <>
-      <SimpleSlider />
-      <Center p={20} flexDirection={"row"}>
-        {account.isLoggedIn() && (
+      <Box h="100%" w="100%" boxSizing="border-box" mx="auto" overflow="hidden">
+        <SimpleSlider />
+      </Box>
+      <Center p={10} flexDirection={"row"}>
+        {account.hasAuth() === "branch" && (
           <>
-            <Box flex={"2"} textAlign={"center"} pt={1} pb={1}>
-              <Text fontWeight={"bold"} fontSize={"1.8rem"}>
+            <Box flex={"2"} textAlign="center">
+              <Text fontWeight={"bold"} fontSize={"1.5rem"}>
                 {account.nickName}
                 {account.branchName}&nbsp;님
               </Text>
@@ -40,9 +42,9 @@ export function MainProduct() {
               flex={"3"}
               textAlign={"center"}
               fontSize={"1.2rem"}
-              bgColor={"gray.100"}
-              maxWidth={"400px"}
-              height={"70px"}
+              bgColor={"#F5F6CE"}
+              maxWidth={"700px"}
+              height={"50px"}
               borderRadius={10}
               display="flex"
               justifyContent={"center"}
@@ -71,13 +73,14 @@ export function MainProduct() {
                 </Link>
               </Box>
             </Box>
-            <Box flex={"1"} /> {/* 빈 공간을 위한 박스 */}
+            {/*<Box flex={"1"} /> /!* 빈 공간을 위한 박스 *!/*/}
           </>
         )}
       </Center>
       <Box mt={4} ml={"100px"}>
         <Box fontSize="1.4rem" fontWeight={600}>
-          {account.nickName}님을 위한 추천메뉴
+          {account.nickName}
+          {account.branchName}&nbsp;님을 위한 추천메뉴
         </Box>
         <Box></Box>
       </Box>
