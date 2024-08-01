@@ -52,13 +52,13 @@ export function MainProduct() {
       <Box h="100%" w="100%" boxSizing="border-box" mx="auto" overflow="hidden">
         <SimpleSlider />
       </Box>
-      <Center p={20} flexDirection={"row"}>
+      <Center p={"140px"} flexDirection={"row"}>
         {account.hasAuth() === "customer" && (
           <>
             <Box flex={"2"} textAlign="center">
               <Text fontWeight={"bold"} fontSize={"1.4rem"}>
                 {account.nickName}
-                {account.branchName}&nbsp;님 ☕
+                {account.branchName}&nbsp;님 환영합니다!
               </Text>
             </Box>
             <Box

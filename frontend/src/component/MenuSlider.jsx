@@ -20,7 +20,7 @@ function MenuSlider({ products }) {
     slidesToScroll: 1,
     autoplay: true,
     speed: 2000,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 2500,
     cssEase: "linear",
   };
 
@@ -35,10 +35,9 @@ function MenuSlider({ products }) {
             height="100%"
           >
             <Card
-              width="300px" // 여기서 카드의 너비를 조정합니다.
+              width="300px"
               boxShadow="none"
-              cursor="pointer"
-              h="450px"
+              h="460px"
               borderRadius="5px"
               overflow="hidden"
               border="1px solid #eee"
@@ -62,16 +61,17 @@ function MenuSlider({ products }) {
                 w="100%"
               >
                 <Text fontSize="1.2rem" mb={2} textAlign="left" p={2}>
-                  {product.title}
+                  {product.title.length < 17 ? (
+                    product.title
+                  ) : (
+                    <Text whiteSpace={"nowrap"}>{product.title}</Text>
+                  )}
                 </Text>
                 <Text
                   textAlign="left"
                   color="gray"
-                  display="-webkit-box"
                   overflow="hidden"
-                  whiteSpace="normal"
-                  WebkitBoxOrient="vertical"
-                  WebkitLineClamp={2}
+                  whiteSpace="wrap"
                 >
                   {product.content}
                 </Text>
