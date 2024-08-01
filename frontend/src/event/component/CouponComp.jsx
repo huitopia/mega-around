@@ -1,4 +1,4 @@
-import {Box, Flex, Image, Spacer} from "@chakra-ui/react";
+import { Box, Flex, Image, Spacer } from "@chakra-ui/react";
 
 export function CouponComp() {
   return (
@@ -19,25 +19,28 @@ export function CouponComp() {
         <Box as={"mark"} fontSize="20px">
           메가어라운드
         </Box>
-        <Box fontSize={"35px"} fontWeight={"bold"}>아메리카노(HOT/ICE) 1잔 무료</Box>
-        <Box ml={1} fontSize="17px">또는 2,000원 할인</Box>
+        <Box fontSize={"35px"} fontWeight={"bold"}>
+          아메리카노(HOT/ICE) 1잔 무료
+        </Box>
+        <Box ml={1} fontSize="17px">
+          또는 2,000원 할인
+        </Box>
       </Box>
-      <Spacer/>
+      <Spacer />
       <Flex
         pr={3}
-        bg={"#401F02"} w={"190px"} h={"100%"} color={"white"} whiteSpace="pre-line" align={"center"} justify={"center"} fontWeight={"bold"} fontSize={"20px"}
-      >C O U P O N  </Flex>
-      <Box
-        position="absolute"
-        top="41%"
-        right="260px"
-        width="50px"
-        height="50px"
-        backgroundColor="white"
-        borderRadius="50%"
-        transform="translateY(-50%)"
-        zIndex="1" // 원형이 다른 내용 위에 나타나게
-      />
+        bg={"#401F02"}
+        w={"190px"}
+        h={"100%"}
+        color={"white"}
+        whiteSpace="pre-line"
+        align={"center"}
+        justify={"center"}
+        fontWeight={"bold"}
+        fontSize={"20px"}
+      >
+        C O U P O N{" "}
+      </Flex>
     </Flex>
   );
 }
