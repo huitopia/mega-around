@@ -38,6 +38,7 @@ public class OrderService {
             orderMapper.insertOrderProduct(orderProduct);
             totalCount += orderProduct.getCount();
         }
+        System.out.println("totalCount = " + totalCount);
         eventService.addStamp(orderItem.getCustomerId(), totalCount, orderItem.getCouponCount());
         return orderItem.getId();
     }
@@ -95,12 +96,20 @@ public class OrderService {
         return orderMapper.updateOrderItemState(id, stateId) == 1;
     }
 
-    public List<Notice> addStateNotice(Integer customerId, String stateId, String orderId) {
+    public List<Notice> addStateNotice(OrderItem orderItem) {
         Notice notice = new Notice();
-        notice.setCustomerId(customerId);
-        notice.setTag(orderId);
-        notice.setContent(stateId);
+        notice.setCustomerId(orderItem.getCustomerId());
+        notice.setTag(orderItem.getId().toString());
+        String stateMessage = switch(orderItem.getStateId()){
+            case 1 -> " 의 주문을 확인했습니다. 5분 후에 제조가 완료될 예정입니다.";
+            case 2 -> " 의 제조를 완료했습니다. 1시간 내에 수령해주세요.";
+            default -> " 알 수 없는 상태입니다.";
+         };
+        Integer productCount = orderItem.getOrderProduct().size();
+        String countString = productCount > 1 ? "외" + (productCount - 1) + "개" : "";
+        String content = orderItem.getOrderProduct().get(0).getProductName() + countString + stateMessage;
+        notice.setContent(content);
         eventMapper.insertStateNotice(notice);
-        return eventMapper.selectAllNoticeByCustomerId(customerId);
+        return eventMapper.selectAllNoticeByCustomerId(orderItem.getCustomerId());
     }
 }

@@ -89,7 +89,7 @@ public interface CartMapper {
     @Update("""
                     UPDATE cart_product
                     SET count = #{count}
-                    WHERE cart_id = #{cartId}
+                    WHERE cart_id = #{cartId} AND product_id = #{productId}
             """)
     int updateCartProductCount(CartProduct cartProduct);
 }

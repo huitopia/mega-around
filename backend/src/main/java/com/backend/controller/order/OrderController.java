@@ -1,7 +1,6 @@
 package com.backend.controller.order;
 
 import com.backend.domain.event.Notice;
-import com.backend.domain.order.ModifyOrderDTO;
 import com.backend.domain.order.OrderItem;
 import com.backend.service.order.OrderService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -48,14 +47,13 @@ public class OrderController {
     // 주문 상태 변경 : 1.결제 완료 2. 제조 중 3. 제조 완료
     // id = order_id
 //    @PreAuthorize("hasAuthority('SCOPE_branch')")
-    @PutMapping("/orders/{id}")
+    @PutMapping("/orders")
     @Description("주문 상태 변경")
-    public ResponseEntity modifyOrderItemState(@RequestBody ModifyOrderDTO modifyOrderDTO, @PathVariable Integer id) {
-        String stateId = modifyOrderDTO.getStateId();
-        Integer customerId = modifyOrderDTO.getCustomerId();
-        if (orderService.modifyOrderItemState(id, Integer.valueOf(stateId))) {
-            List<Notice> noticeList = orderService.addStateNotice(customerId, stateId, String.valueOf(id));
-            messagingTemplate.convertAndSend(STR."/sub/\{customerId}", noticeList);
+    public ResponseEntity modifyOrderItemState(@RequestBody OrderItem orderItem) {
+        if (orderService.modifyOrderItemState(orderItem.getId(), Integer.valueOf(orderItem.getStateId()))) {
+            // TODO. 수정
+            List<Notice> noticeList = orderService.addStateNotice(orderItem);
+            messagingTemplate.convertAndSend(STR."/sub/\{orderItem.getCustomerId()}", noticeList);
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.internalServerError().build();

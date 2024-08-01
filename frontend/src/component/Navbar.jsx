@@ -1,13 +1,15 @@
 import { Box, Center, Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import {useContext, useEffect, useState} from "react";
 import { LoginContext } from "./LoginProvider.jsx";
 import MyPageMenu from "./MyPageMenu.jsx";
 
-export function Navbar() {
+export function Navbar({updateAlarm}) {
   const account = useContext(LoginContext);
   const navigate = useNavigate();
   // const [showTabs, setShowTabs] = useState(false);
+  const [isChanged, setIsChanged] = useState(false);
+
   return (
     <Flex
       h={"40px"}
@@ -52,7 +54,7 @@ export function Navbar() {
           {/*{account.branchName}&nbsp;님*/}
           {/*</Box>*/}
           {/*{showTabs && <MyPageMenu />}*/}
-          <MyPageMenu />
+          <MyPageMenu setIsChanged={setIsChanged} updateAlarm={updateAlarm}/>
           <Box
             onClick={() => {
               account.logout();
