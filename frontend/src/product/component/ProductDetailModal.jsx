@@ -20,6 +20,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spacer,
   Spinner,
   Text,
   useDisclosure,
@@ -223,10 +224,12 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
     <Modal onClose={closeModal} isOpen={isOpen} size={"xl"}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader textAlign={"center"}>{data.title}</ModalHeader>
+        <ModalHeader textAlign={"center"} fontSize={"2xl"} mt={"30px"}>
+          MEGA MENU
+        </ModalHeader>
         <ModalCloseButton />
         <VStack hidden={account.hasAuth() !== "admin"}>
-          <ButtonGroup>
+          <ButtonGroup size="sm">
             <Button onClick={handleUpdateButton}>
               {/* 수정하기 */}
               <FontAwesomeIcon icon={faPenToSquare} />
@@ -244,18 +247,19 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
         <ModalBody align={"center"}>
           <VStack spacing={4}>
             <Image
-              height={"250px"}
-              border={"1px solid red"}
+              height={"300px"}
               objectFit="cover"
               src={`https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/${data.filePath}`}
             />
-            <Text w={"80%"} fontSize={"xl"} as={"b"}>
+            <Text w={"80%"} fontSize={"2xl"} as={"b"} mt={"20px"}>
               {data.title}
             </Text>
-            <Text w={"80%"}>{data.content}</Text>
-            <Divider orientation="horizontal" />
-            <Text w={"80%"} fontSize={"lg"} as={"b"}>
-              퍼스널 옵션
+            <Text w={"80%"} mt={"20px"}>
+              {data.content}
+            </Text>
+            <Divider orientation="horizontal" mt={"20px"} />
+            <Text w={"80%"} as={"b"} fontSize={"xl"} mt={"20px"}>
+              퍼스널옵션
             </Text>
           </VStack>
           <Accordion allowMultiple align="stretch" mt={"20px"}>
@@ -263,7 +267,7 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
               <AccordionItem key={option.id}>
                 <h2>
                   <AccordionButton>
-                    <Box as="span" flex="1" textAlign="left">
+                    <Box flex="1" textAlign="left" as={"span"}>
                       {option.title}
                     </Box>
                     <AccordionIcon />
@@ -280,6 +284,7 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
                         onChange={() =>
                           handleCheckboxChange(option.id, item.id, item.price)
                         }
+                        colorScheme={"gray"}
                       >
                         {item.content} +{item.price}원
                       </Checkbox>
@@ -293,34 +298,40 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
             <Box>
               <HStack maxW="200px">
                 <Button
+                  colorScheme={"pink"}
                   isDisabled={count < 2}
                   onClick={() => handleCountChange(-1)}
                 >
                   -
                 </Button>
                 <Input value={count} readOnly />
-                <Button onClick={() => handleCountChange(1)}>+</Button>
+                <Button
+                  colorScheme={"pink"}
+                  onClick={() => handleCountChange(1)}
+                >
+                  +
+                </Button>
               </HStack>
             </Box>
             <Box mr={"100px"}>
-              <Text fontSize={"lg"} as={"b"}>
+              <Text fontSize={"xl"} as={"b"}>
                 {totalPrice} 원
               </Text>
             </Box>
           </Flex>
         </ModalBody>
-        <ModalFooter>
-          <VStack>
-            <ButtonGroup>
-              <Button colorScheme={"pink"} onClick={handleOrder}>
-                바로 주문
-              </Button>
-              <Button colorScheme={"orange"} onClick={handleAddCart}>
-                장바구니 담기
-              </Button>
-              <Button onClick={onClose}>닫기</Button>
-            </ButtonGroup>
-          </VStack>
+        <ModalFooter justifyContent="center">
+          <Button colorScheme={"pink"} onClick={handleOrder} width={"30%"}>
+            바로 주문
+          </Button>
+          <Spacer />
+          <Button colorScheme={"orange"} onClick={handleAddCart} width={"30%"}>
+            장바구니 담기
+          </Button>
+          <Spacer />
+          <Button onClick={onClose} width={"30%"}>
+            닫기
+          </Button>
         </ModalFooter>
       </ModalContent>
       <CustomAlert
