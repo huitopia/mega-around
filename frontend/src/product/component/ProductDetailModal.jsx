@@ -40,7 +40,7 @@ import { useNavigate } from "react-router-dom";
 import { CustomToast } from "../../component/CustomToast.jsx";
 import { OrderContext } from "../../order/component/OrderProvider.jsx";
 
-export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
+export const ProductDetailModal = ({ isOpen, onClose, productId, branchId }) => {
   // TODO : 권한마다 다른 화면
   //  admin/branch : 전부
   //  customer : 선택한 branch id 의 품절 상품
@@ -189,7 +189,7 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
     axios
       .post("/api/carts", {
         // TODO. 나중에 변경
-        branchId: 1,
+        branchId: branchId,
         totalPrice,
         cartProduct: [
           {
@@ -221,7 +221,7 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
     });
 
     directOrder.setItem({
-      branchId: 1,
+      branchId: branchId,
       branchName: "메가커피",
       totalPrice,
       orderProduct: [
