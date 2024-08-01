@@ -1,8 +1,10 @@
-import { Box, Center, Flex, Text } from "@chakra-ui/react";
+import { Box, Center, Flex, Spacer, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { LoginContext } from "./LoginProvider.jsx";
 import MyPageMenu from "./MyPageMenu.jsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 
 export function Navbar({ updateAlarm }) {
   const account = useContext(LoginContext);
@@ -12,20 +14,20 @@ export function Navbar({ updateAlarm }) {
 
   return (
     <Flex
-      h={"40px"}
-      fontSize={"lg"}
+      height={"80px"}
+      fontSize={"md"}
       align={"center"}
       justifyContent={"space-between"}
-      backgroundColor={"yellow"}
+      p={"30px"}
     >
       <Box>
         <Center onClick={() => navigate("/")} cursor={"pointer"}>
-          <Text>Home</Text>
+          <Text>HOME</Text>
         </Center>
       </Box>
       <Box>
         <Center onClick={() => navigate("branch/list")} cursor={"pointer"}>
-          <Text>메가오더</Text>
+          <Text>MEGA ORDER</Text>
         </Center>
       </Box>
       {!account.isLoggedIn() ? (
@@ -44,7 +46,10 @@ export function Navbar({ updateAlarm }) {
           {/*{account.branchName}&nbsp;님*/}
           {/*</Box>*/}
           {/*{showTabs && <MyPageMenu />}*/}
-          <MyPageMenu setIsChanged={setIsChanged} updateAlarm={updateAlarm} />
+          <Spacer />
+          <Box mr={"50px"}>
+            <MyPageMenu setIsChanged={setIsChanged} updateAlarm={updateAlarm} />
+          </Box>
           <Box
             onClick={() => {
               account.logout();
@@ -52,7 +57,7 @@ export function Navbar({ updateAlarm }) {
             }}
             cursor={"pointer"}
           >
-            로그아웃
+            <FontAwesomeIcon icon={faRightFromBracket} />
           </Box>
         </>
       )}
