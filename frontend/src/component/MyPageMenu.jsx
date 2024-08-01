@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
+  Divider,
   Flex,
   Menu,
   MenuButton,
@@ -21,7 +22,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Client } from "@stomp/stompjs";
 import axios from "axios";
 
-function MyPageMenu({ isChanged,setIsChanged, updateAlarm }) {
+function MyPageMenu({ isChanged, setIsChanged, updateAlarm }) {
   const navigate = useNavigate();
   const account = useContext(LoginContext);
   const [noticeList, setNoticeList] = useState({});
@@ -70,7 +71,7 @@ function MyPageMenu({ isChanged,setIsChanged, updateAlarm }) {
     }
   }, [updateAlarm, isChanged]);
 
-  function getUnreadNoticeCount(items){
+  function getUnreadNoticeCount(items) {
     return items.reduce((count, item) => {
       if (!item.isRead) {
         count++;
@@ -80,7 +81,9 @@ function MyPageMenu({ isChanged,setIsChanged, updateAlarm }) {
   }
 
   function handleReadNotice() {
-    axios.put("/api/event/notice", {customerId : account.id}).then(() => setIsChanged(true));
+    axios
+      .put("/api/event/notice", { customerId: account.id })
+      .then(() => setIsChanged(true));
   }
 
   return (
@@ -88,18 +91,36 @@ function MyPageMenu({ isChanged,setIsChanged, updateAlarm }) {
       <Popover>
         <PopoverTrigger>
           <Flex alignItems={"center"} mr={2} gap={1} onClick={handleReadNotice}>
-          <Box color={"white"} bg={"red"} w="20px" h={"20px"} borderRadius={"full"} fontSize={"sm"} textAlign={"center"}>{unreadNoticeCount}</Box>
-          <FontAwesomeIcon icon={faBell} />
+            <Box
+              color={"white"}
+              bg={"red"}
+              w="20px"
+              h={"20px"}
+              borderRadius={"full"}
+              fontSize={"sm"}
+              textAlign={"center"}
+            >
+              {unreadNoticeCount}
+            </Box>
+            <FontAwesomeIcon icon={faBell} />
           </Flex>
         </PopoverTrigger>
         <PopoverContent>
           <PopoverArrow />
           <PopoverCloseButton />
-          <PopoverBody>
+          <PopoverBody mt={6}>
             {noticeList && Object.keys(noticeList).length > 0 ? (
-              noticeList.map((notice) => (
+              noticeList.map((notice, index) => (
                 <Box key={notice.id}>
-                  <Box bg={notice.isRead ? "white" : "red.100"} fontSize={""}>{notice.content}</Box>
+                  <Box
+                    bg={notice.isRead ? "white" : "red.100"}
+                    fontSize={"16px"}
+                  >
+                    {notice.content}
+                  </Box>
+                  {index < noticeList.length - 1 && (
+                    <Divider borderColor="gray.200" my={4} />
+                  )}
                 </Box>
               ))
             ) : (
