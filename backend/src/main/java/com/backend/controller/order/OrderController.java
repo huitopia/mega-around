@@ -1,20 +1,26 @@
 package com.backend.controller.order;
 
+import com.backend.domain.event.Notice;
+import com.backend.domain.order.ModifyOrderDTO;
 import com.backend.domain.order.OrderItem;
 import com.backend.service.order.OrderService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Description;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class OrderController {
     private final OrderService orderService;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/orders")
@@ -41,13 +47,17 @@ public class OrderController {
 
     // 주문 상태 변경 : 1.결제 완료 2. 제조 중 3. 제조 완료
     // id = order_id
-    @PreAuthorize("hasAuthority('SCOPE_branch')")
+//    @PreAuthorize("hasAuthority('SCOPE_branch')")
     @PutMapping("/orders/{id}")
     @Description("주문 상태 변경")
-    public ResponseEntity modifyOrderItemState(@RequestBody Integer stateId, @PathVariable Integer id) {
-        System.out.println("stateId = " + stateId);
-        System.out.println("id = " + id);
-        orderService.modifyOrderItemState(id, stateId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity modifyOrderItemState(@RequestBody ModifyOrderDTO modifyOrderDTO, @PathVariable Integer id) {
+        String stateId = modifyOrderDTO.getStateId();
+        Integer customerId = modifyOrderDTO.getCustomerId();
+        if (orderService.modifyOrderItemState(id, Integer.valueOf(stateId))) {
+            List<Notice> noticeList = orderService.addStateNotice(customerId, stateId, String.valueOf(id));
+            messagingTemplate.convertAndSend(STR."/sub/\{customerId}", noticeList);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.internalServerError().build();
     }
 }

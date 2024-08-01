@@ -41,11 +41,15 @@ export function BranchPageModalComp({
 
   function handleStateChange() {
     axios
-      .put(`/api/orders/${orderItem.id}`, stateId + 1, {
-        headers: {
-          "Content-Type": "application/json",
+      .put(
+        `/api/orders/${orderItem.id}`,
+        { stateId: stateId + 1, customerId: orderItem.customerId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      })
+      )
       .then(() => {
         onClose();
         successToast("변경되었습니다");
@@ -59,6 +63,7 @@ export function BranchPageModalComp({
       <ModalContent>
         <ModalHeader>주문 상세</ModalHeader>
         <ModalBody>
+          {orderItem.isTakeOut == 1 ? "포장해주세요." : "매장에서 먹고 갈게요"}
           {orderItem.orderProduct.map((item, index) => (
             <Box key={index} mb={4}>
               <Flex>

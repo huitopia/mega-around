@@ -1,5 +1,6 @@
 package com.backend.controller.event;
 
+import com.backend.domain.event.Notice;
 import com.backend.service.event.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Description;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,5 +29,20 @@ public class EventController {
             return ResponseEntity.ok(count);
         }
         return ResponseEntity.badRequest().build();
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/notice/{item}")
+    @Description("스탬프/쿠폰 내역 조회")
+    public ResponseEntity getNotice(@PathVariable String item, Authentication authentication) {
+        List<Notice> noticeList = eventService.getNotice(item, Integer.valueOf(authentication.getName()));
+        return ResponseEntity.ok(noticeList);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/event/notice/{customerId}")
+    @Description("네브바 알림 조회")
+    public ResponseEntity getAlarm(@PathVariable Integer customerId) {
+        return ResponseEntity.ok(eventService.getAlarm(customerId));
     }
 }

@@ -84,7 +84,7 @@ public class UserService {
         if (branchGeocode.getLatitude() == 0.0) {
             return false;
         }
-        branchGeocode.setBranchId(branch);
+        branchGeocode.setBranchId(branch.getId());
         // mapper 저장
         int insertResult = branchMapper.insertGeocodeById(branchGeocode);
         return insertResult >= 1;

@@ -3,6 +3,8 @@ package com.backend.mapper.event;
 import com.backend.domain.event.Notice;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 @Mapper
 public interface EventMapper {
 
@@ -61,8 +63,10 @@ public interface EventMapper {
                 SELECT *
                 FROM notice
                 WHERE customer_id = #{customerId}
+                AND tag = #{tag}
+                ORDER BY created_at DESC
             """)
-    Notice selectNoticeByCustomerId(Integer customerId);
+    List<Notice> selectNoticeByCustomerId(Integer customerId, String tag);
 
     @Update("""
                 UPDATE stamp
@@ -70,4 +74,19 @@ public interface EventMapper {
                 WHERE customer_id = #{customerId}
             """)
     int updateStamp(Integer customerId, Integer count);
+
+    @Insert("""
+    INSERT INTO notice
+    (customer_id, tag, content) VALUES (#{customerId}, #{tag}, #{content})
+""")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
+    int insertStateNotice(Notice notice);
+
+    @Select("""
+    SELECT *
+    FROM notice
+    WHERE customer_id = #{customerId}
+    ORDER BY created_at DESC
+""")
+    List<Notice> selectAllNoticeByCustomerId(Integer customerId);
 }
