@@ -6,6 +6,7 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
+  Heading,
   Input,
   InputGroup,
   InputRightElement,
@@ -136,9 +137,24 @@ export function EditBranch() {
 
   return (
     <>
+      <Box
+        height={"280px"}
+        backgroundColor={"#444444"}
+        textAlign={"center"}
+        display={"flex"}
+        alignItems={"center"}
+        justifyContent="center"
+      >
+        <Box>
+          <Heading size="2xl" textColor={"#FDD000"}>
+            MEGA AROUND
+          </Heading>
+          <Text textColor={"pink"}>마이페이지</Text>
+        </Box>
+      </Box>
       <Center>
         <Box w={520} mt={10}>
-          <Center mt={5} mb={10} fontSize={"25px"} fontWeight={"bold"}>
+          <Center mt={1} mb={8} fontSize={"25px"} fontWeight={"bold"}>
             <Text>지점 정보 수정</Text>
           </Center>
           <Box>
