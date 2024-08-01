@@ -4,7 +4,9 @@ import {
   Card,
   CardBody,
   CardHeader,
+  Center,
   Flex,
+  Heading,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -181,117 +183,137 @@ export const BranchList = () => {
   }, [branchLocation, isOpen]);
 
   return (
-    <Box
-      mt={"50px"}
-      maxWidth="1000px"
-      mx={"auto"}
-      height="100vh"
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      border="1px solid blue"
-    >
-      {error ? (
-        <Text>{error}</Text>
-      ) : !location ? (
-        <Spinner size="xl" />
-      ) : (
-        <>
-          <Box id="map" width={"100%"} height="50%" border="1px solid red" />
-          <Box
-            mt={"20px"}
-            width={"100%"}
-            height="50%"
-            overflowY="auto"
-            border="1px solid gray"
-          >
-            <SimpleGrid spacing={4} columns={2}>
-              {branches.map((branch) => (
-                <Card
-                  key={branch.branchId}
-                  height={"120px"}
-                  backgroundColor={
-                    branch.branchId === selectedBranchId && "yellow"
+    <>
+      <Box mt={"60px"} mb={"60px"}>
+        <VStack>
+          <Heading size="2xl">MEGA AROUND</Heading>
+          <Text>내 주변 가까운 매장을 찾아보세요!</Text>
+        </VStack>
+      </Box>
+      <Box
+        maxWidth="1000px"
+        mx={"auto"}
+        height="100vh"
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+      >
+        {error ? (
+          <Text>{error}</Text>
+        ) : !location ? (
+          <Spinner size="xl" />
+        ) : (
+          <>
+            <Box
+              id="map"
+              width={"100%"}
+              height="50%"
+              border="1px solid #e8e4e0"
+            />
+            <Box
+              mt={"40px"}
+              width={"100%"}
+              height="60%"
+              overflowY="auto"
+              pt={"10px"}
+            >
+              {/*<SimpleGrid spacing={4} columns={2}>*/}
+              <Center>
+                <SimpleGrid templateColumns="repeat(2, 1fr)" gap={6}>
+                  {branches.map((branch) => (
+                    <Card
+                      border="1px solid #e8e4e0"
+                      key={branch.branchId}
+                      height={"120px"}
+                      width={"450px"}
+                      cursor={"pointer"}
+                      _hover={{
+                        filter: "auto",
+                        brightness: "95%",
+                      }}
+                      onClick={() => {
+                        handleModalOpen(
+                          branch.branchId,
+                          branch.branchName,
+                          branch.latitude,
+                          branch.longitude,
+                        );
+                      }}
+                    >
+                      <CardHeader>
+                        <Heading size={"md"} textColor={"#401F02"}>
+                          {branch.branchName}
+                        </Heading>
+                      </CardHeader>
+                      <CardBody>
+                        <Flex>
+                          <Box>
+                            <Text textColor={"#401F02"}>{branch.address}</Text>
+                          </Box>
+                          <Spacer />
+                          <Box textColor={"#ff5f3f"}>
+                            <Text as={"b"}>{branch.distance.toFixed()} m</Text>
+                          </Box>
+                        </Flex>
+                      </CardBody>
+                    </Card>
+                  ))}
+                </SimpleGrid>
+              </Center>
+            </Box>
+          </>
+        )}
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>
+              {selectedBranchName}에서 주문하시겠습니까?
+            </ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <VStack>
+                <Box
+                  id={"staticMap"}
+                  width={"100%"}
+                  height={"200px"}
+                  border="1px solid #e8e4e0"
+                />
+                <Box mt={"20px"}>
+                  <Text textColor={"#ff5f3f"} as={"b"}>
+                    주문 확인 후 취소가 불가합니다.
+                  </Text>
+                </Box>
+              </VStack>
+            </ModalBody>
+            <ModalFooter justifyContent="center">
+              <Button
+                width={"40%"}
+                colorScheme="pink"
+                onClick={onClose}
+                ml={"5%"}
+              >
+                취소
+              </Button>
+              <Spacer />
+              <Button
+                width={"40%"}
+                colorScheme={"orange"}
+                mr={"5%"}
+                onClick={() => {
+                  if (account.hasAuth() === "customer") {
+                    navigate(`/product/list?branchId=${selectedBranchId}`);
+                  } else {
+                    alert("회원 로그인이 필요한 서비스입니다.");
+                    navigate("/login");
                   }
-                  cursor={"pointer"}
-                  _hover={{ backgroundColor: "yellow" }}
-                  onClick={() => {
-                    handleModalOpen(
-                      branch.branchId,
-                      branch.branchName,
-                      branch.latitude,
-                      branch.longitude,
-                    );
-                  }}
-                >
-                  <CardHeader>
-                    <Text size={"md"} as={"b"}>
-                      {branch.branchName}
-                    </Text>
-                  </CardHeader>
-                  <CardBody>
-                    <Flex>
-                      <Box>
-                        <Text>{branch.address}</Text>
-                      </Box>
-                      <Spacer />
-                      <Box textColor={"red"}>
-                        <Text>{branch.distance.toFixed()} m</Text>
-                      </Box>
-                    </Flex>
-                  </CardBody>
-                </Card>
-              ))}
-            </SimpleGrid>
-          </Box>
-        </>
-      )}
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>{selectedBranchName}에서 주문하시겠습니까?</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <VStack>
-              <Box
-                id={"staticMap"}
-                width={"100%"}
-                height={"200px"}
-                border="1px solid red"
-              />
-              <Box mt={"20px"}>
-                <Text color={"red"}>주문 확인 후 취소가 불가합니다.</Text>
-              </Box>
-            </VStack>
-          </ModalBody>
-          <ModalFooter justifyContent="center">
-            <Button
-              width={"40%"}
-              colorScheme="pink"
-              onClick={onClose}
-              ml={"5%"}
-            >
-              취소
-            </Button>
-            <Spacer />
-            <Button
-              width={"40%"}
-              colorScheme={"orange"}
-              mr={"5%"}
-              onClick={() => {
-                if (account.hasAuth() === "customer") {
-                  navigate(`/product/list?branchId=${selectedBranchId}`);
-                } else {
-                  alert("회원 로그인이 필요한 서비스입니다.");
-                  navigate("/login");
-                }
-              }}
-            >
-              주문하기
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </Box>
+                }}
+              >
+                주문하기
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </Box>
+    </>
   );
 };
