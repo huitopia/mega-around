@@ -39,11 +39,10 @@ import { faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { CustomToast } from "../../component/CustomToast.jsx";
 import { OrderContext } from "../../order/component/OrderProvider.jsx";
+import { LoginContext } from "../../component/LoginProvider.jsx";
 
 export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
-  // TODO : 권한마다 다른 화면
-  //  admin/branch : 전부
-  //  customer : 선택한 branch id 의 품절 상품
+  const account = useContext(LoginContext);
   const [data, setData] = useState({
     id: 0,
     title: "",
@@ -245,8 +244,7 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
       <ModalContent>
         <ModalHeader textAlign={"center"}>{data.title}</ModalHeader>
         <ModalCloseButton />
-        <VStack>
-          {/* TODO : admin 권한 설정 */}
+        <VStack hidden={account.hasAuth !== "admin"}>
           <ButtonGroup>
             <Button onClick={handleUpdateButton}>
               {/* 수정하기 */}
