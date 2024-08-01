@@ -167,7 +167,7 @@ export function Order() {
           <h2>
             <AccordionButton>
               <Flex gap={10}>
-                <Box fontWeight={"bold"} fontSiz={"xl"}>주문 상품</Box>
+                <Box fontWeight={"bold"} fontSize={"xl"}>주문 상품</Box>
                 <Box as={"sub"}>{orderItem.orderProduct[0].productName}</Box>
               </Flex>
               <AccordionIcon />
