@@ -1,24 +1,27 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
-  Box, Flex,
+  Box,
+  Flex,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
   Popover,
-  PopoverArrow, PopoverBody, PopoverCloseButton,
-  PopoverContent, PopoverHeader,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
   PopoverTrigger,
-  Text
+  Text,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { LoginContext } from "./LoginProvider.jsx";
-import {faBell, faCaretDown} from "@fortawesome/free-solid-svg-icons";
+import { faBell, faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Client } from "@stomp/stompjs";
 import axios from "axios";
 
-function MyPageMenu({setIsChanged, updateAlarm}) {
+function MyPageMenu({ setIsChanged, updateAlarm }) {
   const navigate = useNavigate();
   const account = useContext(LoginContext);
   const [noticeList, setNoticeList] = useState({});
@@ -56,8 +59,8 @@ function MyPageMenu({setIsChanged, updateAlarm}) {
   }, []);
 
   useEffect(() => {
-    if(account.isLoggedIn()){
-      axios.get(`/api/event/notice/${account.id}`).then(res => {
+    if (account.isLoggedIn()) {
+      axios.get(`/api/event/notice/${account.id}`).then((res) => {
         setNoticeList(res.data);
       });
     }
@@ -73,7 +76,7 @@ function MyPageMenu({setIsChanged, updateAlarm}) {
           <PopoverArrow />
           <PopoverCloseButton />
           <PopoverBody>
-            {(noticeList && Object.keys(noticeList).length > 0) ? (
+            {noticeList && Object.keys(noticeList).length > 0 ? (
               noticeList.map((notice) => (
                 <Box key={notice.id}>
                   <Box>{notice.content}</Box>
@@ -85,38 +88,45 @@ function MyPageMenu({setIsChanged, updateAlarm}) {
           </PopoverBody>
         </PopoverContent>
       </Popover>
-    <Menu>
-      <MenuButton as={Text} cursor={"pointer"}>
-        {account.nickName}
-        {account.branchName}&nbsp;님&nbsp;&nbsp;
-        <FontAwesomeIcon icon={faCaretDown} />
-      </MenuButton>
+      <Menu>
+        <MenuButton as={Text} cursor={"pointer"}>
+          {account.nickName}
+          {account.branchName}&nbsp;님&nbsp;&nbsp;
+          <FontAwesomeIcon icon={faCaretDown} />
+        </MenuButton>
 
-      <MenuList fontSize={"14px"} width="200px">
-        {account.hasAuth() === "customer" && (
-          <>
-            <MenuItem onClick={() => navigate("/stamp")}>스탬프</MenuItem>
-            <MenuItem onClick={() => navigate("/coupon")}>쿠폰</MenuItem>
-            <MenuItem onClick={() => navigate(`/cart`)}>장바구니</MenuItem>
-            <MenuItem onClick={() => navigate(`/order/list`)}>
-              주문 내역
+        <MenuList fontSize={"14px"} width="200px">
+          {account.hasAuth() === "customer" && (
+            <>
+              <MenuItem onClick={() => navigate("/stamp")}>스탬프</MenuItem>
+              <MenuItem onClick={() => navigate("/coupon")}>쿠폰</MenuItem>
+              <MenuItem onClick={() => navigate(`/cart`)}>장바구니</MenuItem>
+              <MenuItem onClick={() => navigate(`/order/list`)}>
+                주문 내역
+              </MenuItem>
+              <MenuItem
+                onClick={() => navigate(`/mypage/customer/${account.id}`)}
+              >
+                내 정보
+              </MenuItem>
+            </>
+          )}
+          {account.hasAuth() === "branch" && (
+            <MenuItem onClick={() => navigate(`/mypage/branch/${account.id}`)}>
+              내 정보(지점)
             </MenuItem>
-            <MenuItem
-              onClick={() => navigate(`/mypage/customer/${account.id}`)}
-            >
-              내 정보
+          )}
+          {account.hasAuth() === "customer" || (
+            <MenuItem onClick={() => navigate(`/product/list`)}>
+              상품 리스트
             </MenuItem>
-          </>
-        )}
-        {account.hasAuth() === "branch" && (
-          <MenuItem onClick={() => navigate(`/mypage/branch/${account.id}`)}>
-            내 정보(지점)
-          </MenuItem>
-        )}
-      </MenuList>
-    </Menu>
+          )}
+          {account.hasAuth() === "admin" && (
+            <MenuItem onClick={() => navigate(`/product`)}>상품 등록</MenuItem>
+          )}
+        </MenuList>
+      </Menu>
     </Flex>
-
   );
 }
 
