@@ -21,7 +21,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Client } from "@stomp/stompjs";
 import axios from "axios";
 
-function MyPageMenu({ setIsChanged, updateAlarm }) {
+function MyPageMenu({ isChanged,setIsChanged, updateAlarm }) {
   const navigate = useNavigate();
   const account = useContext(LoginContext);
   const [noticeList, setNoticeList] = useState({});
@@ -44,7 +44,9 @@ function MyPageMenu({ setIsChanged, updateAlarm }) {
         stompClient.subscribe(`/sub/${account.id}`, (message) => {
           const newNotice = JSON.parse(message.body);
           setNoticeList(newNotice);
+          setUnreadNoticeCount(getUnreadNoticeCount(newNotice));
           setIsChanged(true);
+          setIsChanged(false);
         });
       },
       onStompError: (frame) => {
@@ -63,20 +65,29 @@ function MyPageMenu({ setIsChanged, updateAlarm }) {
     if (account.isLoggedIn()) {
       axios.get(`/api/event/notice/${account.id}`).then((res) => {
         setNoticeList(res.data);
-        console.log(res.data);
+        setUnreadNoticeCount(getUnreadNoticeCount(res.data));
       });
     }
-  }, [updateAlarm]);
+  }, [updateAlarm, isChanged]);
 
-  function getUnreadNoticeCount(item){
-    item
+  function getUnreadNoticeCount(items){
+    return items.reduce((count, item) => {
+      if (!item.isRead) {
+        count++;
+      }
+      return count;
+    }, 0);
+  }
+
+  function handleReadNotice() {
+    axios.put("/api/event/notice", {customerId : account.id}).then(() => setIsChanged(true));
   }
 
   return (
     <Flex>
       <Popover>
         <PopoverTrigger>
-          <Flex alignItems={"center"} mr={2} gap={1}>
+          <Flex alignItems={"center"} mr={2} gap={1} onClick={handleReadNotice}>
           <Box color={"white"} bg={"red"} w="20px" h={"20px"} borderRadius={"full"} fontSize={"sm"} textAlign={"center"}>{unreadNoticeCount}</Box>
           <FontAwesomeIcon icon={faBell} />
           </Flex>
