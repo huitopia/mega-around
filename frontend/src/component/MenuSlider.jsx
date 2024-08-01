@@ -18,77 +18,59 @@ function MenuSlider({ products }) {
 
   return (
     <Slider {...settings}>
-      <Box>
-        {products.map((product) => (
-          <Box key={product.id} position="relative" width="100%" height="475px">
-            <Flex
-              alignItems="center"
-              justifyContent="center"
-              width="100%"
-              // opacity={currentSlide === index ? 1 : 0.3}
-              transition="opacity 0.3s"
+      {products.map((product) => (
+        <Box key={product.id} position="relative" width="100%" height="475px">
+          <Flex
+            alignItems="center"
+            justifyContent="center"
+            width="100%"
+            transition="opacity 0.3s"
+          >
+            <Card
+              w={"70%"}
+              boxShadow={"none"}
+              cursor={"pointer"}
+              maxW="sm"
+              h="100%"
+              borderRadius={"5px"}
+              overflow="hidden"
+              border={"1px solid #eee"}
             >
-              <Card
-                w={"70%"}
-                boxShadow={"none"}
-                cursor={"pointer"}
-                maxW="sm"
-                h="100%"
-                borderRadius={"5px"}
-                overflow="hidden"
-                border={"1px solid #eee"}
-              >
-                <CardBody position="relative" h="100%" p={0}>
-                  <Box position="relative">
-                    <Image
-                      src={`https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/${product.file_path}`}
-                      w="100%"
-                      h="250px"
-                      transition="transform 0.2s"
-                      _hover={{ transform: "scale(1.05)" }}
-                    />
-                    <Box
-                      display={"flex"}
-                      justifyContent={"center"}
-                      alignItems={"center"}
+              <CardBody position="relative" h="100%" p={0}>
+                <Box position="relative">
+                  <Image
+                    src={`https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/${product.file_path}`}
+                    w="100%"
+                    h="250px"
+                    transition="transform 0.2s"
+                    objectFit="cover"
+                  />
+                  <Box
+                    display={"flex"}
+                    flexDirection="column"
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    p={4}
+                  >
+                    <Text
+                      fontSize={"xl"}
+                      fontWeight={"600"}
+                      bgColor={"white"}
+                      borderRadius={"5px"}
+                      mb={2}
+                      textAlign={"center"}
+                      p={2}
                     >
-                      <Text
-                        fontSize={"xl"}
-                        fontWeight={"600"}
-                        w={10}
-                        h={10}
-                        bgColor={"white"}
-                        borderRadius={"5px"}
-                        position="absolute"
-                        top={2}
-                        left={2}
-                        display={"flex"}
-                        justifyContent={"center"}
-                        alignItems={"center"}
-                        textAlign={"center"}
-                      >
-                        {product.title}
-                      </Text>
-                      <Text>{product.content}</Text>
-                    </Box>
+                      {product.title}
+                    </Text>
+                    <Text textAlign="center">{product.content}</Text>
                   </Box>
-                </CardBody>
-              </Card>
-            </Flex>
-
-            {/*  <Image*/}
-            {/*    src={`https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/${product.file_path}`}*/}
-            {/*    width="100%"*/}
-            {/*    height="300px"*/}
-            {/*    objectFit="contain"*/}
-            {/*  />*/}
-            {/*  <Text fontSize="xl" fontWeight="bold">*/}
-            {/*    {product.title}*/}
-            {/*  </Text>*/}
-            {/*  <Text>{product.content}</Text>*/}
-          </Box>
-        ))}
-      </Box>
+                </Box>
+              </CardBody>
+            </Card>
+          </Flex>
+        </Box>
+      ))}
     </Slider>
   );
 }

@@ -89,7 +89,7 @@ export function MainProduct() {
         )}
       </Center>
       <Box mt={4} ml={"100px"}>
-        <Box fontSize={"xl"} fontWeight={600} mb={6}>
+        <Box fontSize={"xl"} fontWeight={600} mb={10}>
           {account.isLoggedIn() ? (
             <>
               {account.nickName}
