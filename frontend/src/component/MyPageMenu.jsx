@@ -99,7 +99,7 @@ function MyPageMenu({ isChanged,setIsChanged, updateAlarm }) {
             {noticeList && Object.keys(noticeList).length > 0 ? (
               noticeList.map((notice) => (
                 <Box key={notice.id}>
-                  <Box>{notice.content}</Box>
+                  <Box bg={notice.isRead ? "white" : "red.100"} fontSize={""}>{notice.content}</Box>
                 </Box>
               ))
             ) : (
