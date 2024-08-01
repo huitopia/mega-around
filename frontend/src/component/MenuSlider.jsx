@@ -29,10 +29,6 @@ function MenuSlider({ products }) {
               transition="opacity 0.3s"
             >
               <Card
-                onClick={() => {
-                  navigate(`/product/${product.id}`);
-                  window.scrollTo({ top: 0, behavior: "auto" });
-                }}
                 w={"70%"}
                 boxShadow={"none"}
                 cursor={"pointer"}
@@ -46,7 +42,6 @@ function MenuSlider({ products }) {
                   <Box position="relative">
                     <Image
                       src={`https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/${product.file_path}`}
-                      // src={product.productFileList[0].filePath}
                       w="100%"
                       h="250px"
                       transition="transform 0.2s"
