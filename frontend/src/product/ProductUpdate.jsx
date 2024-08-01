@@ -41,7 +41,7 @@ export const ProductUpdate = () => {
   const { successToast, errorToast } = CustomToast();
 
   useEffect(() => {
-    if (account.hasAuth() === "admin") {
+    if (account.hasAuth() !== "admin") {
       errorToast("접근 권한이 없습니다.");
       navigate("/");
     }
@@ -132,7 +132,7 @@ export const ProductUpdate = () => {
   return (
     <Box maxWidth="1000px" mx={"auto"}>
       <Box>
-        <Heading>Update</Heading>
+        <Heading>상품 수정</Heading>
       </Box>
       <Divider border={"1px solid black"} my={4} />
       <Box maxWidth="700px" mx={"auto"}>
