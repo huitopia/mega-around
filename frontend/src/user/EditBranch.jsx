@@ -20,10 +20,10 @@ import { useNavigate } from "react-router-dom";
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import { CustomToast } from "../component/CustomToast.jsx";
 import { LoginContext } from "../component/LoginProvider.jsx";
-import ConfirmationModal from "./component/ConfirmationModal.jsx";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Postcode } from "./component/Postcode.jsx";
+import DeleteModal from "./component/DeleteModal.jsx";
 
 export function EditBranch() {
   const [branch, setBranch] = useState({ password: "" });
@@ -98,9 +98,14 @@ export function EditBranch() {
       .delete(`/api/user/branch/${account.id}`)
       .then(() => {
         infoToast("탈퇴 되었습니다. 그동안 이용해 주셔서 감사합니다");
+        account.logout();
+        navigate("/");
       })
       .catch(() => errorToast("지점 탈퇴 중 문제가 발생하였습니다"))
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        setIsLoading(false);
+        onClose();
+      });
   }
 
   let isCheckedPassword = branch.password === passwordCheck;
@@ -290,13 +295,11 @@ export function EditBranch() {
           </Box>
         </Box>
       </Center>
-      <ConfirmationModal
+      <DeleteModal
         isOpen={isOpen}
         onClose={onClose}
         onConfirm={handleBranchDelete}
         isLoading={isLoading}
-        modalheader={" 확인요청 "}
-        modalbody={"정말로 탈퇴하시겠습니까?"}
       />
     </>
   );
