@@ -15,15 +15,25 @@ export function MainProduct() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios.get("/api/event/coupon").then((res) => {
-      setCouponCount(res.data);
-    });
+    axios
+      .get("/api/event/coupon")
+      .then((res) => {
+        setCouponCount(res.data || 0);
+      })
+      .catch(() => {
+        setCouponCount(0); // 에러 발생 시 0으로 설정
+      });
   }, []);
 
   useEffect(() => {
-    axios.get("/api/event/stamp").then((res) => {
-      setStampCount(res.data);
-    });
+    axios
+      .get("/api/event/stamp")
+      .then((res) => {
+        setStampCount(res.data || 0);
+      })
+      .catch(() => {
+        setStampCount(0); // 에러 발생 시 0으로 설정
+      });
   }, []);
 
   useEffect(() => {
@@ -32,7 +42,9 @@ export function MainProduct() {
       .then((res) => {
         setProducts(res.data);
       })
-      .catch();
+      .catch(() => {
+        setProducts([]); // 에러 발생 시 빈 배열로 설정
+      });
   }, []);
 
   return (
@@ -68,14 +80,20 @@ export function MainProduct() {
                 justifyContent={"center"}
                 alignItems={"center"}
               >
-                <Link to={"/stamp"}>
+                <Link
+                  to={"/stamp"}
+                  onClick={() => window.scrollTo({ top: 0, behavior: "auto" })}
+                >
                   <Box display="flex" alignItems="center" gap={2}>
                     <FontAwesomeIcon icon={faStamp} />
                     <Text>스탬프</Text>
                     <Text>{stampCount}</Text>
                   </Box>
                 </Link>
-                <Link to={"/coupon"}>
+                <Link
+                  to={"/coupon"}
+                  onClick={() => window.scrollTo({ top: 0, behavior: "auto" })}
+                >
                   <Box display="flex" alignItems="center" gap={2}>
                     <FontAwesomeIcon icon={faTicket} />
                     <Text>쿠폰</Text>
@@ -99,17 +117,6 @@ export function MainProduct() {
             <Text>추천메뉴</Text>
           )}
         </Box>
-        <Box></Box>
-        {/*<Box>*/}
-        {/*  {products.map((product) => (*/}
-        {/*    <Box key={product.id} p={4} border="1px solid #ccc" mb={4}>*/}
-        {/*      <Text fontSize="xl" fontWeight="bold">*/}
-        {/*        {product.title}*/}
-        {/*      </Text>*/}
-        {/*      <Text>{product.content}</Text>*/}
-        {/*    </Box>*/}
-        {/*  ))}*/}
-        {/*</Box>*/}
         <MenuSlider products={products} />
       </Box>
     </>
