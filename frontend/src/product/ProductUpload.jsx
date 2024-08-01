@@ -129,18 +129,20 @@ export const ProductUpload = () => {
   };
 
   return (
-    <Box maxWidth="1000px" mx={"auto"}>
-      <Box>
-        <Heading>상품 등록</Heading>
+    <Box maxWidth="1200px" mx={"auto"}>
+      <Box mt={"60px"} mb={"60px"}>
+        <Center>
+          <Heading size={"xl"}>상품 등록</Heading>
+        </Center>
       </Box>
-      <Divider border={"1px solid black"} my={4} />
+      <Divider />
       <Box maxWidth="700px" mx={"auto"}>
         <Box mt={"40px"}>
           <FormControl>
-            <Center>
+            <Center hidden={imageSrc === null}>
               <Img src={imageSrc} height={"300px"}></Img>
             </Center>
-            <FormLabel mt={"15px"}>썸네일</FormLabel>
+            <FormLabel mt={"20px"}>썸네일</FormLabel>
             <Input
               multiple
               type={"file"}
@@ -152,7 +154,7 @@ export const ProductUpload = () => {
             </FormHelperText>
           </FormControl>
         </Box>
-        <Box mt={"20px"}>
+        <Box mt={"25px"}>
           <FormControl>
             <FormLabel>상품명</FormLabel>
             <Input
@@ -162,10 +164,10 @@ export const ProductUpload = () => {
             />
           </FormControl>
         </Box>
-        <Box mt={"20px"}>
+        <Box mt={"25px"}>
           <CategoryComp category={category} />
         </Box>
-        <Box mt={"20px"}>
+        <Box mt={"25px"}>
           <FormControl>
             <FormLabel>상세 내용</FormLabel>
             <Textarea
@@ -175,19 +177,21 @@ export const ProductUpload = () => {
             />
           </FormControl>
         </Box>
-        <Box mt={"20px"}>
+        <Box mt={"25px"}>
           <OptionComp options={options} />
         </Box>
-        <Box maxWidth="60%" mt={"20px"}>
+        <Box maxWidth="60%" mt={"25px"}>
           <FormControl>
             <FormLabel>가격</FormLabel>
             <NumberInput defaultValue={0} min={0} max={100000}>
               <NumberInputField onChange={handlePriceChange} />
             </NumberInput>
-            <FormHelperText>가격은 0원 이상부터 가능합니다.</FormHelperText>
+            <FormHelperText>
+              가격은 0원 이상부터 입력 가능합니다.
+            </FormHelperText>
           </FormControl>
         </Box>
-        <Box mt={"40px"}>
+        <Box mt={"50px"}>
           <Center>
             <ButtonGroup variant="solid">
               <HStack>

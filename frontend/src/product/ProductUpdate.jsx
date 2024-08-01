@@ -130,23 +130,20 @@ export const ProductUpdate = () => {
   };
 
   return (
-    <Box maxWidth="1000px" mx={"auto"}>
-      <Box>
-        <Heading>상품 수정</Heading>
+    <Box maxWidth="1200px" mx={"auto"}>
+      <Box mt={"60px"} mb={"60px"}>
+        <Center>
+          <Heading size={"xl"}>상품 수정</Heading>
+        </Center>
       </Box>
-      <Divider border={"1px solid black"} my={4} />
+      <Divider />
       <Box maxWidth="700px" mx={"auto"}>
         <Box mt={"40px"}>
           <FormControl>
             <Center>
-              <Image
-                height={"300px"}
-                border={"1px solid red"}
-                objectFit="cover"
-                src={imgSrc}
-              ></Image>
+              <Image height={"300px"} objectFit="cover" src={imgSrc}></Image>
             </Center>
-            <FormLabel mt={"15px"}>썸네일</FormLabel>
+            <FormLabel mt={"20px"}>썸네일</FormLabel>
             <Input
               multiple
               type={"file"}
@@ -158,7 +155,7 @@ export const ProductUpdate = () => {
             </FormHelperText>
           </FormControl>
         </Box>
-        <Box mt={"20px"}>
+        <Box mt={"25px"}>
           <FormControl>
             <FormLabel>상품명</FormLabel>
             <Input
@@ -169,14 +166,14 @@ export const ProductUpdate = () => {
             />
           </FormControl>
         </Box>
-        <Box mt={"20px"}>
+        <Box mt={"25px"}>
           <CategoryComp
             category={category}
             checkMain={mainCategory}
             checkSub={subCategory}
           />
         </Box>
-        <Box mt={"20px"}>
+        <Box mt={"25px"}>
           <FormControl>
             <FormLabel>상세 내용</FormLabel>
             <Textarea
@@ -187,10 +184,10 @@ export const ProductUpdate = () => {
             />
           </FormControl>
         </Box>
-        <Box mt={"20px"}>
+        <Box mt={"25px"}>
           <OptionComp options={options} option={option} />
         </Box>
-        <Box maxWidth="60%" mt={"20px"}>
+        <Box maxWidth="60%" mt={"25px"}>
           <FormControl>
             <FormLabel>가격</FormLabel>
             <NumberInput value={price} min={0} max={100000}>
@@ -199,7 +196,7 @@ export const ProductUpdate = () => {
             <FormHelperText>가격은 0원 이상부터 가능합니다.</FormHelperText>
           </FormControl>
         </Box>
-        <Box mt={"40px"}>
+        <Box mt={"50px"}>
           <Center>
             <ButtonGroup variant="solid">
               <HStack>
