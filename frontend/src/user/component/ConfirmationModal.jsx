@@ -8,6 +8,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Text,
 } from "@chakra-ui/react";
 
 const ConfirmationModal = ({
@@ -24,30 +25,26 @@ const ConfirmationModal = ({
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{modalheader}</ModalHeader>
-        <ModalBody>{modalbody}</ModalBody>
-        <ModalFooter>
+        <ModalBody pb={9}>
+          {modalbody}
+          <Text fontWeight="bold" mb="1rem"></Text>
           <Input
-            mr={2}
-            type={"password"}
-            // variant="flushed"
+            type="password"
+            placeholder="비밀번호 입력"
             onChange={(e) => setPassword(e.target.value)}
           />
+        </ModalBody>
+        <ModalFooter>
           <Button
             mr={2}
             onClick={onConfirm}
             isLoading={isLoading}
-            variant="outline"
             colorScheme="blue"
-            borderWidth={2}
+            width={"80px"}
           >
             확인
           </Button>
-          <Button
-            onClick={onClose}
-            variant="outline"
-            colorScheme="gray"
-            borderWidth={2}
-          >
+          <Button onClick={onClose} width={"80px"} mr={3}>
             취소
           </Button>
         </ModalFooter>

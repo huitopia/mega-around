@@ -15,7 +15,7 @@ public class Branch {
     private String address;
     private Boolean auth;
 
-    public String getCreatedAt() {
+    public String getCreatedAtTime() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return createdAt.format(formatter);
     }
