@@ -13,7 +13,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CustomToast } from "../component/CustomToast.jsx";
 
-export function FindCustomerEmail() {
+export function FindCustomerPassword() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ export function FindCustomerEmail() {
         <Box>
           <Center>
             <Box>
-              <Heading mt={20} color={"#fdd000"}>
+              <Heading mt={20} color={"#FDD000"}>
                 mega-around
               </Heading>
               <Center mt={5} fontSize={"lg"} fontWeight={"bold"}>

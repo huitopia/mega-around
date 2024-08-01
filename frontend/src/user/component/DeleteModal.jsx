@@ -3,7 +3,6 @@ import {
   Center,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -18,7 +17,6 @@ const DeleteModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>확인 요청</ModalHeader>
-        <ModalCloseButton />
         <ModalBody pb={5} pt={3} ml={10}>
           <Text fontWeight="bold" mb="1rem">
             정말로 탈퇴하시겠어요?

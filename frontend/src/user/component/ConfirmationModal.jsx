@@ -5,7 +5,6 @@ import {
   Input,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -24,7 +23,6 @@ const ConfirmationModal = ({
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalCloseButton />
         <ModalHeader>확인 요청</ModalHeader>
         <ModalBody pb={5} pt={3} ml={10} mr={10}>
           <Text mb="1.1rem" fontWeight={600}>

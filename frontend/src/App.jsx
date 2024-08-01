@@ -26,8 +26,8 @@ import { MyPageBranch } from "./user/MyPageBranch.jsx";
 import { EditCustomer } from "./user/EditCustomer.jsx";
 import { EditBranch } from "./user/EditBranch.jsx";
 import { BranchList } from "./branch/BranchList.jsx";
-import { FindCustomerEmail } from "./user/FindCustomer.jsx";
-import { FindCustomerPassword } from "./FindCustomerPassword.jsx";
+import { FindCustomerPassword } from "./user/FindCustomerPassword.jsx";
+import { FindCustomerEmail } from "./FindCustomerEmail.jsx";
 
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
