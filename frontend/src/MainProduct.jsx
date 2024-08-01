@@ -40,13 +40,13 @@ export function MainProduct() {
       <Box h="100%" w="100%" boxSizing="border-box" mx="auto" overflow="hidden">
         <SimpleSlider />
       </Box>
-      <Center p={10} flexDirection={"row"}>
-        {account.hasAuth() === "branch" && (
+      <Center p={20} flexDirection={"row"}>
+        {account.hasAuth() === "customer" && (
           <>
             <Box flex={"2"} textAlign="center">
               <Text fontWeight={"bold"} fontSize={"1.4rem"}>
                 {account.nickName}
-                {account.branchName}&nbsp;님
+                {account.branchName}&nbsp;님 💕
               </Text>
             </Box>
             <Box
@@ -89,21 +89,27 @@ export function MainProduct() {
         )}
       </Center>
       <Box mt={4} ml={"100px"}>
-        <Box fontSize={"xl"} fontWeight={600}>
-          {account.nickName}
-          {account.branchName}&nbsp;님을 위한 추천메뉴
+        <Box fontSize={"xl"} fontWeight={600} mb={10}>
+          {account.isLoggedIn() ? (
+            <>
+              {account.nickName}
+              {account.branchName}&nbsp;님을 위한 추천메뉴
+            </>
+          ) : (
+            <Text>추천메뉴</Text>
+          )}
         </Box>
         <Box></Box>
-        <Box>
-          {products.map((product) => (
-            <Box key={product.id} p={4} border="1px solid #ccc" mb={4}>
-              <Text fontSize="xl" fontWeight="bold">
-                {product.title}
-              </Text>
-              <Text>{product.content}</Text>
-            </Box>
-          ))}
-        </Box>
+        {/*<Box>*/}
+        {/*  {products.map((product) => (*/}
+        {/*    <Box key={product.id} p={4} border="1px solid #ccc" mb={4}>*/}
+        {/*      <Text fontSize="xl" fontWeight="bold">*/}
+        {/*        {product.title}*/}
+        {/*      </Text>*/}
+        {/*      <Text>{product.content}</Text>*/}
+        {/*    </Box>*/}
+        {/*  ))}*/}
+        {/*</Box>*/}
         <MenuSlider products={products} />
       </Box>
     </>

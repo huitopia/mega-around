@@ -168,6 +168,7 @@ export function SignUpBranch() {
                     placeholder={"8-20자의 영문/숫자/특수문자 조합으로 입력"}
                     sx={{ "::placeholder": { fontSize: "sm" } }}
                     value={password}
+                    type={"password"}
                   />
                   <InputRightElement>
                     {password.length > 0 &&
