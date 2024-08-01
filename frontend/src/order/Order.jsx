@@ -174,7 +174,7 @@ export function Order() {
         align={"center"}
         justify={"center"}
       >
-        이대역사거리점
+        {orderItem.branchName}
       </Flex>
       <Spacer />
       <Accordion allowMultiple mt={5}>
