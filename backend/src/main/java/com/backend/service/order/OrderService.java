@@ -38,7 +38,7 @@ public class OrderService {
             orderMapper.insertOrderProduct(orderProduct);
             totalCount += orderProduct.getCount();
         }
-        System.out.println("totalCount = " + totalCount);
+
         eventService.addStamp(orderItem.getCustomerId(), totalCount, orderItem.getCouponCount());
         return orderItem.getId();
     }
