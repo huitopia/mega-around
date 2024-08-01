@@ -49,8 +49,12 @@ export function ProductBodyComp({ branchId, mainCategory, subCategory }) {
             width={"250px"}
             value={product.id}
             key={product.id}
-            height={"330px"}
-            cursor={"pointer"}
+            height={"380px"}
+            _hover={{
+              cursor: "pointer",
+              filter: "auto",
+              brightness: "95%",
+            }}
             onClick={() => {
               setProductId(product.id);
               onOpen();
@@ -59,11 +63,17 @@ export function ProductBodyComp({ branchId, mainCategory, subCategory }) {
           >
             <CardBody>
               <VStack spacing={4}>
-                <Image
-                  height={"200px"}
-                  objectFit="cover"
-                  src={`https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/${product.file_path}`}
-                />
+                <Box overflow={"hidden"}>
+                  <Image
+                    height={"240px"}
+                    objectFit="cover"
+                    src={`https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/${product.file_path}`}
+                    transition={"transform 0.3s ease"}
+                    _hover={{
+                      transform: "scale(1.15)",
+                    }}
+                  />
+                </Box>
                 <Text
                   fontSize="lg"
                   as={"b"}
