@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
-  Divider,
   Flex,
   Grid,
   Heading,
@@ -26,22 +25,23 @@ function Stamp(props) {
     axios.get("/api/event/stamp").then((res) => {
       setStampCount(res.data);
     });
-    axios.get("/api/notice/stamp").then(res => {
+    axios.get("/api/notice/stamp").then((res) => {
       function createDate(data) {
         const result = [];
-        data.map((item) => {
-            const arr = item.content.split(" ");
-            const count = parseInt(arr[1].replace("개",""));
-            for (let i = 0; i < count; i++) {
-              result.push(item.createdAtString);
-            }
+        for (let i = data.length - 1; i >= 0; i--) {
+          const item = data[i];
+          const arr = item.content.split(" ");
+          const count = parseInt(arr[1].replace("개", ""));
+          for (let j = 0; j < count; j++) {
+            result.push(item.createdAtString);
+          }
         }
-          )
         return result;
       }
 
       const date = createDate(res.data);
-      setStampDate(date)});
+      setStampDate(date);
+    });
   }, []);
 
   if (stampCount === null || stampDate === null) {
@@ -50,17 +50,20 @@ function Stamp(props) {
 
   return (
     <Box maxWidth="1000px" mx={"auto"}>
-      <Box>
-        <Heading>Stamp</Heading>
-      </Box>
-      <Divider border={"1px solid black"} my={4} />
-      <Flex justify={"right"}>
+      <Flex justify={"right"} mt={"50px"} alignItems={"center"}>
         <Flex gap={2}>
           <Heading>스탬프</Heading>
           <Heading color={"red"}>{stampCount}</Heading>
         </Flex>
-        <Spacer/>
-        <Button onClick={() => onOpen()} colorScheme={"orange"} borderRadius={"20px"} w={"170px"}>적립내역 보기</Button>
+        <Spacer />
+        <Button
+          onClick={() => onOpen()}
+          colorScheme={"orange"}
+          borderRadius={"20px"}
+          w={"170px"}
+        >
+          적립내역 보기
+        </Button>
       </Flex>
       <Flex justify={"center"} mt={10}>
         <Box bgColor={"yellow"} w={"520px"} h={"300px"} borderRadius={"20px"}>
@@ -112,8 +115,7 @@ function Stamp(props) {
                         zIndex={1}
                         borderRadius={"10px"}
                       >
-                        <Text fontSize="xs">  발급일: {stampDate[box-1]}
-                        </Text>
+                        <Text fontSize="xs"> 발급일: {stampDate[box - 1]}</Text>
                       </Box>
                     </Box>
                   )}
@@ -125,7 +127,9 @@ function Stamp(props) {
       </Flex>
       <Box bg={"#f8f9fa"} mt={12} p={7}>
         <Text fontWeight={"bold"}>유의사항</Text>
-        <Box whiteSpace="pre-line" fontSize={"sm"} lineHeight={2}>{longText}</Box>
+        <Box whiteSpace="pre-line" fontSize={"sm"} lineHeight={2}>
+          {longText}
+        </Box>
       </Box>
       <StampModal isOpen={isOpen} onClose={onClose} />
     </Box>
