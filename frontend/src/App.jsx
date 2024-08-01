@@ -26,6 +26,7 @@ import { MyPageBranch } from "./user/MyPageBranch.jsx";
 import { EditCustomer } from "./user/EditCustomer.jsx";
 import { EditBranch } from "./user/EditBranch.jsx";
 import { BranchList } from "./branch/BranchList.jsx";
+import { FindCustomer } from "./user/FindCustomer.jsx";
 
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
@@ -69,6 +70,7 @@ const router = createBrowserRouter([
       { path: "mypage/branch/:id", element: <MyPageBranch /> },
       { path: "mypage/customer/edit/:id", element: <EditCustomer /> },
       { path: "mypage/branch/edit/:id", element: <EditBranch /> },
+      { path: "find-customerPassword", element: <FindCustomer /> },
     ],
   },
 ]);

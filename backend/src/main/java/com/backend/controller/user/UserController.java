@@ -224,4 +224,13 @@ public class UserController {
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
+
+    // 고객 비밀번호 재설정
+    @PutMapping("/user/customer/password")
+    public ResponseEntity modifyPassword(@RequestBody Customer customer) {
+        if (service.modifyPassword(customer)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
 }

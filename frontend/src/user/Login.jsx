@@ -97,7 +97,21 @@ export function Login() {
           {/*    또는*/}
           {/*  </AbsoluteCenter>*/}
           {/*</Box>*/}
-          <Divider mt={10} />
+          <Box display="flex">
+            <Box
+              mt={5}
+              fontSize="sm"
+              ml={"auto"}
+              mr={12}
+              cursor="pointer"
+              as={"u"}
+              color={"gray.500"}
+              onClick={() => navigate("/find-customerPassword")}
+            >
+              비밀번호 찾기
+            </Box>
+          </Box>
+          <Divider mt={5} />
 
           <Center>
             <Button

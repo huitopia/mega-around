@@ -325,4 +325,14 @@ public class UserService {
         List<Map<String, Object>> recommendList = userMapper.selectRecommendList();
         return recommendList;
     }
+
+    public boolean modifyPassword(Customer customer) {
+        Customer dbCustomer = getCustomerByEmail(customer.getEmail());
+        if (dbCustomer != null) {
+            customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+            userMapper.updatePassword(customer);
+            return true;
+        }
+        return false;
+    }
 }
