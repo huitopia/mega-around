@@ -4,12 +4,6 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
   Box,
   Button,
   ButtonGroup,
@@ -29,7 +23,6 @@ import {
   Spinner,
   Text,
   useDisclosure,
-  useToast,
   VStack,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
@@ -40,6 +33,7 @@ import { useNavigate } from "react-router-dom";
 import { CustomToast } from "../../component/CustomToast.jsx";
 import { OrderContext } from "../../order/component/OrderProvider.jsx";
 import { LoginContext } from "../../component/LoginProvider.jsx";
+import { CustomAlert } from "../../component/CustomAlert.jsx";
 
 export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
   const account = useContext(LoginContext);
@@ -55,13 +49,11 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [count, setCount] = useState(1);
   const navigate = useNavigate();
-  const toast = useToast();
   const {
     isOpen: alertIsOpen,
     onOpen: alertOnOpen,
     onClose: alertOnClose,
   } = useDisclosure();
-  const cancelRef = React.useRef();
   const [loading, setLoading] = useState(false);
   const { successToast, errorToast } = CustomToast();
   const directOrder = useContext(OrderContext);
@@ -87,14 +79,7 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
           console.log("Response: ", response.data);
         })
         .catch((error) => {
-          toast({
-            title: "상품 상세 조회 실패",
-            description: "Unable to fetch data.",
-            status: "error",
-            duration: 1500,
-            position: "top",
-            isClosable: true,
-          });
+          errorToast("상품 상세 조회 실패");
           console.error("Error:", error);
         })
         .finally();
@@ -151,24 +136,18 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
   };
 
   const handleDeleteButton = () => {
+    if (account.hasAuth() !== "admin") {
+      errorToast("접근 권한이 없습니다.");
+      return navigate("/");
+    }
     setLoading(true);
     axios
       .delete(`/api/products/${productId}`)
       .then(() => {
-        toast({
-          title: "상품 삭제 성공",
-          status: "success",
-          position: "top",
-          duration: 1500,
-        });
+        successToast("상품 삭제 성공");
       })
       .catch((error) => {
-        toast({
-          status: "warning",
-          description: "상품 삭제 중 문제가 발생하였습니다.",
-          position: "top",
-          duration: 1500,
-        });
+        errorToast("상품 삭제 실패");
         console.error("Error:", error);
       })
       .finally(() => {
@@ -244,13 +223,17 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
       <ModalContent>
         <ModalHeader textAlign={"center"}>{data.title}</ModalHeader>
         <ModalCloseButton />
-        <VStack hidden={account.hasAuth !== "admin"}>
+        <VStack hidden={account.hasAuth() !== "admin"}>
           <ButtonGroup>
             <Button onClick={handleUpdateButton}>
               {/* 수정하기 */}
               <FontAwesomeIcon icon={faPenToSquare} />
             </Button>
-            <Button onClick={alertOnOpen}>
+            <Button
+              onClick={() => {
+                alertOnOpen();
+              }}
+            >
               {/* 삭제하기 */}
               <FontAwesomeIcon icon={faTrashCan} />
             </Button>
@@ -338,35 +321,16 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
           </VStack>
         </ModalFooter>
       </ModalContent>
-      <AlertDialog
-        leastDestructiveRef={cancelRef}
+      <CustomAlert
         isOpen={alertIsOpen}
         onClose={alertOnClose}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              상품 삭제
-            </AlertDialogHeader>
-            <AlertDialogBody>
-              {data.title} 상품을 삭제하시겠습니까?
-            </AlertDialogBody>
-            <AlertDialogFooter>
-              <Button
-                colorScheme="red"
-                isLoading={loading}
-                onClick={handleDeleteButton}
-                ml={3}
-              >
-                Delete
-              </Button>
-              <Button ref={cancelRef} onClick={alertOnClose}>
-                Cancel
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
+        alertHeader={"상품 삭제"}
+        alertBody={`${data.title} 상품을 삭제하시겠습니까?`}
+        onClick={handleDeleteButton}
+        isLoading={loading}
+        alertButtonContent={"Delete"}
+        buttonColor={"red"}
+      />
     </Modal>
   );
 };
