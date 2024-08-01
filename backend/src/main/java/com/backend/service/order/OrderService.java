@@ -47,6 +47,9 @@ public class OrderService {
         List<OrderItem> orderItemList = orderMapper.selectOrderItemList(customerId, period, stateId, branchId);
         for (OrderItem orderItem : orderItemList) {
             List<OrderProduct> orderProductList = orderMapper.selectOrderProductByOrderId(orderItem.getId());
+            // 포장 옵션 리스트 변환
+            List<Boolean> option = objectMapper.readValue(orderItem.getOptions(), List.class);
+            orderItem.setOption(option);
             // TODO. 필요없는 데이터 주석 처리
             for (OrderProduct orderProduct : orderProductList) {
                 List<Integer> optionList = objectMapper.readValue(orderProduct.getOptions(), List.class);
@@ -73,6 +76,9 @@ public class OrderService {
         } else {
             orderItem = orderMapper.selectOrderItemByOrderId(id);
         }
+        // 포장 옵션 List로 변환
+        List<Boolean> option = objectMapper.readValue(orderItem.getOptions(), List.class);
+        orderItem.setOption(option);
 
         // 주문 정보에 주문 상품 담기
         List<OrderProduct> orderProductList = orderMapper.selectOrderProductByOrderId(orderItem.getId());
