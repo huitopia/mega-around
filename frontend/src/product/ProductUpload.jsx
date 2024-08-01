@@ -8,20 +8,20 @@ import {
   FormHelperText,
   FormLabel,
   Heading,
+  HStack,
   Img,
   Input,
   NumberInput,
   NumberInputField,
   Textarea,
-  VStack,
 } from "@chakra-ui/react";
 import { CategoryComp } from "./component/CategoryComp.jsx";
 import { useContext, useEffect, useState } from "react";
 import { OptionComp } from "./component/OptionComp.jsx";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { CustomToast } from "../component/CustomToast.jsx";
 import { LoginContext } from "../component/LoginProvider.jsx";
+import axios from "axios";
 
 export const ProductUpload = () => {
   const [title, setTitle] = useState("");
@@ -36,9 +36,6 @@ export const ProductUpload = () => {
   const navigate = useNavigate();
   const { successToast, errorToast } = CustomToast();
   const account = useContext(LoginContext);
-  // TODO :
-  //  빈 값 전송 금지
-  //  가격 0원 이하 전송 금지
 
   useEffect(() => {
     if (account.hasAuth() !== "admin") {
@@ -46,8 +43,13 @@ export const ProductUpload = () => {
       return navigate("/");
     }
   }, []);
+
   const handleSaveClick = () => {
     setLoading(true);
+    if (!checkValidation()) {
+      setLoading(false);
+      return false;
+    }
     axios
       .postForm("/api/products/add", {
         title,
@@ -69,6 +71,30 @@ export const ProductUpload = () => {
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  const checkValidation = () => {
+    if (title.length === 0 && title.length <= 30) {
+      errorToast("상품명은 30자 이내로 입력해주세요.");
+      return false;
+    }
+    if (mainCategory.length === 0 || subCategory.length === 0) {
+      errorToast("카테고리를 선택해주세요.");
+      return false;
+    }
+    if (content.length === 0 && content.length <= 100) {
+      errorToast("상세 내용을 100자 이내로 입력해주세요.");
+      return false;
+    }
+    if (option.length === 0) {
+      errorToast("퍼스널 옵션을 선택해주세요.");
+      return false;
+    }
+    if (price >= 0) {
+      errorToast("가격을 입력해주세요.");
+      return false;
+    }
+    return true;
   };
 
   const category = (category) => {
@@ -105,16 +131,16 @@ export const ProductUpload = () => {
   return (
     <Box maxWidth="1000px" mx={"auto"}>
       <Box>
-        <Heading>Upload</Heading>
+        <Heading>상품 등록</Heading>
       </Box>
       <Divider border={"1px solid black"} my={4} />
       <Box maxWidth="700px" mx={"auto"}>
-        <Box>
+        <Box mt={"40px"}>
           <FormControl>
-            <FormLabel>썸네일</FormLabel>
             <Center>
               <Img src={imageSrc} height={"300px"}></Img>
             </Center>
+            <FormLabel mt={"15px"}>썸네일</FormLabel>
             <Input
               multiple
               type={"file"}
@@ -126,7 +152,7 @@ export const ProductUpload = () => {
             </FormHelperText>
           </FormControl>
         </Box>
-        <Box>
+        <Box mt={"20px"}>
           <FormControl>
             <FormLabel>상품명</FormLabel>
             <Input
@@ -136,10 +162,10 @@ export const ProductUpload = () => {
             />
           </FormControl>
         </Box>
-        <Box>
+        <Box mt={"20px"}>
           <CategoryComp category={category} />
         </Box>
-        <Box>
+        <Box mt={"20px"}>
           <FormControl>
             <FormLabel>상세 내용</FormLabel>
             <Textarea
@@ -149,10 +175,10 @@ export const ProductUpload = () => {
             />
           </FormControl>
         </Box>
-        <Box>
+        <Box mt={"20px"}>
           <OptionComp options={options} />
         </Box>
-        <Box maxWidth="60%">
+        <Box maxWidth="60%" mt={"20px"}>
           <FormControl>
             <FormLabel>가격</FormLabel>
             <NumberInput defaultValue={0} min={0} max={100000}>
@@ -161,10 +187,10 @@ export const ProductUpload = () => {
             <FormHelperText>가격은 0원 이상부터 가능합니다.</FormHelperText>
           </FormControl>
         </Box>
-        <Box>
+        <Box mt={"40px"}>
           <Center>
             <ButtonGroup variant="solid">
-              <VStack>
+              <HStack>
                 <Button
                   isLoading={loading}
                   colorScheme={"orange"}
@@ -180,7 +206,7 @@ export const ProductUpload = () => {
                 >
                   Cancel
                 </Button>
-              </VStack>
+              </HStack>
             </ButtonGroup>
           </Center>
         </Box>
