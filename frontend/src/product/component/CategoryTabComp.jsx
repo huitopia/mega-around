@@ -64,7 +64,17 @@ export function CategoryTabComp(props) {
     <Tabs isFitted variant="enclosed">
       <TabList mb="3em">
         {mainCategoryOption.map((category) => (
-          <Tab key={category} onClick={() => handleMainCategory(category)}>
+          <Tab
+            cursor={"pointer"}
+            as={"b"}
+            key={category}
+            onClick={() => handleMainCategory(category)}
+            sx={
+              category === mainCategory
+                ? { bg: "#e8e4e0", color: "#401F02" }
+                : {}
+            }
+          >
             {category}
           </Tab>
         ))}
@@ -80,7 +90,7 @@ export function CategoryTabComp(props) {
             m="1"
             sx={
               selectSubCategory === subCategory
-                ? { bg: "blue.400", color: "white" }
+                ? { bg: "#ffde00", color: "#401F02" }
                 : {}
             }
           >
