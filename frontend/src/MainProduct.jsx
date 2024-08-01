@@ -58,14 +58,15 @@ export function MainProduct() {
             <Box flex={"2"} textAlign="center">
               <Text fontWeight={"bold"} fontSize={"1.4rem"}>
                 {account.nickName}
-                {account.branchName}&nbsp;님 💕
+                {account.branchName}&nbsp;님 ☕
               </Text>
             </Box>
             <Box
               flex={"3"}
               textAlign={"center"}
               fontSize={"1.2rem"}
-              bgColor={"#F5F6CE"}
+              bgColor={"pink"}
+              color={"orange"}
               maxWidth={"700px"}
               height={"50px"}
               borderRadius={10}
@@ -117,7 +118,9 @@ export function MainProduct() {
             <Text>추천메뉴</Text>
           )}
         </Box>
-        <MenuSlider products={products} />
+        <Box width="100%" overflow="hidden">
+          <MenuSlider products={products} />
+        </Box>
       </Box>
     </>
   );
