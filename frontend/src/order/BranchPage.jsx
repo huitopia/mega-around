@@ -8,7 +8,7 @@ export function BranchPage() {
   const branchId = 3;
 
   return (
-    <Box maxWidth="1000px" mx={"auto"}>
+    <Box mx={"auto"}>
       <Box mt={"50px"} mb={"50px"}>
         <Center>
           <Heading>Branch Page</Heading>

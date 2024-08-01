@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Divider,
   Flex,
   Image,
   Modal,
@@ -41,15 +42,11 @@ export function BranchPageModalComp({
 
   function handleStateChange() {
     axios
-      .put(
-        `/api/orders`,
-        orderItem,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
+      .put(`/api/orders`, orderItem, {
+        headers: {
+          "Content-Type": "application/json",
         },
-      )
+      })
       .then(() => {
         onClose();
         successToast("변경되었습니다");
@@ -61,17 +58,30 @@ export function BranchPageModalComp({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalContent>
-        <ModalHeader>주문 상세</ModalHeader>
+        <ModalHeader fontSize={"25px"}>{orderItem.id} 번 주문</ModalHeader>
         <ModalBody>
-          <Box>
-          {orderItem.isTakeOut == 1 ? "포장해주세요." : "매장에서 먹고 갈게요"}
-          </Box>
-          <Box>
-            {orderItem.option && (orderItem.option[0] ? "캐리어/봉투 필요해요" : "")}
-          </Box>
-          <Box>
-            {orderItem.request}
-          </Box>
+          <Flex>
+            <Box fontWeight={"bold"} mr={5}>
+              요청사항
+            </Box>
+            <Box>{orderItem.request}</Box>
+          </Flex>
+          <Flex mb={5}>
+            <Box fontWeight={"bold"} mr={5}>
+              포장옵션
+            </Box>
+            <Box>
+              <Box>
+                {orderItem.isTakeOut == 1
+                  ? "포장해주세요."
+                  : "매장에서 먹고 갈게요"}
+              </Box>
+              <Box>
+                {orderItem.option &&
+                  (orderItem.option[0] ? "캐리어/봉투 필요해요" : "")}
+              </Box>
+            </Box>
+          </Flex>
           {orderItem.orderProduct.map((item, index) => (
             <Box key={index} mb={4}>
               <Flex>
@@ -95,13 +105,18 @@ export function BranchPageModalComp({
                   <Box>{item.count}개</Box>
                 </Box>
               </Flex>
+              {index < orderItem.orderProduct.length - 1 && (
+                <Divider borderColor="gray.200" my={4} />
+              )}
             </Box>
           ))}
         </ModalBody>
         <ModalFooter>
-          <Button onClick={onClose}>닫기</Button>
+          <Button onClick={onClose} mr={3} colorScheme={"pink"}>
+            닫기
+          </Button>
           {stateId === 3 || (
-            <Button onClick={handleStateChange}>
+            <Button onClick={handleStateChange} colorScheme={"orange"}>
               {stateId === 1 ? "제조중으" : "제조완료"}로 변경
             </Button>
           )}
