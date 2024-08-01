@@ -1,15 +1,30 @@
-import { Box, Center, Spinner, Table, Td, Th, Tr } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Spinner,
+  Table,
+  Td,
+  Th,
+  Tr,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../component/LoginProvider.jsx";
 import axios from "axios";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import ConfirmationModal from "./component/ConfirmationModal.jsx";
+import { CustomToast } from "../component/CustomToast.jsx";
 
 export function MyPageBranch() {
   const account = useContext(LoginContext);
   const [branch, setBranch] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
-  console.log(id);
+  const { onOpen, onClose, isOpen } = useDisclosure();
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { successToast, errorToast, infoToast } = CustomToast();
+
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       return navigate("/login");
@@ -36,6 +51,19 @@ export function MyPageBranch() {
     );
   }
 
+  function handleBranchPasswordCheck() {
+    setIsLoading(true);
+    axios
+      .post(`/api/user/branch/password/${id}`, { password })
+      .then(() => navigate(`/mypage/branch/edit/${id}`))
+      .catch((err) => {
+        err.response.status === 401
+          ? errorToast("비밀번호가 맞지 않습니다")
+          : errorToast("비밀번호 확인 중 오류가 발생했습니다");
+      })
+      .finally(setIsLoading(false));
+  }
+
   return (
     <>
       <Center mt={10}>
@@ -53,7 +81,7 @@ export function MyPageBranch() {
                   </Tr>
                   <Tr>
                     <Th>지점명</Th>
-                    <Td>{branch.nickName}</Td>
+                    <Td>{branch.branchName}</Td>
                   </Tr>
                   <Tr>
                     <Th>주소</Th>
@@ -61,30 +89,37 @@ export function MyPageBranch() {
                   </Tr>
                   <Tr>
                     <Th>가입일</Th>
-                    <Td>{branch.createdAt}</Td>
+                    <Td>{branch.createdAtTime}</Td>
                   </Tr>
                 </Table>
               </Center>
-              <Link to={`/mypage/branch/edit/${id}`}>
-                <Box display="flex">
-                  <Box
-                    mt={10}
-                    fontSize="sm"
-                    ml={"auto"}
-                    mr={12}
-                    cursor="pointer"
-                    as={"u"}
-                    color={"gray.500"}
-                    // onClick={() => navigate(`/mypage/branch/edit/${id}`)}
-                  >
-                    회원정보 수정
-                  </Box>
+              <Box display="flex">
+                <Box
+                  mt={10}
+                  fontSize="sm"
+                  ml={"auto"}
+                  mr={12}
+                  cursor="pointer"
+                  as={"u"}
+                  color={"gray.500"}
+                  onClick={onOpen}
+                >
+                  지점정보 수정
                 </Box>
-              </Link>
+              </Box>
             </>
           )}
         </Box>
       </Center>
+      <ConfirmationModal
+        modalheader={"본인 확인"}
+        modalbody={"비밀번호를 입력해주세요"}
+        isOpen={isOpen}
+        onClose={onClose}
+        setPassword={setPassword}
+        isLoading={isLoading}
+        onConfirm={handleBranchPasswordCheck}
+      />
     </>
   );
 }

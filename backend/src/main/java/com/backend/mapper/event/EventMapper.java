@@ -24,13 +24,13 @@ public interface EventMapper {
 
     @Insert("""
             INSERT INTO stamp
-            (customer_id, count) VALUES (#{count}, #{customerId})
+            (customer_id, count) VALUES (#{customerId}, #{count})
             """)
     int insertStamp(Integer customerId, Integer count);
 
     @Insert("""
             INSERT INTO coupon
-            (customer_id, count) VALUES (#{count}, #{customerId})
+            (customer_id, count) VALUES (#{customerId}, #{count})
             """)
     int insertCoupon(Integer customerId, Integer count);
 

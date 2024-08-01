@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Center,
+  Flex,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -10,23 +11,25 @@ import {
   InputRightElement,
   Spinner,
   Text,
+  Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
-import { CustomToast } from "./component/CustomToast.jsx";
-import { LoginContext } from "./component/LoginProvider.jsx";
-import ConfirmationModal from "./user/component/CustomModal.jsx";
+import { CustomToast } from "../component/CustomToast.jsx";
+import { LoginContext } from "../component/LoginProvider.jsx";
+import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import DeleteModal from "./component/DeleteModal.jsx";
 
-export function CustomerEdit() {
-  const [customer, setCustomer] = useState(null);
+export function EditCustomer() {
+  const [customer, setCustomer] = useState({ password: "" });
   const [oldNickName, setOldNickName] = useState("");
-  const [oldPassword, setOldPassword] = useState("");
-  const [isCheckedNickName, setIsCheckedNickName] = useState(false);
   const [passwordCheck, setPasswordCheck] = useState("");
   const [isValidPassword, setIsValidPassword] = useState(false);
+  const [disableNickNameButton, setDisableNickNameButton] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const account = useContext(LoginContext);
@@ -38,7 +41,7 @@ export function CustomerEdit() {
       .get(`/api/user/customer/${account.id}`)
       .then((res) => {
         const dbCustomer = res.data;
-        setCustomer({ ...dbCustomer });
+        setCustomer({ ...dbCustomer, password: "" });
         setOldNickName(dbCustomer.nickName);
       })
       .catch((err) => {
@@ -61,69 +64,69 @@ export function CustomerEdit() {
     } else {
       setIsValidPassword(false);
     }
-  }, [customer, passwordPattern]);
+  }, [customer.password]);
 
   function handleCustomerUpdate() {
     setIsLoading(true);
     const customerCopy = { ...customer };
     axios
-      .putForm(`/api/user/customer/${account.id}`, {
+      .put(`/api/user/customer/${account.id}`, {
         ...customerCopy,
-        oldPassword,
       })
       .then((res) => {
         account.logout();
         account.login(res.data.token);
         successToast("회원 정보가 수정되었습니다");
+        navigate(`/mypage/customer/${customer.id}`);
       })
       .catch((err) => {
-        if (err.response.status === 401) {
-          errorToast("비밀번호가 다릅니다");
-        } else if (err.response.status === 400) {
-          errorToast("사용할 수 없는 비밀번호이거나 닉네임입니다");
+        if (err.response.status === 400) {
+          errorToast(err.response.data);
         } else {
           errorToast("회원 정보 수정 중 문제가 발생했습니다");
         }
       })
       .finally(() => {
-        setOldPassword("");
-        onClose();
         setIsLoading(false);
-        navigate(`/myPage/customer/${customer.id}`);
       });
   }
 
-  let isCheckedPassword = customer?.password === passwordCheck;
+  function handleCustomerDelete() {
+    setIsLoading(true);
+    axios
+      .delete(`/api/user/customer/${account.id}`)
+      .then(() => {
+        infoToast("탈퇴 되었습니다. 그동안 이용해 주셔서 감사합니다");
+        account.logout();
+        navigate("/");
+      })
+      .catch(() => errorToast("회원 탈퇴 중 문제가 발생하였습니다"))
+      .finally(() => {
+        setIsLoading(false);
+        onClose();
+      });
+  }
 
-  // let disabledNickNameCheckButton = true;
-  // let disabled = false;
-
-  // if (customer?.nickName.length === 0) {
-  //   disabledNickNameCheckButton = false;
-  // }
-
-  // if (!isCheckedNickName) {
-  //   disabled = true;
-  // }
-
-  // if (!isCheckedPassword) {
-  //   disabled = true;
-  // }
-
-  // if (!disabledNickNameCheckButton) {
-  //   disabled = true;
-  // }
-
-  // if (!isValidPassword && customer?.password?.length > 0) {
-  //   disabled = true;
-  // }
+  let isCheckedPassword = customer.password === passwordCheck;
 
   if (customer === null) {
     return <Spinner />;
   }
 
-  function handleCustomerDelete() {
-    axios.delete("/api/user/customer/${account.id}", account.id);
+  function handleCustomerCheckNickName() {
+    axios
+      .get(
+        `/api/user/customer/nickName/${customer.nickName}`,
+        customer.nickName,
+      )
+      .then(() => infoToast("사용 가능한 닉네임입니다"))
+      .catch((err) => {
+        if (err.response.status === 409) {
+          errorToast("이미 존재하는 닉네임입니다");
+        } else {
+          errorToast("유효하지 않은 닉네임입니다");
+        }
+      });
   }
 
   return (
@@ -141,8 +144,21 @@ export function CustomerEdit() {
               </FormControl>
             </Box>
             <Box mb={7}>
-              <FormControl isRequired>
-                <FormLabel>새로운 비밀번호</FormLabel>
+              <FormControl>
+                <FormLabel>
+                  새 비밀번호{" "}
+                  <Tooltip
+                    hasArrow
+                    label="비밀번호 변경 시에만 입력해주세요"
+                    placement="right"
+                    closeDelay={1000}
+                  >
+                    <FontAwesomeIcon
+                      icon={faCircleInfo}
+                      style={{ color: "#638097" }}
+                    />
+                  </Tooltip>
+                </FormLabel>
                 <InputGroup>
                   <Input
                     type="password"
@@ -153,7 +169,7 @@ export function CustomerEdit() {
                     }
                   />
                   <InputRightElement>
-                    {customer?.password?.length > 0 &&
+                    {customer.password.length === 0 ||
                       (isValidPassword ? (
                         <CheckIcon color="green.500" />
                       ) : (
@@ -161,8 +177,8 @@ export function CustomerEdit() {
                       ))}
                   </InputRightElement>
                 </InputGroup>
-                {customer?.password?.length > 0 &&
-                  (isValidPassword || (
+                {customer.password.length === 0 ||
+                  (!isValidPassword && (
                     <FormHelperText color={"#dc7b84"}>
                       영문 대/소문자, 숫자, 특수문자를 하나 이상 포함하여 8-20자
                       이내로 입력해 주세요.
@@ -171,14 +187,15 @@ export function CustomerEdit() {
               </FormControl>
             </Box>
             <Box mb={7}>
-              <FormControl isRequired>
-                <FormLabel>비밀번호 재입력</FormLabel>
+              <FormControl>
+                <FormLabel>새 비밀번호 확인</FormLabel>
                 <InputGroup>
                   <Input
                     type="password"
                     onChange={(e) => setPasswordCheck(e.target.value)}
                     placeholder={"새 비밀번호를 다시 입력해 주세요"}
                     sx={{ "::placeholder": { fontSize: "sm" } }}
+                    value={passwordCheck}
                   />
                   <InputRightElement>
                     {passwordCheck.length > 0 &&
@@ -198,30 +215,36 @@ export function CustomerEdit() {
               </FormControl>
             </Box>
             <Box mb={7}>
-              <FormControl isRequired>
+              <FormControl>
                 <FormLabel>닉네임</FormLabel>
-                <InputGroup>
+                <Flex>
                   <Input
-                    value={customer?.nickName || ""}
+                    value={customer.nickName}
                     onChange={(e) => {
                       setCustomer({
                         ...customer,
                         nickName: e.target.value.trim(),
                       });
-                      // setIsCheckedNickName(false);
+                      setDisableNickNameButton(false);
                     }}
                   />
-                </InputGroup>
-
-                {/*{isCheckedNickName || (*/}
-                {/*  <FormHelperText color={"#dc7b84"}>*/}
-                {/*    중복된 닉네임입니다.*/}
-                {/*  </FormHelperText>*/}
-                {/*)}*/}
+                  <Box w={5} />
+                  <Button
+                    isDisabled={
+                      disableNickNameButton || oldNickName === customer.nickName
+                    }
+                    onClick={handleCustomerCheckNickName}
+                    variant={"outline"}
+                    colorScheme={"purple"}
+                    fontSize={"sm"}
+                    width={"120px"}
+                    borderRadius={5}
+                  >
+                    중복확인
+                  </Button>
+                </Flex>
               </FormControl>
             </Box>
-
-            {/*<Flex justifyContent={"space-between"} mt={10} alignItems={"end"}>*/}
             <Center mt={10}>
               <Button
                 bg={"black"}
@@ -229,13 +252,16 @@ export function CustomerEdit() {
                 width={"200px"}
                 fontSize={"14px"}
                 borderRadius={"40"}
-                // isDisabled={disabled}
-                onClick={onOpen}
+                isDisabled={
+                  customer.password.length > 0 &&
+                  !isCheckedPassword &&
+                  !isValidPassword
+                }
+                onClick={handleCustomerUpdate}
               >
                 수정
               </Button>
             </Center>
-
             <Box display="flex">
               <Box
                 mt={3}
@@ -244,7 +270,7 @@ export function CustomerEdit() {
                 cursor="pointer"
                 as={"u"}
                 color={"gray.500"}
-                onClick={handleCustomerDelete}
+                onClick={onOpen}
               >
                 회원탈퇴
               </Box>
@@ -252,14 +278,11 @@ export function CustomerEdit() {
           </Box>
         </Box>
       </Center>
-      <ConfirmationModal
+      <DeleteModal
         isOpen={isOpen}
         onClose={onClose}
-        onConfirm={handleCustomerUpdate}
+        onConfirm={handleCustomerDelete}
         isLoading={isLoading}
-        setPassword={setOldPassword}
-        modalheader={"수정하시겠습니까?"}
-        modalbody={"비밀번호를 입력해주세요"}
       />
     </>
   );

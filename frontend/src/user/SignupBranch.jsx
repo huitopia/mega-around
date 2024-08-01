@@ -74,12 +74,12 @@ export function SignUpBranch() {
               if (err.response.status === 409) {
                 errorToast("이미 존재하는 이메일입니다.");
               } else if (err.response.status === 404) {
-                errorToast("이메일을 입력해주세요.");
+                errorToast("이메일을 입력해 주세요");
               } else {
                 infoToast("회원가입이 가능한 이메일입니다.");
               }
             })
-        : errorToast("유효한 비밀번호를 입력해주세요.");
+        : errorToast("유효한 이메일을 입력해 주세요");
     }
   }
 
