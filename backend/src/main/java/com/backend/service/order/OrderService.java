@@ -38,6 +38,7 @@ public class OrderService {
             orderMapper.insertOrderProduct(orderProduct);
             totalCount += orderProduct.getCount();
         }
+        System.out.println("totalCount = " + totalCount);
         eventService.addStamp(orderItem.getCustomerId(), totalCount, orderItem.getCouponCount());
         return orderItem.getId();
     }
@@ -104,7 +105,9 @@ public class OrderService {
             case 2 -> " 의 제조를 완료했습니다. 1시간 내에 수령해주세요.";
             default -> " 알 수 없는 상태입니다.";
          };
-        String content = orderItem.getOrderProduct().get(0).getProductName() + stateMessage;
+        Integer productCount = orderItem.getOrderProduct().size();
+        String countString = productCount > 1 ? "외" + (productCount - 1) + "개" : "";
+        String content = orderItem.getOrderProduct().get(0).getProductName() + countString + stateMessage;
         notice.setContent(content);
         eventMapper.insertStateNotice(notice);
         return eventMapper.selectAllNoticeByCustomerId(orderItem.getCustomerId());
