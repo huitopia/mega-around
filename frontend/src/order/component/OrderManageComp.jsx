@@ -61,8 +61,10 @@ export function OrderManageComp({
                     외 {order.orderProduct.length - 1}개
                   </Badge>
                 )}
+                {order.isTakeOut == 1 ? <Badge>포장</Badge> : <Badge>매장</Badge>}
+                {(order.option[0] || order.option[1] || order.request) && (<Badge>포장옵션</Badge>)}
                 {order.orderProduct[0].optionList.length > 0 && (
-                  <Badge>옵션</Badge>
+                  <Badge>상품옵션</Badge>
                 )}
               </Box>
               <Image
