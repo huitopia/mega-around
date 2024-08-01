@@ -3,15 +3,17 @@ import {
   Button,
   Center,
   FormControl,
+  FormLabel,
   Heading,
   Input,
   InputGroup,
   Text,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CustomToast } from "../component/CustomToast.jsx";
+import { formLabel } from "../component/css/style.js";
 
 export function FindCustomerPassword() {
   const [email, setEmail] = useState("");
@@ -32,20 +34,33 @@ export function FindCustomerPassword() {
 
   return (
     <>
+      <Box
+        height={"280px"}
+        backgroundColor={"#444444"}
+        textAlign={"center"}
+        display={"flex"}
+        alignItems={"center"}
+        justifyContent="center"
+      >
+        <Box>
+          <Heading size="2xl" textColor={"#FDD000"}>
+            MEGA AROUND
+          </Heading>
+          <Text textColor={"pink"}>비밀번호 재설정</Text>
+        </Box>
+      </Box>
       <Center>
         <Box>
           <Center>
             <Box>
-              <Heading mt={20} color={"#FDD000"}>
-                mega-around
-              </Heading>
-              <Center mt={5} fontSize={"lg"} fontWeight={"bold"}>
-                <Text>비밀번호 재설정</Text>
+              <Center mt={10} fontSize={"lg"} fontWeight={"bold"}>
+                <Text>고객 비밀번호 재설정</Text>
               </Center>
             </Box>
           </Center>
           <Box mt={8}>
             <FormControl>
+              <FormLabel {...formLabel}>이메일</FormLabel>
               <InputGroup width={"400px"}>
                 <Input
                   placeholder={"이메일을 입력하세요"}
@@ -55,8 +70,9 @@ export function FindCustomerPassword() {
               </InputGroup>
             </FormControl>
           </Box>
-          <Box mt={3}>
+          <Box mt={6}>
             <FormControl>
+              <FormLabel {...formLabel}>비밀번호</FormLabel>
               <InputGroup width={"400px"}>
                 <Input
                   placeholder={"재설정 할 비밀번호를 입력하세요"}
@@ -70,11 +86,12 @@ export function FindCustomerPassword() {
           <Box mt={10}>
             <Button
               onClick={handleCustomerPassword}
-              bg={"black"}
+              bg={"#444444"}
               color={"white"}
               width={"400px"}
               fontSize={"14px"}
               borderRadius={"40"}
+              _hover={{ backgroundColor: "gray.500" }}
             >
               비밀번호 재설정
             </Button>

@@ -17,10 +17,10 @@ export function SignUp() {
           <Heading size="2xl" textColor={"#FDD000"}>
             MEGA AROUND
           </Heading>
-          <Text textColor={"pink"}>마이페이지</Text>
+          <Text textColor={"pink"}>회원가입</Text>
         </Box>
       </Box>
-      <Center mt={"230px"}>
+      <Center mt={"140px"}>
         <Flex w={700} justifyContent={"space-between"}>
           <Button
             w={250}
