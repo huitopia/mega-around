@@ -96,4 +96,11 @@ public interface EventMapper {
                 WHERE customer_id = #{customerId}
             """)
     int addStamp(Integer customerId, Integer count);
+
+    @Update("""
+    UPDATE notice
+    SET is_read = true
+    WHERE customer_id = #{customerId}
+""")
+    void updateNotice(Integer customerId);
 }

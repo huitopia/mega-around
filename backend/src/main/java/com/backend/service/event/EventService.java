@@ -72,4 +72,8 @@ public class EventService {
     public List<Notice> getAlarm(Integer customerId) {
         return eventMapper.selectAllNoticeByCustomerId(customerId);
     }
+
+    public void modifyNotice(Integer customerId) {
+        eventMapper.updateNotice(customerId);
+    }
 }
