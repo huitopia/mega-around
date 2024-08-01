@@ -1,4 +1,4 @@
-import { Box, Divider, Heading } from "@chakra-ui/react";
+import { Box, Center, Divider, Heading } from "@chakra-ui/react";
 import { CategoryTabComp } from "./component/CategoryTabComp.jsx";
 import { useState } from "react";
 import { ProductBodyComp } from "./component/ProductBodyComp.jsx";
@@ -17,9 +17,11 @@ export const ProductList = () => {
   };
 
   return (
-    <Box maxWidth="1000px" mx={"auto"}>
-      <Box>
-        <Heading>List</Heading>
+    <Box maxWidth="1200px" mx={"auto"}>
+      <Box mt={"50px"} mb={"50px"}>
+        <Center>
+          <Heading>MEGA MENU</Heading>
+        </Center>
       </Box>
       <Divider border={"1px solid black"} my={4} />
       <CategoryTabComp category={category} />
