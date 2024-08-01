@@ -89,4 +89,11 @@ public interface EventMapper {
     ORDER BY created_at DESC
 """)
     List<Notice> selectAllNoticeByCustomerId(Integer customerId);
+
+    @Update("""
+                UPDATE stamp
+                SET count = count + #{count}
+                WHERE customer_id = #{customerId}
+            """)
+    int addStamp(Integer customerId, Integer count);
 }

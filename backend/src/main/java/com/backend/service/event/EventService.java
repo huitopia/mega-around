@@ -29,30 +29,39 @@ public class EventService {
 
     @Description("스탬프/쿠폰 발급 및 알림 추가")
     public void addStamp(Integer customerId, Integer totalCount, Integer couponCount) {
-        Integer stampCount = eventMapper.selectStampByCustomerId(customerId) + totalCount;
+        System.out.println("totalCount = " + totalCount);
+        System.out.println("couponCount = " + couponCount);
+        // 쿠폰 사용
+        if (couponCount != 0) {
+            eventMapper.insertNotice(customerId, "coupon", "쿠폰을 " + couponCount + "개 사용하였습니다.");
+            eventMapper.updateCoupon(customerId, -couponCount);
+        }
+
+        // 스탬프 적립
+        eventMapper.insertNotice(customerId, "stamp", "스탬프가 " + totalCount + "개 적립되었습니다");
+        eventMapper.addStamp(customerId, totalCount);
+
+        // 총 스탬프 수 조회
+        Integer stampCount = eventMapper.selectStampByCustomerId(customerId);
+        System.out.println("stampCount = " + stampCount);
+
+        // 쿠폰으로 전환
         if (stampCount > 9) {
             Integer newCouponCount = stampCount / 10;
             Integer restStampCount = stampCount % 10;
-            if (couponCount != null) {
-                eventMapper.updateCoupon(customerId, newCouponCount - couponCount);
-            } else {
-                eventMapper.updateCoupon(customerId, newCouponCount);
-            }
+            System.out.println("newCouponCount = " + newCouponCount);
+            System.out.println("restStampCount = " + restStampCount);
+
+            // 쿠폰 적립 & 스탬프 전환
+            eventMapper.updateCoupon(customerId, newCouponCount);
             eventMapper.insertNotice(customerId, "coupon", "쿠폰이 " + newCouponCount + "개 적립되었습니다.");
             eventMapper.insertNotice(customerId, "stamp", "스탬프 " + newCouponCount * 10 + "개 가 쿠폰으로 전환되었습니다.");
+            // 스탬프 갯수 변경
             if (restStampCount > 0) {
                 eventMapper.updateStamp(customerId, restStampCount);
-                eventMapper.insertNotice(customerId, "stamp", "스탬프가 " + restStampCount + "개 적립되었습니다");
             } else {
                 eventMapper.updateStamp(customerId, 0);
             }
-        } else {
-            eventMapper.updateStamp(customerId, totalCount);
-        }
-
-        // 쿠폰 사용
-        if (couponCount != null) {
-            eventMapper.insertNotice(customerId, "coupon", "쿠폰을 " + couponCount + "개 사용하였습니다.");
         }
     }
 
