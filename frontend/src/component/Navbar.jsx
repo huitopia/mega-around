@@ -1,10 +1,8 @@
-import { Box, Center, Flex, Spacer, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { LoginContext } from "./LoginProvider.jsx";
 import MyPageMenu from "./MyPageMenu.jsx";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 
 export function Navbar({ updateAlarm }) {
   const account = useContext(LoginContext);
@@ -16,27 +14,32 @@ export function Navbar({ updateAlarm }) {
     <Flex
       height={"80px"}
       fontSize={"md"}
-      align={"center"}
-      justifyContent={"space-between"}
+      textAlign={"center"}
+      display={"flex"}
+      alignItems={"center"}
+      justifyContent={"space-around"}
       p={"30px"}
     >
-      <Box>
-        <Center onClick={() => navigate("/")} cursor={"pointer"}>
-          <Text>HOME</Text>
-        </Center>
+      <Box onClick={() => navigate("/")} cursor={"pointer"}>
+        <Text as={"b"} fontSize={"2xl"}>
+          MEGA AROUND
+        </Text>
       </Box>
-      <Box>
-        <Center onClick={() => navigate("branch/list")} cursor={"pointer"}>
-          <Text>MEGA ORDER</Text>
-        </Center>
+      <Box onClick={() => navigate("branch/list")} cursor={"pointer"}>
+        <Text>MEGA ORDER</Text>
       </Box>
       {!account.isLoggedIn() ? (
         <>
-          <Box onClick={() => navigate("/signup")} cursor={"pointer"}>
-            회원가입
-          </Box>
-          <Box onClick={() => navigate("/login")} cursor={"pointer"}>
-            로그인
+          <Box>
+            <Flex gap={2}>
+              <Box onClick={() => navigate("/signup")} cursor={"pointer"}>
+                SIGNUP
+              </Box>
+              <Box>/</Box>
+              <Box onClick={() => navigate("/login")} cursor={"pointer"}>
+                LOGIN
+              </Box>
+            </Flex>
           </Box>
         </>
       ) : (
@@ -46,18 +49,8 @@ export function Navbar({ updateAlarm }) {
           {/*{account.branchName}&nbsp;님*/}
           {/*</Box>*/}
           {/*{showTabs && <MyPageMenu />}*/}
-          <Spacer />
-          <Box mr={"50px"}>
+          <Box>
             <MyPageMenu setIsChanged={setIsChanged} updateAlarm={updateAlarm} />
-          </Box>
-          <Box
-            onClick={() => {
-              account.logout();
-              navigate("/");
-            }}
-            cursor={"pointer"}
-          >
-            <FontAwesomeIcon icon={faRightFromBracket} />
           </Box>
         </>
       )}
