@@ -26,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -318,5 +319,10 @@ public class UserService {
 
         // 지점 지우기
         userMapper.deleteBranchById(id);
+    }
+
+    public List<Map<String, Object>> getList() {
+        List<Map<String, Object>> recommendList = userMapper.selectRecommendList();
+        return recommendList;
     }
 }

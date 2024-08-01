@@ -4,6 +4,9 @@ import com.backend.domain.user.Branch;
 import com.backend.domain.user.Customer;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+import java.util.Map;
+
 @Mapper
 public interface UserMapper {
 
@@ -68,4 +71,12 @@ public interface UserMapper {
             DELETE FROM branch WHERE id=#{id};
             """)
     int deleteBranchById(Integer id);
+
+    @Select("""
+            SELECT p.id, i.file_path, p.title, p.content
+            FROM product p
+                LEFT JOIN product_img i ON p.id = i.product_id
+            ORDER BY RAND() LIMIT 12;
+            """)
+    List<Map<String, Object>> selectRecommendList();
 }

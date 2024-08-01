@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -21,8 +22,8 @@ public class UserController {
 
     // 메인페이지
     @GetMapping("/")
-    public ResponseEntity main(Authentication authentication) {
-        return null;
+    public List<Map<String, Object>> list() {
+        return service.getList();
     }
 
     // 고객 회원가입
