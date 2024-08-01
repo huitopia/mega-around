@@ -18,9 +18,9 @@ export const ProductList = () => {
 
   return (
     <Box maxWidth="1200px" mx={"auto"}>
-      <Box mt={"50px"} mb={"50px"}>
+      <Box mt={"60px"} mb={"60px"}>
         <Center>
-          <Heading>MEGA MENU</Heading>
+          <Heading size="2xl">MEGA MENU</Heading>
         </Center>
       </Box>
       <CategoryTabComp category={category} />
