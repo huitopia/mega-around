@@ -13,24 +13,17 @@ import {
   NumberInput,
   NumberInputField,
   Textarea,
-  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { CategoryComp } from "./component/CategoryComp.jsx";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { OptionComp } from "./component/OptionComp.jsx";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { CustomToast } from "../component/CustomToast.jsx";
+import { LoginContext } from "../component/LoginProvider.jsx";
 
-export function ProductUpload() {
-  // const [product, setProduct] = useState({
-  //   title: "",
-  //   content: "",
-  //   mainCategory: "",
-  //   subCategory: "",
-  //   option: [],
-  //   price: 0,
-  // });
+export const ProductUpload = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [mainCategory, setMainCategory] = useState("");
@@ -41,11 +34,18 @@ export function ProductUpload() {
   const [imageSrc, setImageSrc] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const toast = useToast();
-
-  // TODO : admin 권한만 접근 가능하게 수정
+  const { successToast, errorToast } = CustomToast();
+  const account = useContext(LoginContext);
+  // TODO :
   //  빈 값 전송 금지
   //  가격 0원 이하 전송 금지
+
+  useEffect(() => {
+    if (account.hasAuth() !== "admin") {
+      errorToast("접근 권한이 없습니다.");
+      navigate("/");
+    }
+  }, []);
   const handleSaveClick = () => {
     setLoading(true);
     axios
@@ -59,23 +59,11 @@ export function ProductUpload() {
         files,
       })
       .then(() => {
-        toast({
-          title: "상품 등록 성공",
-          status: "success",
-          position: "top",
-          duration: 1500,
-          isClosable: true,
-        });
+        successToast("상품 등록 성공");
         navigate("/product/list");
       })
       .catch((error) => {
-        toast({
-          title: "상품 등록 실패",
-          status: "error",
-          position: "top",
-          duration: 1500,
-          isClosable: true,
-        });
+        errorToast("상품 등록 실패");
         console.error("Error:", error);
       })
       .finally(() => {
@@ -123,9 +111,10 @@ export function ProductUpload() {
       <Box maxWidth="700px" mx={"auto"}>
         <Box>
           <FormControl>
-            {/* TODO : 썸네일 크기 수정 */}
             <FormLabel>썸네일</FormLabel>
-            <Img src={imageSrc}></Img>
+            <Center>
+              <Img src={imageSrc} height={"300px"}></Img>
+            </Center>
             <Input
               multiple
               type={"file"}
@@ -198,4 +187,4 @@ export function ProductUpload() {
       </Box>
     </Box>
   );
-}
+};
