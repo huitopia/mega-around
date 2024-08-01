@@ -62,7 +62,7 @@ export function CategoryTabComp(props) {
 
   return (
     <Tabs isFitted variant="enclosed">
-      <TabList mb="3em">
+      <TabList height={"60px"} mb={"20px"}>
         {mainCategoryOption.map((category) => (
           <Tab
             cursor={"pointer"}
@@ -71,7 +71,7 @@ export function CategoryTabComp(props) {
             onClick={() => handleMainCategory(category)}
             sx={
               category === mainCategory
-                ? { bg: "#e8e4e0", color: "#401F02" }
+                ? { bg: "#ffde00", color: "#401F02" }
                 : {}
             }
           >
