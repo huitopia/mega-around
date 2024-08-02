@@ -1,4 +1,4 @@
-import { Box, Center, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { LoginContext } from "./LoginProvider.jsx";
@@ -12,29 +12,40 @@ export function Navbar({ updateAlarm }) {
 
   return (
     <Flex
-      h={"40px"}
-      fontSize={"lg"}
-      align={"center"}
-      justifyContent={"space-between"}
-      backgroundColor={"yellow"}
+      position="fixed"
+      top={0}
+      width="100%"
+      height={"80px"}
+      fontSize={"md"}
+      textAlign={"center"}
+      display={"flex"}
+      alignItems={"center"}
+      justifyContent={"space-around"}
+      p={"30px"}
+      zIndex={1}
+      backgroundColor={"white"}
+      borderBottom={"1px solid #444444"}
     >
-      <Box>
-        <Center onClick={() => navigate("/")} cursor={"pointer"}>
-          <Text>Home</Text>
-        </Center>
+      <Box onClick={() => navigate("/")} cursor={"pointer"}>
+        <Text as={"b"} fontSize={"2xl"}>
+          MEGA AROUND
+        </Text>
       </Box>
-      <Box>
-        <Center onClick={() => navigate("branch/list")} cursor={"pointer"}>
-          <Text>메가오더</Text>
-        </Center>
+      <Box onClick={() => navigate("branch/list")} cursor={"pointer"}>
+        <Text>MEGA ORDER</Text>
       </Box>
       {!account.isLoggedIn() ? (
         <>
-          <Box onClick={() => navigate("/signup")} cursor={"pointer"}>
-            회원가입
-          </Box>
-          <Box onClick={() => navigate("/login")} cursor={"pointer"}>
-            로그인
+          <Box>
+            <Flex gap={2}>
+              <Box onClick={() => navigate("/signup")} cursor={"pointer"}>
+                SIGNUP
+              </Box>
+              <Box>/</Box>
+              <Box onClick={() => navigate("/login")} cursor={"pointer"}>
+                LOGIN
+              </Box>
+            </Flex>
           </Box>
         </>
       ) : (
@@ -44,15 +55,8 @@ export function Navbar({ updateAlarm }) {
           {/*{account.branchName}&nbsp;님*/}
           {/*</Box>*/}
           {/*{showTabs && <MyPageMenu />}*/}
-          <MyPageMenu isChanged={isChanged} setIsChanged={setIsChanged} updateAlarm={updateAlarm} />
-          <Box
-            onClick={() => {
-              account.logout();
-              navigate("/");
-            }}
-            cursor={"pointer"}
-          >
-            로그아웃
+          <Box>
+            <MyPageMenu setIsChanged={setIsChanged} updateAlarm={updateAlarm} />
           </Box>
         </>
       )}

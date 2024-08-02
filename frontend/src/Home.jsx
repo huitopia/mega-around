@@ -7,15 +7,17 @@ import { useState } from "react";
 export function Home() {
   const [updateAlarm, setUpdateAlarm] = useState(false);
   return (
-    <Box h={"100%"}>
+    <Box height={"100%"}>
       <Box>
         <Navbar updateAlarm={updateAlarm} />
       </Box>
-      <Box minHeight={"100vh"} position={"relative"} paddingBottom={"70px"}>
-        <Outlet context={{ setUpdateAlarm, updateAlarm }} />
-      </Box>
-      <Box>
-        <Footer />
+      <Box mt={"80px"} minHeight={"calc(100vh - 80px)"} position={"relative"}>
+        <Box minHeight={"calc(100vh - 80px - 300px)"}>
+          <Outlet context={{ setUpdateAlarm }} />
+        </Box>
+        <Box>
+          <Footer />
+        </Box>
       </Box>
     </Box>
   );

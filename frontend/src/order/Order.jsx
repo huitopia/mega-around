@@ -6,11 +6,11 @@ import {
   AccordionPanel,
   Box,
   Button,
+  ButtonGroup,
   Card,
   Center,
   Checkbox,
   CheckboxGroup,
-  Divider,
   Flex,
   FormControl,
   FormLabel,
@@ -22,6 +22,7 @@ import {
   Spacer,
   Stack,
   StackDivider,
+  Text,
 } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { ChevronRightIcon } from "@chakra-ui/icons";
@@ -160,228 +161,267 @@ export function Order() {
   }
 
   return (
-    <Box maxWidth="1000px" mx={"auto"}>
-      <Box mt={"50px"} mb={"50px"}>
-        <Center>
-          <Heading>Order</Heading>
-        </Center>
-      </Box>
-      <Divider border={"1px solid black"} my={4} />
-      <Flex
-        bg={"black"}
-        color={"white"}
-        h={"50px"}
-        align={"center"}
-        justify={"center"}
+    <Box>
+      <Box
+        height={"280px"}
+        backgroundColor={"#444444"}
+        textAlign={"center"}
+        display={"flex"}
+        alignItems={"center"}
+        justifyContent="center"
       >
-        {orderItem.branchName}
-      </Flex>
-      <Spacer />
-      <Accordion allowMultiple mt={5}>
-        <AccordionItem>
-          <h2>
-            <AccordionButton h={"50px"}>
-              <Flex gap={10} alignItems={"center"} w={"100%"}>
-                <Box fontWeight={"bold"} fontSize={"19px"} ml={3}>
-                  주문 상품
+        <Box>
+          <Heading size="2xl" textColor={"#FDD000"}>
+            ORDER LIST
+          </Heading>
+          <Text fontSize={"lg"} textColor={"pink"}>
+            {orderItem.branchName}
+          </Text>
+        </Box>
+      </Box>
+      <Box maxWidth="1200px" mx={"auto"} mt={"50px"}>
+        <Flex>
+          <Box w={"60%"}>
+            <Accordion allowMultiple>
+              <AccordionItem>
+                <h2>
+                  <AccordionButton>
+                    <Flex gap={10} alignItems={"center"} w={"100%"}>
+                      <Box fontWeight={"bold"} fontSize={"19px"} ml={3}>
+                        주문 상품
+                      </Box>
+                      <Spacer />
+                      <Box mr={2}>{orderItem.orderProduct[0].productName}</Box>
+                    </Flex>
+                    <AccordionIcon />
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel>
+                  <Card variant={"outline"}>
+                    <Stack divider={<StackDivider />} spacing="4">
+                      {orderItem.orderProduct.map((product, index) => (
+                        <Flex key={index} alignItems={"center"} p={3}>
+                          <Box>
+                            <Image
+                              src={
+                                "https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/" +
+                                product.filePath
+                              }
+                              h={"120px"}
+                            />
+                          </Box>
+                          <Box ml={4}>
+                            <Box fontSize={"18px"}>{product.productName}</Box>
+                            {product.optionList.map((item, index) => (
+                              <Box key={index} fontSize={"sm"}>
+                                {item}
+                              </Box>
+                            ))}
+                            <Box mt={3} fontSize={"21px"} mb={1}>
+                              {product.count}개
+                            </Box>
+                          </Box>
+                          <Spacer />
+                          <Box
+                            fontWeight={"bold"}
+                            fontSize={"23px"}
+                            mt={9}
+                            pr={3}
+                          >
+                            {(
+                              product.totalPrice * product.count
+                            ).toLocaleString("ko-KR")}
+                            원
+                          </Box>
+                        </Flex>
+                      ))}
+                    </Stack>
+                  </Card>
+                </AccordionPanel>
+              </AccordionItem>
+            </Accordion>
+            <Box ml={"30px"}>
+              <FormControl mt={"30px"}>
+                <FormLabel fontWeight={"bold"}>매장 요청사항</FormLabel>
+                <Input
+                  mt={"10px"}
+                  width={"90%"}
+                  border={"1px solid #5b5859"}
+                  placeholder={"매장 요청사항이 있으면 적어주세요."}
+                  fontSize={"13px"}
+                  onChange={(e) => setRequest(e.target.value)}
+                />
+              </FormControl>
+              <Box mt={"30px"}>
+                <Box fontWeight={"bold"}>포장 요청사항</Box>
+                <RadioGroup
+                  onChange={setIsTakeOut}
+                  value={isTakeOut}
+                  mt={"10px"}
+                >
+                  <Radio size="md" value={"1"} colorScheme="black" ml={2}>
+                    포장해주세요
+                  </Radio>
+                  <Radio size="md" value={"2"} colorScheme="black" ml={6}>
+                    매장에서 먹고 갈게요
+                  </Radio>
+                </RadioGroup>
+              </Box>
+              <Box>
+                <Box fontWeight={"bold"} mt={"30px"}>
+                  포장옵션
+                </Box>
+                <Box mt={"10px"}>
+                  {isTakeOut === "1" && (
+                    <CheckboxGroup>
+                      <Checkbox
+                        size="md"
+                        {...checkBoxStyle}
+                        isChecked={option[0]}
+                        onChange={(e) =>
+                          setOption([e.target.checked, option[1]])
+                        }
+                      >
+                        캐리어/봉투 필요해요
+                      </Checkbox>
+                      <Checkbox
+                        ml={6}
+                        size="md"
+                        {...checkBoxStyle}
+                        isChecked={option[1]}
+                        onChange={(e) =>
+                          setOption([option[0], e.target.checked])
+                        }
+                      >
+                        빨대/스틱 필요해요
+                      </Checkbox>
+                    </CheckboxGroup>
+                  )}
+                </Box>
+              </Box>
+            </Box>
+            <Box mt={"30px"}>
+              <Accordion allowMultiple>
+                <AccordionItem>
+                  <h2>
+                    <AccordionButton>
+                      <Flex w={"100%"} alignItems={"center"}>
+                        <Box fontWeight={"bold"} ml={3}>
+                          쿠폰 적용
+                        </Box>
+                        <Spacer />
+                        <Box fontSize={"sm"}>{couponCount}개 보유</Box>
+                        <ChevronRightIcon w={"20px"} />
+                      </Flex>
+                    </AccordionButton>
+                    <AccordionPanel>
+                      <Flex mt={3} alignItems={"center"}>
+                        <Box ml={"30px"} mr={5}>
+                          쿠폰
+                        </Box>
+                        <Button
+                          onClick={reduceCouponCount}
+                          {...RoundBlackButtonStyle}
+                        >
+                          -
+                        </Button>
+                        <Box mx={4} textAlign="center" fontSize={"lg"}>
+                          {useCouponCount}
+                        </Box>
+                        <Button
+                          {...RoundBlackButtonStyle}
+                          onClick={plusCouponCount}
+                        >
+                          +
+                        </Button>
+                        <Box ml={3}>개 사용</Box>
+                      </Flex>
+                    </AccordionPanel>
+                  </h2>
+                </AccordionItem>
+              </Accordion>
+            </Box>
+            <Box ml={"30px"} mb={"50px"}>
+              <Box fontWeight={"bold"} mt={"30px"}>
+                결제 수단
+              </Box>
+              <RadioGroup onChange={setProvider} value={provider} mt={"10px"}>
+                <Radio size="md" value="html5_inicis" defaultChecked ml={5}>
+                  신용카드
+                </Radio>
+                <Radio ml={3} size="md" value={"kakaopay"}>
+                  카카오페이
+                </Radio>
+                <Radio ml={3} size="md" value={"payco"}>
+                  페이코
+                </Radio>
+                <Radio ml={3} size="md" value={"uplus"}>
+                  토스페이
+                </Radio>
+              </RadioGroup>
+            </Box>
+          </Box>
+          <Box w={"40%"}>
+            <Box ml={"30px"} mr={"30px"} mt={"60px"}>
+              <Flex align={"center"}>
+                <Box fontSize={"lg"} as={"b"}>
+                  상품금액
                 </Box>
                 <Spacer />
-                <Box mr={2}>{orderItem.orderProduct[0].productName}</Box>
+                <Box fontSize={"23px"} fontWeight={"bold"}>
+                  {calculateTotalPrice(orderItem.orderProduct).toLocaleString(
+                    "ko-KR",
+                  )}
+                  원
+                </Box>
               </Flex>
-              <AccordionIcon />
-            </AccordionButton>
-          </h2>
-          <AccordionPanel>
-            <Card variant={"outline"}>
-              <Stack divider={<StackDivider />} spacing="4">
-                {orderItem.orderProduct.map((product, index) => (
-                  <Flex key={index} alignItems={"center"} p={3}>
-                    <Box>
-                      <Image
-                        src={
-                          "https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/" +
-                          product.filePath
-                        }
-                        w={"120px"}
-                        h={"120px"}
-                      />
-                    </Box>
-                    <Box ml={4}>
-                      <Box fontSize={"18px"}>{product.productName}</Box>
-                      {product.optionList.map((item, index) => (
-                        <Box key={index} fontSize={"sm"}>
-                          {item}
-                        </Box>
-                      ))}
-                      <Box mt={3} fontSize={"21px"} mb={1}>
-                        {product.count}개
-                      </Box>
-                    </Box>
-                    <Spacer />
-                    <Box fontWeight={"bold"} fontSize={"23px"} mt={9} pr={3}>
-                      {(product.totalPrice * product.count).toLocaleString(
-                        "ko-KR",
-                      )}
-                      원
-                    </Box>
-                  </Flex>
-                ))}
-              </Stack>
-            </Card>
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
-      <Box ml={3}>
-        <FormControl>
-          <FormLabel fontWeight={"bold"} mt={9} ml={4}>
-            매장 요청사항
-          </FormLabel>
-          <Input
-            ml={3}
-            w={"99%"}
-            border={"1px solid #5b5859"}
-            placeholder={"매장 요청사항이 있으면 적어주세요."}
-            fontSize={"13px"}
-            onChange={(e) => setRequest(e.target.value)}
-          />
-        </FormControl>
-        <RadioGroup
-          onChange={setIsTakeOut}
-          value={isTakeOut}
-          mt={7}
-          mb={7}
-          ml={4}
-        >
-          <Box fontWeight={"bold"} mb={1}>
-            포장 요청사항
-          </Box>
-          <Radio size="md" value={"1"} colorScheme="black" ml={2}>
-            포장해주세요
-          </Radio>
-          <Radio size="md" value={"2"} colorScheme="black" ml={6}>
-            매장에서 먹고 갈게요
-          </Radio>
-        </RadioGroup>
-        {isTakeOut === "1" && (
-          <CheckboxGroup>
-            <Box ml={4} fontWeight={"bold"} mb={1}>
-              포장옵션
+              <Flex align={"center"}>
+                <Box fontSize={"lg"} as={"b"}>
+                  할인금액
+                </Box>
+                <Spacer />
+                <Box fontSize={"23px"} fontWeight={"bold"}>
+                  -{useCouponCount * 2000}원
+                </Box>
+              </Flex>
+              <Flex align={"center"}>
+                <Box fontSize={"lg"} as={"b"}>
+                  결제금액
+                </Box>
+                <Spacer />
+                <Box fontSize={"25px"} color={"red"} fontWeight={"bold"}>
+                  {(
+                    calculateTotalPrice(orderItem.orderProduct) -
+                    useCouponCount * 2000
+                  ).toLocaleString("ko-KR")}
+                  원
+                </Box>
+              </Flex>
             </Box>
-            <Checkbox
-              ml={6}
-              size="md"
-              {...checkBoxStyle}
-              isChecked={option[0]}
-              onChange={(e) => setOption([e.target.checked, option[1]])}
-            >
-              캐리어/봉투 필요해요
-            </Checkbox>
-            <Checkbox
-              ml={6}
-              size="md"
-              {...checkBoxStyle}
-              isChecked={option[1]}
-              onChange={(e) => setOption([option[0], e.target.checked])}
-            >
-              빨대/스틱 필요해요
-            </Checkbox>
-          </CheckboxGroup>
-        )}
-        <Accordion allowMultiple mt={7}>
-          <AccordionItem>
-            <h2>
-              <AccordionButton h={"50px"}>
-                <Flex w={"100%"} alignItems={"center"}>
-                  <Box ml={1} fontWeight={"bold"}>
-                    쿠폰 적용
-                  </Box>
-                  <Spacer />
-                  <Box fontSize={"sm"}>{couponCount}개 보유</Box>
-                  <ChevronRightIcon w={"20px"} />
-                </Flex>
-              </AccordionButton>
-              <AccordionPanel>
-                <Flex mt={3} alignItems={"center"}>
-                  <Box ml={4} mr={5}>
-                    쿠폰
-                  </Box>
+            <Box mt={"50px"}>
+              <Center ml={3}>
+                <ButtonGroup gap={4}>
                   <Button
-                    onClick={reduceCouponCount}
-                    {...RoundBlackButtonStyle}
+                    width={"200px"}
+                    onClick={handlePayment}
+                    colorScheme={"orange"}
                   >
-                    -
+                    결제하기
                   </Button>
-                  <Box mx={4} textAlign="center" fontSize={"lg"}>
-                    {useCouponCount}
-                  </Box>
-                  <Button {...RoundBlackButtonStyle} onClick={plusCouponCount}>
-                    +
+                  <Button
+                    width={"200px"}
+                    colorScheme={"pink"}
+                    onClick={() => {
+                      navigate(-1);
+                    }}
+                  >
+                    취소하기
                   </Button>
-                  <Box ml={3}>개 사용</Box>
-                </Flex>
-              </AccordionPanel>
-            </h2>
-          </AccordionItem>
-        </Accordion>
-        <RadioGroup onChange={setProvider} value={provider} mt={7}>
-          <Box fontWeight={"bold"} ml={5} mb={2}>
-            결제 수단
+                </ButtonGroup>
+              </Center>
+            </Box>
           </Box>
-          <Radio size="md" value="html5_inicis" defaultChecked ml={5}>
-            신용카드
-          </Radio>
-          <Radio ml={3} size="md" value={"kakaopay"}>
-            카카오페이
-          </Radio>
-          <Radio ml={3} size="md" value={"payco"}>
-            페이코
-          </Radio>
-          <Radio ml={3} size="md" value={"uplus"}>
-            토스페이
-          </Radio>
-        </RadioGroup>
-        <Box ml={6} fontSize={"18px"}>
-          <Flex mt={"40px"} align={"center"}>
-            <Box>상품금액</Box>
-            <Spacer />
-            <Box fontSize={"23px"} fontWeight={"bold"}>
-              {calculateTotalPrice(orderItem.orderProduct).toLocaleString(
-                "ko-KR",
-              )}
-              원
-            </Box>
-          </Flex>
-          <Flex align={"center"}>
-            <Box>할인금액</Box>
-            <Spacer />
-            <Box fontSize={"23px"} fontWeight={"bold"}>
-              -{useCouponCount * 2000}원
-            </Box>
-          </Flex>
-          <Flex mt={1}>
-            <Box>결제금액</Box>
-            <Spacer />
-            <Box fontSize={"25px"} color={"red"} fontWeight={"bold"}>
-              {(
-                calculateTotalPrice(orderItem.orderProduct) -
-                useCouponCount * 2000
-              ).toLocaleString("ko-KR")}
-              원
-            </Box>
-          </Flex>
-        </Box>
-        <Center ml={3}>
-          <Button
-            onClick={handlePayment}
-            colorScheme={"orange"}
-            w={"650px"}
-            h={"60px"}
-            fontSize={"19px"}
-            mt={"50px"}
-          >
-            결제하기
-          </Button>
-        </Center>
+        </Flex>
       </Box>
     </Box>
   );

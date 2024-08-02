@@ -1,4 +1,4 @@
-import { Box, Divider, Heading } from "@chakra-ui/react";
+import { Box, Heading } from "@chakra-ui/react";
 import { CategoryTabComp } from "./component/CategoryTabComp.jsx";
 import { useState } from "react";
 import { ProductBodyComp } from "./component/ProductBodyComp.jsx";
@@ -18,18 +18,30 @@ export const ProductList = () => {
   };
 
   return (
-    <Box maxWidth="1000px" mx={"auto"}>
-      <Box>
-        <Heading>List</Heading>
+    <Box>
+      <Box
+        height={"280px"}
+        backgroundColor={"#444444"}
+        textAlign={"center"}
+        display={"flex"}
+        alignItems={"center"}
+        justifyContent="center"
+      >
+        <Box>
+          <Heading size="2xl" textColor={"#FDD000"}>
+            MEGA MENU
+          </Heading>
+        </Box>
       </Box>
-      <Divider border={"1px solid black"} my={4} />
-      <CategoryTabComp category={category} />
-      <ProductBodyComp
-        branchName={branchName}
-        branchId={branchId}
-        mainCategory={mainCategory}
-        subCategory={subCategory}
-      />
+      <Box maxWidth="1200px" mx={"auto"} mt={"50px"}>
+        <CategoryTabComp category={category} />
+        <ProductBodyComp
+          branchName={branchName}
+          branchId={branchId}
+          mainCategory={mainCategory}
+          subCategory={subCategory}
+        />
+      </Box>
     </Box>
   );
 };

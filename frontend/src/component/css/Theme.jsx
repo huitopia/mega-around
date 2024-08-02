@@ -84,14 +84,14 @@ const components = {
   Radio: {
     baseStyle: {
       control: {
-        borderColor: "gray.200",  // 원의 테두리 색상
+        borderColor: "gray.200", // 원의 테두리 색상
         _checked: {
-          bg: "black",  // 체크된 상태의 배경 색상
+          bg: "black", // 체크된 상태의 배경 색상
           borderColor: "black", // 체크된 상태의 테두리 색상
         },
       },
       label: {
-        color: "black",  // 라벨 색상
+        color: "black", // 라벨 색상
       },
     },
   },
