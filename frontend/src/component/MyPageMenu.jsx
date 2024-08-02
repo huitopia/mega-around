@@ -118,14 +118,11 @@ function MyPageMenu({ isChanged, setIsChanged, updateAlarm }) {
             )}
             {account.hasAuth() === "branch" && (
               <>
-              <MenuItem
-                onClick={() => navigate(`/mypage/branch/${account.id}`)}
-              >
-                내 정보(지점)
-              </MenuItem>
-              <MenuItem onClick={() => navigate(`/branch/order/${account.id}`)}>
-              주문 관리
-              </MenuItem>
+                <MenuItem
+                  onClick={() => navigate(`/branch/order/${account.id}`)}
+                >
+                  주문 관리
+                </MenuItem>
               </>
             )}
             {account.hasAuth() === "customer" || (
@@ -138,6 +135,9 @@ function MyPageMenu({ isChanged, setIsChanged, updateAlarm }) {
                 상품 등록
               </MenuItem>
             )}
+            <MenuItem onClick={() => navigate(`/mypage/branch/${account.id}`)}>
+              내 정보(지점)
+            </MenuItem>
             <MenuDivider />
             <MenuItem
               onClick={() => {
@@ -151,27 +151,33 @@ function MyPageMenu({ isChanged, setIsChanged, updateAlarm }) {
         </Menu>
         <Popover>
           <PopoverTrigger>
-            <Flex alignItems={"center"} cursor={"pointer"} onClick={handleReadNotice}>
+            <Flex
+              alignItems={"center"}
+              cursor={"pointer"}
+              onClick={handleReadNotice}
+            >
               {account.hasAuth() === "customer" && (
                 <>
-              <Box>
-                <FontAwesomeIcon
-                  color={unreadNoticeCount > 0 ? "#FDD000" : "rgba(0,0,0,0.5)"}
-                  icon={faBell}
-                />
-              </Box>
-              <Box
-                color={"#444444"}
-                w="20px"
-                h={"50px"}
-                fontSize={"sm"}
-                textAlign={"center"}
-                as={"b"}
-                hidden={unreadNoticeCount === 0}
-              >
-                {unreadNoticeCount}
-              </Box>
-              </>
+                  <Box>
+                    <FontAwesomeIcon
+                      color={
+                        unreadNoticeCount > 0 ? "#FDD000" : "rgba(0,0,0,0.5)"
+                      }
+                      icon={faBell}
+                    />
+                  </Box>
+                  <Box
+                    color={"#444444"}
+                    w="20px"
+                    h={"50px"}
+                    fontSize={"sm"}
+                    textAlign={"center"}
+                    as={"b"}
+                    hidden={unreadNoticeCount === 0}
+                  >
+                    {unreadNoticeCount}
+                  </Box>
+                </>
               )}
             </Flex>
           </PopoverTrigger>
