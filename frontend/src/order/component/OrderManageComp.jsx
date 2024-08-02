@@ -30,7 +30,7 @@ function CustomPrevArrow(props) {
         top: "50%",
         left: "-20px",
         transform: "translateY(-50%)",
-        color: "black",
+        color: "#401F02",
         fontSize: "24px",
         cursor: "pointer",
         zIndex: 1, // 클릭 가능하도록 설정
@@ -50,9 +50,9 @@ function CustomNextArrow(props) {
       style={{
         position: "absolute",
         top: "50%",
-        left: "1600px",
+        left: "1200px",
         transform: "translateY(-50%)",
-        color: "black",
+        color: "#401F02",
         fontSize: "24px",
         cursor: "pointer",
         zIndex: 1, // 클릭 가능하도록 설정
@@ -79,9 +79,10 @@ export function OrderManageComp({
     infinite: false,
     arrows: true,
     speed: 500,
-    slidesToShow: 6,
+    slidesToShow: 4,
     slidesToScroll: 2,
     draggable: false,
+    overflow : "hidden",
     prevArrow: <CustomPrevArrow />,
     nextArrow: <CustomNextArrow />,
   };
@@ -98,14 +99,14 @@ export function OrderManageComp({
   }
 
   return (
-    <Flex h={"200px"} borderBottom="1px solid #e9ecef">
-      <Center bg={"pink"} w={"150px"} mr={"50px"}>
+    <Flex h={"240px"} borderBottom="1px solid #e9ecef">
+      <Center w={"150px"} mr={"50px"}>
         <Box fontWeight={"bold"} fontSize={"20px"}>
-          {text}
+          {text}(
         </Box>
-        <Box fontSize={"20px"}>({orderList.length})</Box>
+        <Flex fontSize={"20px"} fontWeight={"bold"}><Box color={"red"}>{orderList.length}</Box><Box fontWeight={"bold"} fontSize={"20px"}>)</Box></Flex>
       </Center>
-      <Box w={"1600px"}>
+      <Box w={"1100px"}>
         <Slider {...settings}>
           {orderList.map((order, index) => (
             <Card
@@ -117,8 +118,8 @@ export function OrderManageComp({
                 setOrderId(order.id);
               }}
               zIndex={1}
-              w={"200px"}
-              h={"195px"}
+              w={"220px"}
+              h={"240px"}
               mx={1}
             >
               <CardBody>
@@ -141,7 +142,7 @@ export function OrderManageComp({
                         order.orderProduct[0].filePath
                       }
                     />
-                    <Flex gap={3} alignItems={"center"}>
+                    <Flex direction={"column"} gap={3} alignItems={"center"}>
                       <Flex direction="row" align="center" gap={1}>
                         {order.isTakeOut == 1 ? (
                           <Badge bg={"orange"} color="white">

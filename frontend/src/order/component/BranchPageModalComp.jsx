@@ -98,7 +98,7 @@ export function BranchPageModalComp({
                   {item.optionList && (
                     <Box>
                       {item.optionList.map((option, idx) => (
-                        <Box key={idx}>{option}</Box>
+                        <Box key={idx} fontSize={"sm"}>{option}</Box>
                       ))}
                     </Box>
                   )}
