@@ -328,9 +328,11 @@ public class UserService {
 
     public boolean checkPasswordPattern(String password) {
         if (password == null || password.isBlank()) {
+            System.out.println("null 또는 black password = " + password);
             return false;
         }
         String passwordPattern = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,20}$";
+        System.out.println("passwordPattern 일치 여부 = " + password.trim().matches(passwordPattern));
         return password.trim().matches(passwordPattern);
     }
 

@@ -168,7 +168,7 @@ export function SignUpBranch() {
                   </Button>
                 </Flex>
                 {email.length > 0 && (
-                  <FormHelperText color="#dc7b84">
+                  <FormHelperText color="#dc7b84" fontSize={"12px"}>
                     {isValidEmail
                       ? isCheckedEmail || "중복확인 버튼을 눌러주세요."
                       : "유효한 이메일을 입력해주세요."}
@@ -198,7 +198,7 @@ export function SignUpBranch() {
                 </InputGroup>
                 {password.length > 0 &&
                   (isValidPassword || (
-                    <FormHelperText color={"#dc7b84"}>
+                    <FormHelperText color={"#dc7b84"} fontSize={"12px"}>
                       영문 대/소문자, 숫자, 특수문자를 하나 이상 포함하여 8-20자
                       이내로 입력해 주세요.
                     </FormHelperText>
@@ -226,7 +226,7 @@ export function SignUpBranch() {
                 </InputGroup>
                 {passwordCheck.length > 0 &&
                   (isCheckedPassword || (
-                    <FormHelperText color={"#dc7b84"}>
+                    <FormHelperText color={"#dc7b84"} fontSize={"12px"}>
                       비밀번호가 일치하지 않습니다
                     </FormHelperText>
                   ))}
@@ -246,7 +246,7 @@ export function SignUpBranch() {
                   />
                 </InputGroup>
                 {isCheckedBranchName || (
-                  <FormHelperText color={"#dc7b84"}>
+                  <FormHelperText color={"#dc7b84"} fontSize={"12px"}>
                     중복된 지점명입니다.
                   </FormHelperText>
                 )}
