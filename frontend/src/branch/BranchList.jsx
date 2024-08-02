@@ -222,7 +222,7 @@ export const BranchList = () => {
             <Box
               mt={"40px"}
               width={"100%"}
-              height="50%"
+              height="450px"
               overflowY="auto"
               pt={"10px"}
             >
