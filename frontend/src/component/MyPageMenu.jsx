@@ -123,6 +123,11 @@ function MyPageMenu({ isChanged, setIsChanged, updateAlarm }) {
                 >
                   주문 관리
                 </MenuItem>
+                <MenuItem
+                  onClick={() => navigate(`/mypage/branch/${account.id}`)}
+                >
+                  내 정보(지점)
+                </MenuItem>
               </>
             )}
             {account.hasAuth() === "customer" || (
@@ -135,9 +140,6 @@ function MyPageMenu({ isChanged, setIsChanged, updateAlarm }) {
                 상품 등록
               </MenuItem>
             )}
-            <MenuItem onClick={() => navigate(`/mypage/branch/${account.id}`)}>
-              내 정보(지점)
-            </MenuItem>
             <MenuDivider />
             <MenuItem
               onClick={() => {
