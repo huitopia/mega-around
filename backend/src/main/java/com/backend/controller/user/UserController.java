@@ -228,6 +228,9 @@ public class UserController {
     // 고객 비밀번호 재설정
     @PutMapping("/user/customer/password")
     public ResponseEntity modifyPasswordCustomer(@RequestBody Customer customer) {
+        if (service.checkPasswordPattern(customer.getPassword())) {
+            return ResponseEntity.badRequest().build();
+        }
         if (service.modifyPasswordCustomer(customer)) {
             return ResponseEntity.ok().build();
         }
@@ -237,6 +240,9 @@ public class UserController {
     // 지점 비밀번호 재설정
     @PutMapping("/user/branch/password")
     public ResponseEntity modifyPasswordBranch(@RequestBody Branch branch) {
+        if (service.checkPasswordPattern(branch.getPassword())) {
+            return ResponseEntity.badRequest().build();
+        }
         if (service.modifyPasswordBranch(branch)) {
             return ResponseEntity.ok().build();
         }

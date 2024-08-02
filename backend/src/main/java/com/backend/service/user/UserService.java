@@ -326,6 +326,14 @@ public class UserService {
         return recommendList;
     }
 
+    public boolean checkPasswordPattern(String password) {
+        if (password == null || password.isBlank()) {
+            return false;
+        }
+        String passwordPattern = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,20}$";
+        return password.trim().matches(passwordPattern);
+    }
+
     public boolean modifyPasswordCustomer(Customer customer) {
         Customer dbCustomer = getCustomerByEmail(customer.getEmail());
         if (dbCustomer != null) {
@@ -335,6 +343,7 @@ public class UserService {
         }
         return false;
     }
+
 
     public boolean modifyPasswordBranch(Branch branch) {
         Branch dbBranch = getBranchByEmail(branch.getEmail());
