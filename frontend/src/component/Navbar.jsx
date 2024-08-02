@@ -12,6 +12,9 @@ export function Navbar({ updateAlarm }) {
 
   return (
     <Flex
+      position="fixed"
+      top={0}
+      width="100%"
       height={"80px"}
       fontSize={"md"}
       textAlign={"center"}
@@ -19,6 +22,9 @@ export function Navbar({ updateAlarm }) {
       alignItems={"center"}
       justifyContent={"space-around"}
       p={"30px"}
+      zIndex={1}
+      backgroundColor={"white"}
+      borderBottom={"1px solid #444444"}
     >
       <Box onClick={() => navigate("/")} cursor={"pointer"}>
         <Text as={"b"} fontSize={"2xl"}>
