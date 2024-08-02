@@ -75,7 +75,7 @@ export function LoginBranch() {
               </InputGroup>
             </FormControl>
           </Box>
-          <Box mt={10}>
+          <Box mt={8}>
             <Button
               onClick={handleBranchLogin}
               bg={"#fdd000"}
@@ -87,6 +87,29 @@ export function LoginBranch() {
             >
               지점 로그인
             </Button>
+          </Box>
+          <Box display="flex" mt={6}>
+            <Box
+              fontSize="sm"
+              ml={"auto"}
+              cursor="pointer"
+              as={"u"}
+              color={"gray.500"}
+              onClick={() => navigate("/find-branchEmail")}
+            >
+              이메일 찾기
+            </Box>
+            <Box
+              fontSize="sm"
+              ml={"auto"}
+              mr="80px"
+              cursor="pointer"
+              as={"u"}
+              color={"gray.500"}
+              onClick={() => navigate("/find-branchPassword")}
+            >
+              비밀번호 찾기
+            </Box>
           </Box>
         </Box>
       </Center>
