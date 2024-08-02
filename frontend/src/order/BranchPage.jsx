@@ -38,13 +38,21 @@ export function BranchPage() {
 
   return (
     <Box mx={"auto"}>
-      <Box mt={"50px"} mb={"50px"}>
-        <Center>
-          <Heading>Branch Page</Heading>
-        </Center>
+      <Box
+        height={"280px"}
+        backgroundColor={"#444444"}
+        textAlign={"center"}
+        display={"flex"}
+        alignItems={"center"}
+        justifyContent="center"
+      >
+        <Box>
+          <Heading size="2xl" textColor={"#FDD000"}>
+            BRANCH PAGE
+          </Heading>
+        </Box>
       </Box>
-      <Divider border={"1px solid black"} my={4} />
-      <Box>
+      <Box mt={10}>
         <Center>
         <Flex gap={3} px={3} mb={10}>
           <Input w={"500px"} type={"date"} value={date} onChange={event => setDate(event.target.value)}/>
