@@ -13,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +28,7 @@ public class OrderService {
     private final ProductMapper productMapper;
     private final EventService eventService;
     private final EventMapper eventMapper;
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public Integer addOrderItem(OrderItem orderItem, Integer customerId) throws JsonProcessingException {
         // 포장 옵션
@@ -43,8 +47,12 @@ public class OrderService {
         return orderItem.getId();
     }
 
-    public List<OrderItem> getOrderItemList(Integer customerId, String period, Integer stateId, Integer branchId) throws JsonProcessingException {
-        List<OrderItem> orderItemList = orderMapper.selectOrderItemList(customerId, period, stateId, branchId);
+    public List<OrderItem> getOrderItemList(Integer customerId, String period, Integer stateId, Integer branchId, String date, String startTime, String endTime) throws JsonProcessingException {
+        // 날짜+시간 데이터 변환
+        LocalDateTime startDateTime = parseDateTime(date, startTime);
+        LocalDateTime endDateTime = parseDateTime(date, endTime);
+
+        List<OrderItem> orderItemList = orderMapper.selectOrderItemList(customerId, period, stateId, branchId, startDateTime, endDateTime);
         for (OrderItem orderItem : orderItemList) {
             List<OrderProduct> orderProductList = orderMapper.selectOrderProductByOrderId(orderItem.getId());
             // 포장 옵션 리스트 변환
@@ -66,6 +74,14 @@ public class OrderService {
         }
 
         return orderItemList;
+    }
+
+    private static LocalDateTime parseDateTime(String date, String time) {
+        if (date != null && !date.isEmpty() && time != null && !time.isEmpty()) {
+            String dateTimeStr = date + " " + time;
+            return LocalDateTime.parse(dateTimeStr, FORMATTER);
+        }
+        return null;
     }
 
     public OrderItem getOrderItem(Integer id) throws JsonProcessingException {

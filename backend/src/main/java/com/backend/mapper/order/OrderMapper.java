@@ -5,6 +5,7 @@ import com.backend.domain.order.OrderItem;
 import com.backend.domain.order.OrderProduct;
 import org.apache.ibatis.annotations.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
@@ -47,10 +48,15 @@ public interface OrderMapper {
                              <if test="stateId != null and branchId != null">
                                  AND oi.state_id = #{stateId} AND oi.branch_id = #{branchId}
                              </if>
+                            <if test="startDateTime != null and endDateTime != null">
+                            <![CDATA[
+                                AND oi.created_at >= #{startDateTime} AND oi.created_at <= #{endDateTime}
+                                ]]>
+                            </if>
                              ORDER BY oi.created_at DESC
                          </script>
             """)
-    List<OrderItem> selectOrderItemList(Integer customerId, String period, Integer stateId, Integer branchId);
+    List<OrderItem> selectOrderItemList(Integer customerId, String period, Integer stateId, Integer branchId, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     @Select("""
                 SELECT oi.id, oi.customer_id, oi.branch_id, oi.total_price, oi.state_id, oi.created_at, oi.is_take_out, b.branch_name, p.provider, p.coupon_count, oi.options, oi.request
