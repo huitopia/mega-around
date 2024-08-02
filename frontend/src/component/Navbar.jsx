@@ -22,7 +22,7 @@ export function Navbar({ updateAlarm }) {
       alignItems={"center"}
       justifyContent={"space-around"}
       p={"30px"}
-      zIndex={1}
+      zIndex={2}
       backgroundColor={"white"}
       borderBottom={"1px solid #444444"}
     >
