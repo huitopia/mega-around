@@ -34,12 +34,9 @@ export function Login() {
         account.logout();
         if (email.length === 0) {
           errorToast("이메일을 입력해주세요.");
-        } else {
-          const errorMessage = err.response
-            ? err.response.data
-            : "로그인에 실패하였습니다.";
-          errorToast(errorMessage);
-        }
+        } else if (err.response.status === 401 || err.response.status === 403) {
+          errorToast(err.response.data);
+        } else errorToast("로그인을 실패하였습니다");
       });
   }
 

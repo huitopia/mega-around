@@ -10,7 +10,6 @@ import {
   InputGroup,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -39,9 +38,7 @@ export function FindCustomerEmail() {
         onOpen();
       })
       .catch((err) => {
-        if (err.response.status === 401) {
-          errorToast(err.response.data);
-        } else if (err.response.status === 404) {
+        if (err.response.status === 401 || err.response.status === 404) {
           errorToast(err.response.data);
         } else errorToast("이메일 찾기를 실패하였습니다");
       });
@@ -122,7 +119,6 @@ export function FindCustomerEmail() {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalCloseButton />
           <ModalHeader>이메일 확인</ModalHeader>
           <ModalBody pb={8} pt={8} ml={7}>
             <Text>
