@@ -28,6 +28,7 @@ export function LoginBranch() {
         account.login(res.data.token);
         successToast(res.data.name + "님! 환영합니다");
         navigate("/");
+        window.scrollTo({ top: 0, behavior: "auto" });
       })
       .catch((err) => {
         account.logout();

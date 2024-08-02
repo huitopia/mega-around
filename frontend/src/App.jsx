@@ -29,6 +29,7 @@ import { BranchList } from "./branch/BranchList.jsx";
 import { FindCustomerPassword } from "./user/FindCustomerPassword.jsx";
 import { FindCustomerEmail } from "./user/FindCustomerEmail.jsx";
 import { FindBranchPassword } from "./user/FindBranchPassword.jsx";
+import { FindBranchEmail } from "./user/FindBranchEmail.jsx";
 
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
@@ -74,6 +75,7 @@ const router = createBrowserRouter([
       { path: "mypage/branch/edit/:id", element: <EditBranch /> },
       { path: "find-customerEmail", element: <FindCustomerEmail /> },
       { path: "find-customerPassword", element: <FindCustomerPassword /> },
+      { path: "find-branchEmail", element: <FindBranchEmail /> },
       { path: "find-branchPassword", element: <FindBranchPassword /> },
     ],
   },

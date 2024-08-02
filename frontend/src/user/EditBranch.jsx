@@ -101,6 +101,7 @@ export function EditBranch() {
         infoToast("탈퇴 되었습니다. 그동안 이용해 주셔서 감사합니다");
         account.logout();
         navigate("/");
+        window.scrollTo({ top: 0, behavior: "auto" });
       })
       .catch(() => errorToast("지점 탈퇴 중 문제가 발생하였습니다"))
       .finally(() => {
