@@ -279,10 +279,14 @@ export const BranchList = () => {
               colorScheme={"orange"}
               mr={"5%"}
               onClick={() => {
-                account.hasAuth() === "customer"
-                  ? navigate(`/product/list?branchId=${selectedBranchId}`)
-                  : alert("회원 로그인이 필요한 서비스입니다.");
-                navigate("/login");
+                if (account.hasAuth() === "customer") {
+                  navigate(
+                    `/product/list?branchId=${selectedBranchId}&branchName=${selectedBranchName}`,
+                  );
+                } else {
+                  alert("회원 로그인이 필요한 서비스입니다.");
+                  navigate("/login");
+                }
               }}
             >
               주문하기

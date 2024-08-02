@@ -12,6 +12,7 @@ public class Notice {
     String tag;
     String content;
     LocalDateTime createdAt;
+    Boolean isRead;
 
     public String getCreatedAtString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy. MM. dd. HH:mm");

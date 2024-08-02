@@ -15,7 +15,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ProductDetailModal } from "./ProductDetailModal.jsx";
 
-export function ProductBodyComp({ branchId, mainCategory, subCategory }) {
+export function ProductBodyComp({
+  branchId,
+  mainCategory,
+  subCategory,
+  branchName,
+}) {
   const [data, setData] = useState([]);
   const [productId, setProductId] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -92,6 +97,7 @@ export function ProductBodyComp({ branchId, mainCategory, subCategory }) {
         onClose={onClose}
         productId={productId}
         branchId={branchId}
+        branchName={branchName}
       />
     </Box>
   );

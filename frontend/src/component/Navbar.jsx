@@ -44,7 +44,7 @@ export function Navbar({ updateAlarm }) {
           {/*{account.branchName}&nbsp;님*/}
           {/*</Box>*/}
           {/*{showTabs && <MyPageMenu />}*/}
-          <MyPageMenu setIsChanged={setIsChanged} updateAlarm={updateAlarm} />
+          <MyPageMenu isChanged={isChanged} setIsChanged={setIsChanged} updateAlarm={updateAlarm} />
           <Box
             onClick={() => {
               account.logout();

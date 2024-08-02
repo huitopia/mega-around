@@ -90,7 +90,7 @@ export const ProductUpload = () => {
       errorToast("퍼스널 옵션을 선택해주세요.");
       return false;
     }
-    if (price >= 0) {
+    if (price <= 0) {
       errorToast("가격을 입력해주세요.");
       return false;
     }
