@@ -8,35 +8,42 @@ import {
   Heading,
   Input,
   InputGroup,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { CustomToast } from "../component/CustomToast.jsx";
 import { formLabel } from "../component/css/style.js";
 
 export function FindCustomerEmail() {
+  const [email, setEmail] = useState("");
   const [nickName, setNickName] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const { onOpen, onClose, isOpen } = useDisclosure();
   const { successToast, errorToast, infoToast } = CustomToast();
 
   function handleCustomerEmail() {
     axios
-      .put(`/api/user/customer/email`, { nickName, password })
-      .then(() => {
-        // todo : 회원님의 이메일은 ...입니다 페이지로 이동
-        navigate("/login");
+      .post(`/api/user/customer/email`, { nickName, password })
+      .then((res) => {
         window.scrollTo({ top: 0, behavior: "auto" });
+        setEmail(res.data.email);
+        onOpen();
       })
       .catch((err) => {
-        // todo : 에러메세지 수정하기
-        if (err.response.status === 400) {
-          errorToast("");
+        if (err.response.status === 401) {
+          errorToast(err.response.data);
         } else if (err.response.status === 404) {
-          errorToast("해당 닉네임으로 가입한 이력이 없습니다");
-        } else errorToast("이메일 찾기에 실패하였습니다");
+          errorToast(err.response.data);
+        } else errorToast("이메일 찾기를 실패하였습니다");
       });
   }
 
@@ -111,6 +118,33 @@ export function FindCustomerEmail() {
           </Center>
         </Box>
       </Center>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalHeader>이메일 확인</ModalHeader>
+          <ModalBody pb={8} pt={8} ml={7}>
+            <Text>
+              회원님의 이메일은{" "}
+              <Text as="span" fontWeight="bold">
+                {email}
+              </Text>{" "}
+              입니다.
+            </Text>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              mr={2}
+              onClick={onClose}
+              colorScheme="orange"
+              width={"100px"}
+            >
+              확인
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 }

@@ -356,4 +356,19 @@ public class UserService {
         }
         return false;
     }
+
+    public boolean isNameRegistered(String NickName) {
+        if (userMapper.selectCustomerByNickName(NickName) != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isPasswordMatch(Customer customer) {
+        Customer dbCustomer = userMapper.selectCustomerByNickName(customer.getNickName());
+        if (passwordEncoder.matches(customer.getPassword(), dbCustomer.getPassword())) {
+            return true;
+        }
+        return false;
+    }
 }
