@@ -311,7 +311,9 @@ export const BranchList = () => {
                 mr={"5%"}
                 onClick={() => {
                   if (account.hasAuth() === "customer") {
-                    navigate(`/product/list?branchId=${selectedBranchId}`);
+                    navigate(
+                      `/product/list?branchId=${selectedBranchId}&branchName=${selectedBranchName}`,
+                    );
                   } else {
                     alert("회원 로그인이 필요한 서비스입니다.");
                     navigate("/login");
