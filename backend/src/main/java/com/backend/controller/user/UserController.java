@@ -228,19 +228,19 @@ public class UserController {
     // 고객 비밀번호 재설정
     @PutMapping("/user/customer/password")
     public ResponseEntity modifyPasswordCustomer(@RequestBody Customer customer) {
-        if (service.modifyPassword(customer)) {
+        if (service.modifyPasswordCustomer(customer)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
     }
 
-//    // 지점 비밀번호 재설정
-//    @PutMapping("/user/branch/password")
-//    public ResponseEntity modifyPasswordBranch(@RequestBody Branch branch) {
-//        if (service.modifyPassword(branch)) {
-//            return ResponseEntity.ok().build();
-//        }
-//        return ResponseEntity.notFound().build();
-//    }
+    // 지점 비밀번호 재설정
+    @PutMapping("/user/branch/password")
+    public ResponseEntity modifyPasswordBranch(@RequestBody Branch branch) {
+        if (service.modifyPasswordBranch(branch)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
 
 }

@@ -326,11 +326,21 @@ public class UserService {
         return recommendList;
     }
 
-    public boolean modifyPassword(Customer customer) {
+    public boolean modifyPasswordCustomer(Customer customer) {
         Customer dbCustomer = getCustomerByEmail(customer.getEmail());
         if (dbCustomer != null) {
             customer.setPassword(passwordEncoder.encode(customer.getPassword()));
-            userMapper.updatePassword(customer);
+            userMapper.updatePasswordCustomer(customer);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean modifyPasswordBranch(Branch branch) {
+        Branch dbBranch = getBranchByEmail(branch.getEmail());
+        if (dbBranch != null) {
+            branch.setPassword(passwordEncoder.encode(branch.getPassword()));
+            userMapper.updatePasswordBranch(branch);
             return true;
         }
         return false;

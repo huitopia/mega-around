@@ -83,5 +83,10 @@ public interface UserMapper {
     @Update("""
             UPDATE customer SET password=#{password} WHERE email=#{email}
             """)
-    int updatePassword(Customer customer);
+    int updatePasswordCustomer(Customer customer);
+
+    @Update("""
+            UPDATE branch SET password=#{password} WHERE email=#{email}
+            """)
+    int updatePasswordBranch(Branch branch);
 }

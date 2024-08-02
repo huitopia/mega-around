@@ -22,3 +22,6 @@ WHERE customer_id = 11;
 UPDATE coupon
 SET count = 2
 WHERE customer_id = 11;
+
+ALTER TABLE customer
+    DROP COLUMN phone;
