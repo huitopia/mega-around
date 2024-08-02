@@ -263,4 +263,19 @@ public class UserController {
         Customer result = service.getCustomerByNickName(customer.getNickName());
         return ResponseEntity.ok().body(result);
     }
+
+    // 지점 이메일 찾기
+    @PostMapping("/user/branch/email")
+    public ResponseEntity findBranchEmail(@RequestBody Branch branch) {
+        // 등록되지 않은 닉네임인지 확인
+        if (!service.isNameRegisteredBranch(branch.getBranchName())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("등록되지 않은 닉네임입니다");
+        }
+        // 등록되었으면 비밀번호가 일치하는지
+        if (!service.isPasswordMatchBranch(branch)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("패스워드가 일치하지 않습니다");
+        }
+        Branch result = service.getBranchByBranchName(branch.getBranchName());
+        return ResponseEntity.ok().body(result);
+    }
 }

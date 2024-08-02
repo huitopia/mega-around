@@ -371,4 +371,19 @@ public class UserService {
         }
         return false;
     }
+
+    public boolean isNameRegisteredBranch(String branchName) {
+        if (userMapper.selectBranchByBranchName(branchName) != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isPasswordMatchBranch(Branch branch) {
+        Branch dbBranch = userMapper.selectBranchByBranchName(branch.getBranchName());
+        if (passwordEncoder.matches(branch.getPassword(), dbBranch.getPassword())) {
+            return true;
+        }
+        return false;
+    }
 }
