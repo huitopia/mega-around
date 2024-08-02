@@ -36,7 +36,7 @@ export function BranchPageModalComp({
     }
   }, [orderId]);
 
-  if (orderItem === null) {
+  if (orderItem === null || orderItem === []) {
     return <Spinner />;
   }
 
@@ -53,6 +53,15 @@ export function BranchPageModalComp({
         setIsChanged(true);
       })
       .catch(() => errorToast("변경 실패했습니다. 다시 시도해주세요"));
+  }
+
+  function modifyTime(createdAtString) {
+    if (!createdAtString) {
+      return "시간 정보 없음";
+    }
+
+    const time = createdAtString.substring(14).split(":");
+    return time[0] + "시 " + (parseInt(time[1]) + 5) + "분";
   }
 
   return (
@@ -110,6 +119,13 @@ export function BranchPageModalComp({
               )}
             </Box>
           ))}
+          <Flex mt={6} fontWeight={"bold"} align={"center"} ml={2}>
+            <Box color={"red"}  fontSize={"lg"}>
+              {modifyTime(orderItem.createdAtString)}
+            </Box>
+            <Box fontSize={"17px"}>
+              까지 제조가 완료되어야 합니다
+            </Box></Flex>
         </ModalBody>
         <ModalFooter>
           <Button onClick={onClose} mr={3} colorScheme={"pink"}>

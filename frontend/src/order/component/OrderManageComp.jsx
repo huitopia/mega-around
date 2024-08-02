@@ -69,6 +69,9 @@ export function OrderManageComp({
   text,
   setIsChanged,
   isChanged,
+  date,
+  startTime,
+  endTime,
 }) {
   const [orderList, setOrderList] = useState(null);
   const { onClose, isOpen, onOpen } = useDisclosure();
@@ -90,7 +93,7 @@ export function OrderManageComp({
   useEffect(() => {
     setIsChanged(false);
     axios
-      .get(`/api/orders/list?stateId=${stateId}&branchId=${branchId}`)
+      .get(`/api/orders/list?stateId=${stateId}&branchId=${branchId}&date=${date}&startTime=${startTime}&endTime=${endTime}`)
       .then((res) => setOrderList(res.data));
   }, [isChanged]);
 
