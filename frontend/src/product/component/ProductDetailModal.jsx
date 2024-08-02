@@ -35,7 +35,13 @@ import { OrderContext } from "../../order/component/OrderProvider.jsx";
 import { LoginContext } from "../../component/LoginProvider.jsx";
 import { CustomAlert } from "../../component/CustomAlert.jsx";
 
-export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
+export const ProductDetailModal = ({
+  isOpen,
+  onClose,
+  productId,
+  branchId,
+  branchName,
+}) => {
   const account = useContext(LoginContext);
   const [data, setData] = useState({
     id: 0,
@@ -201,7 +207,7 @@ export const ProductDetailModal = ({ isOpen, onClose, productId }) => {
 
     directOrder.setItem({
       branchId: branchId,
-      branchName: "메가커피",
+      branchName: branchName,
       totalPrice,
       orderProduct: [
         {

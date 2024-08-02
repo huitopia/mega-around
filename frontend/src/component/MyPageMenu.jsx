@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
+  Divider,
   Flex,
   Menu,
   MenuButton,
@@ -21,7 +22,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Client } from "@stomp/stompjs";
 import axios from "axios";
 
-function MyPageMenu({ setIsChanged, updateAlarm }) {
+function MyPageMenu({ isChanged, setIsChanged, updateAlarm }) {
   const navigate = useNavigate();
   const account = useContext(LoginContext);
   const [noticeList, setNoticeList] = useState({});
@@ -44,7 +45,9 @@ function MyPageMenu({ setIsChanged, updateAlarm }) {
         stompClient.subscribe(`/sub/${account.id}`, (message) => {
           const newNotice = JSON.parse(message.body);
           setNoticeList(newNotice);
+          setUnreadNoticeCount(getUnreadNoticeCount(newNotice));
           setIsChanged(true);
+          setIsChanged(false);
         });
       },
       onStompError: (frame) => {
@@ -63,32 +66,65 @@ function MyPageMenu({ setIsChanged, updateAlarm }) {
     if (account.isLoggedIn()) {
       axios.get(`/api/event/notice/${account.id}`).then((res) => {
         setNoticeList(res.data);
-        console.log(res.data);
+        setUnreadNoticeCount(getUnreadNoticeCount(res.data));
       });
     }
-  }, [updateAlarm]);
+  }, [updateAlarm, isChanged]);
 
-  function getUnreadNoticeCount(item){
-    item
+  function getUnreadNoticeCount(items) {
+    return items.reduce((count, item) => {
+      if (!item.isRead) {
+        count++;
+      }
+      return count;
+    }, 0);
+  }
+
+  function handleReadNotice() {
+    axios
+      .put("/api/event/notice", { customerId: account.id })
+      .then(() => setIsChanged(true));
   }
 
   return (
     <Flex>
       <Popover>
         <PopoverTrigger>
-          <Flex alignItems={"center"} mr={2} gap={1}>
-          <Box color={"white"} bg={"red"} w="20px" h={"20px"} borderRadius={"full"} fontSize={"sm"} textAlign={"center"}>{unreadNoticeCount}</Box>
-          <FontAwesomeIcon icon={faBell} />
+          <Flex alignItems={"center"} mr={2} gap={1} onClick={handleReadNotice}>
+            {account.hasAuth() === "customer" && (
+              <>
+                <Box
+                  color={"white"}
+                  bg={"red"}
+                  w="20px"
+                  h={"20px"}
+                  borderRadius={"full"}
+                  fontSize={"sm"}
+                  textAlign={"center"}
+                >
+                  {unreadNoticeCount}
+                </Box>
+                <FontAwesomeIcon icon={faBell} />
+              </>
+            )}
           </Flex>
         </PopoverTrigger>
-        <PopoverContent>
+        <PopoverContent w={"350px"}>
           <PopoverArrow />
           <PopoverCloseButton />
-          <PopoverBody>
+          <PopoverBody mt={6}>
             {noticeList && Object.keys(noticeList).length > 0 ? (
-              noticeList.map((notice) => (
+              noticeList.map((notice, index) => (
                 <Box key={notice.id}>
-                  <Box>{notice.content}</Box>
+                  <Box
+                    bg={notice.isRead ? "white" : "red.100"}
+                    fontSize={"16px"}
+                  >
+                    {notice.content}
+                  </Box>
+                  {index < noticeList.length - 1 && (
+                    <Divider borderColor="gray.200" my={4} />
+                  )}
                 </Box>
               ))
             ) : (
@@ -121,9 +157,16 @@ function MyPageMenu({ setIsChanged, updateAlarm }) {
             </>
           )}
           {account.hasAuth() === "branch" && (
-            <MenuItem onClick={() => navigate(`/mypage/branch/${account.id}`)}>
-              내 정보(지점)
-            </MenuItem>
+            <>
+              <MenuItem
+                onClick={() => navigate(`/mypage/branch/${account.id}`)}
+              >
+                내 정보(지점)
+              </MenuItem>
+              <MenuItem onClick={() => navigate(`/branch/order/${account.id}`)}>
+                주문 관리
+              </MenuItem>
+            </>
           )}
           {account.hasAuth() === "customer" || (
             <MenuItem onClick={() => navigate(`/product/list`)}>

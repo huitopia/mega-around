@@ -2,7 +2,6 @@ import {
   Box,
   Card,
   Center,
-  Divider,
   Flex,
   Heading,
   Image,
@@ -11,7 +10,7 @@ import {
   Spinner,
   Stack,
   StackDivider,
-  Text
+  Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -30,7 +29,10 @@ export function OrderDetail() {
     });
   }, [id]);
 
-  const progressPercent = ((progress - 1) / 2) * 100;
+  const progressPercent = () => {
+    const percent = ((progress - 1) / 2) * 100;
+    return percent === 0 ? 4 : percent;
+  };
 
   if (order === null) {
     return <Spinner />;
@@ -57,16 +59,17 @@ export function OrderDetail() {
   }
 
   function modifyTime(createdAtString) {
-    const time = createdAtString.substring(14).split(":")
-    return time[0]+"시 " + (parseInt(time[1]) + 5)+ "분";
+    const time = createdAtString.substring(14).split(":");
+    return time[0] + "시 " + (parseInt(time[1]) + 5) + "분";
   }
 
   return (
     <Box maxWidth="1000px" mx="auto">
-      <Box mb={4}>
-        <Heading>Order Detail</Heading>
+      <Box mt={"50px"} mb={"50px"}>
+        <Center>
+          <Heading>Order Detail</Heading>
+        </Center>
       </Box>
-      <Divider border="1px solid black" my={4} />
       <Card variant={"outline"} mb={4} pl={3} pr={3}>
         <Center
           mb={2}
@@ -80,25 +83,26 @@ export function OrderDetail() {
         </Center>
         <Center mb={2} mt={7}>
           <Box textAlign="center">
-            <Box fontSize={"20px"}>
-              {order.branchName}
-            </Box>
+            <Box fontSize={"20px"}>{order.branchName}</Box>
             <Box fontWeight={"bold"} fontSize={"22px"} mt={1}>
               주문번호: {order.id}
             </Box>
-            <Box color={"#656565"} mt={2}>{order.createdAtString}</Box>
-            <Box bg={"#f8f9fa"}
-                 h={"50px"}
-                 display="flex"
-                 alignItems="center"
-                 justifyContent="center"
-                 w={"400px"}
-            mt={3}>
-              <Text fontSize={"xl"} fontWeight={"bold"}>{modifyTime(order.createdAtString)}</Text>
-              <Text fontSize={"16px"}
-              >
-                까지 제조가 완료될 예정입니다.
+            <Box color={"#656565"} mt={2}>
+              {order.createdAtString}
+            </Box>
+            <Box
+              bg={"#f8f9fa"}
+              h={"50px"}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              w={"400px"}
+              mt={3}
+            >
+              <Text fontSize={"xl"} fontWeight={"bold"}>
+                {modifyTime(order.createdAtString)}
               </Text>
+              <Text fontSize={"16px"}>까지 제조가 완료될 예정입니다.</Text>
             </Box>
           </Box>
         </Center>
@@ -111,7 +115,7 @@ export function OrderDetail() {
           <Progress
             colorScheme={"red"}
             mt={3}
-            value={progressPercent}
+            value={progressPercent()}
             height="9px"
             width="full"
             borderRadius={"5px"}
@@ -136,13 +140,17 @@ export function OrderDetail() {
                   {item.optionList && (
                     <Box>
                       {item.optionList.map((option, idx) => (
-                        <Box key={idx} fontSize={"sm"}>{option}</Box>
+                        <Box key={idx} fontSize={"sm"}>
+                          {option}
+                        </Box>
                       ))}
                     </Box>
                   )}
-                  <Box mt={3} fontSize={"21px"}>{item.count}개</Box>
+                  <Box mt={3} fontSize={"21px"}>
+                    {item.count}개
+                  </Box>
                 </Box>
-                <Spacer/>
+                <Spacer />
                 <Box fontWeight={"bold"} fontSize={"23px"} mt={14}>
                   {(item.totalPrice * item.count).toLocaleString("ko-KR")}원
                 </Box>

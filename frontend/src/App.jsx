@@ -26,6 +26,7 @@ import { MyPageBranch } from "./user/MyPageBranch.jsx";
 import { EditCustomer } from "./user/EditCustomer.jsx";
 import { EditBranch } from "./user/EditBranch.jsx";
 import { BranchList } from "./branch/BranchList.jsx";
+import "./fonts.css";
 
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
@@ -57,7 +58,7 @@ const router = createBrowserRouter([
       // cart
       { path: "cart", element: <Cart /> },
       // branch_order
-      { path: "branch/order", element: <BranchPage /> },
+      { path: "branch/order/:id", element: <BranchPage /> },
 
       // user
       { path: "signup", element: <SignUp /> },

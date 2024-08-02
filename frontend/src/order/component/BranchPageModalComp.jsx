@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Divider,
   Flex,
   Image,
   Modal,
@@ -35,21 +36,17 @@ export function BranchPageModalComp({
     }
   }, [orderId]);
 
-  if (orderItem === null) {
+  if (orderItem === null || orderItem === []) {
     return <Spinner />;
   }
 
   function handleStateChange() {
     axios
-      .put(
-        `/api/orders`,
-        orderItem,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
+      .put(`/api/orders`, orderItem, {
+        headers: {
+          "Content-Type": "application/json",
         },
-      )
+      })
       .then(() => {
         onClose();
         successToast("변경되었습니다");
@@ -58,12 +55,42 @@ export function BranchPageModalComp({
       .catch(() => errorToast("변경 실패했습니다. 다시 시도해주세요"));
   }
 
+  function modifyTime(createdAtString) {
+    if (!createdAtString) {
+      return "시간 정보 없음";
+    }
+
+    const time = createdAtString.substring(14).split(":");
+    return time[0] + "시 " + (parseInt(time[1]) + 5) + "분";
+  }
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalContent>
-        <ModalHeader>주문 상세</ModalHeader>
+        <ModalHeader fontSize={"25px"}>{orderItem.id} 번 주문</ModalHeader>
         <ModalBody>
-          {orderItem.isTakeOut == 1 ? "포장해주세요." : "매장에서 먹고 갈게요"}
+          <Flex>
+            <Box fontWeight={"bold"} mr={5}>
+              요청사항
+            </Box>
+            <Box>{orderItem.request}</Box>
+          </Flex>
+          <Flex mb={5}>
+            <Box fontWeight={"bold"} mr={5}>
+              포장옵션
+            </Box>
+            <Box>
+              <Box>
+                {orderItem.isTakeOut == 1
+                  ? "포장해주세요."
+                  : "매장에서 먹고 갈게요"}
+              </Box>
+              <Box>
+                {orderItem.option &&
+                  (orderItem.option[0] ? "캐리어/봉투 필요해요" : "")}
+              </Box>
+            </Box>
+          </Flex>
           {orderItem.orderProduct.map((item, index) => (
             <Box key={index} mb={4}>
               <Flex>
@@ -80,20 +107,32 @@ export function BranchPageModalComp({
                   {item.optionList && (
                     <Box>
                       {item.optionList.map((option, idx) => (
-                        <Box key={idx}>{option}</Box>
+                        <Box key={idx} fontSize={"sm"}>{option}</Box>
                       ))}
                     </Box>
                   )}
                   <Box>{item.count}개</Box>
                 </Box>
               </Flex>
+              {index < orderItem.orderProduct.length - 1 && (
+                <Divider borderColor="gray.200" my={4} />
+              )}
             </Box>
           ))}
+          <Flex mt={6} fontWeight={"bold"} align={"center"} ml={2}>
+            <Box color={"red"}  fontSize={"lg"}>
+              {modifyTime(orderItem.createdAtString)}
+            </Box>
+            <Box fontSize={"17px"}>
+              까지 제조가 완료되어야 합니다
+            </Box></Flex>
         </ModalBody>
         <ModalFooter>
-          <Button onClick={onClose}>닫기</Button>
+          <Button onClick={onClose} mr={3} colorScheme={"pink"}>
+            닫기
+          </Button>
           {stateId === 3 || (
-            <Button onClick={handleStateChange}>
+            <Button onClick={handleStateChange} colorScheme={"orange"}>
               {stateId === 1 ? "제조중으" : "제조완료"}로 변경
             </Button>
           )}
