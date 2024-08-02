@@ -16,7 +16,6 @@ import { Order } from "./order/Order.jsx";
 import { OrderList } from "./order/OrderList.jsx";
 import { OrderDetail } from "./order/OrderDetail.jsx";
 import { ProductUpdate } from "./product/ProductUpdate.jsx";
-import { Cart } from "./cart/Cart.jsx";
 import { OrderProvider } from "./order/component/OrderProvider.jsx";
 import { BranchPage } from "./order/BranchPage.jsx";
 import { Coupon } from "./event/Coupon.jsx";
@@ -26,6 +25,7 @@ import { MyPageBranch } from "./user/MyPageBranch.jsx";
 import { EditCustomer } from "./user/EditCustomer.jsx";
 import { EditBranch } from "./user/EditBranch.jsx";
 import { BranchList } from "./branch/BranchList.jsx";
+import { CartProductComp } from "./cart/component/CartProductComp.jsx";
 
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
@@ -55,7 +55,7 @@ const router = createBrowserRouter([
       { path: "/order/list", element: <OrderList /> },
       { path: "/order/:id", element: <OrderDetail /> },
       // cart
-      { path: "cart", element: <Cart /> },
+      { path: "cart", element: <CartProductComp /> },
       // branch_order
       { path: "branch/order", element: <BranchPage /> },
 
