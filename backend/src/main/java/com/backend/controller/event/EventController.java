@@ -7,10 +7,7 @@ import org.springframework.context.annotation.Description;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -44,5 +41,13 @@ public class EventController {
     @Description("네브바 알림 조회")
     public ResponseEntity getAlarm(@PathVariable Integer customerId) {
         return ResponseEntity.ok(eventService.getAlarm(customerId));
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/event/notice")
+    @Description("알림 읽음으로 변경")
+    public void modifyNotice(@RequestBody Notice notice) {
+        System.out.println("notice.getCustomerId() = " + notice.getCustomerId());
+        eventService.modifyNotice(notice.getCustomerId());
     }
 }

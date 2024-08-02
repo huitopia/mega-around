@@ -45,17 +45,19 @@ public class CartService {
 
     public Object getCart(Integer customerId) throws JsonProcessingException {
         Cart cart = cartMapper.selectCartByCustomerId(customerId);
-        List<CartProduct> cartProductList = cartMapper.selectCartProductListByCartId(cart.getId());
-        for (CartProduct cartProduct : cartProductList) {
-            List<Integer> optionList = objectMapper.readValue(cartProduct.getOptions(), List.class);
-            List<String> optionListString = new ArrayList<>();
-            for (Integer id : optionList) {
-                optionListString.add(productMapper.selectOptionById(id));
+        if (cart != null) {
+            List<CartProduct> cartProductList = cartMapper.selectCartProductListByCartId(cart.getId());
+            for (CartProduct cartProduct : cartProductList) {
+                List<Integer> optionList = objectMapper.readValue(cartProduct.getOptions(), List.class);
+                List<String> optionListString = new ArrayList<>();
+                for (Integer id : optionList) {
+                    optionListString.add(productMapper.selectOptionById(id));
+                }
+                cartProduct.setOptionList(optionListString);
+                cartProduct.setOption(optionList);
             }
-            cartProduct.setOptionList(optionListString);
-            cartProduct.setOption(optionList);
+            cart.setCartProduct(cartProductList);
         }
-        cart.setCartProduct(cartProductList);
 
         return cart;
     }

@@ -325,4 +325,50 @@ public class UserService {
         List<Map<String, Object>> recommendList = userMapper.selectRecommendList();
         return recommendList;
     }
+
+    public boolean checkPasswordPattern(String password) {
+        if (password == null || password.isBlank()) {
+            System.out.println("null 또는 black password = " + password);
+            return false;
+        }
+        String passwordPattern = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,20}$";
+        System.out.println("passwordPattern 일치 여부 = " + password.trim().matches(passwordPattern));
+        return password.trim().matches(passwordPattern);
+    }
+
+    public boolean modifyPasswordCustomer(Customer customer) {
+        Customer dbCustomer = getCustomerByEmail(customer.getEmail());
+        if (dbCustomer != null) {
+            customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+            userMapper.updatePasswordCustomer(customer);
+            return true;
+        }
+        return false;
+    }
+
+
+    public boolean modifyPasswordBranch(Branch branch) {
+        Branch dbBranch = getBranchByEmail(branch.getEmail());
+        if (dbBranch != null) {
+            branch.setPassword(passwordEncoder.encode(branch.getPassword()));
+            userMapper.updatePasswordBranch(branch);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isNameRegistered(String NickName) {
+        if (userMapper.selectCustomerByNickName(NickName) != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isPasswordMatch(Customer customer) {
+        Customer dbCustomer = userMapper.selectCustomerByNickName(customer.getNickName());
+        if (passwordEncoder.matches(customer.getPassword(), dbCustomer.getPassword())) {
+            return true;
+        }
+        return false;
+    }
 }

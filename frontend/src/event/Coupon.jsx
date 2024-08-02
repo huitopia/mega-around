@@ -1,4 +1,4 @@
-import { Box, Divider, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Center, Divider, Flex, Heading, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { CouponComp } from "./component/CouponComp.jsx";
@@ -23,15 +23,23 @@ export function Coupon() {
 
   return (
     <Box maxWidth="1000px" mx={"auto"}>
-      <Box>
-        <Heading>Coupon</Heading>
+      <Box mt={"50px"} mb={"50px"}>
+        <Center>
+          <Heading>Coupon</Heading>
+        </Center>
       </Box>
       <Divider border={"1px solid black"} my={4} />
       {loading ? (
         <Box>Loading...</Box>
       ) : couponCount > 0 ? (
         <Box ml={3}>
-          <Flex fontWeight={"bold"} fontSize={"xl"} alignItems="center" mb={3} gap={1}>
+          <Flex
+            fontWeight={"bold"}
+            fontSize={"xl"}
+            alignItems="center"
+            mb={3}
+            gap={1}
+          >
             <Text fontSize={"27px"}>사용할 수 있는 쿠폰이</Text>
             <Text fontSize={"30px"} color={"red"}>
               {couponCount}
@@ -41,10 +49,12 @@ export function Coupon() {
           <CouponComp />
         </Box>
       ) : (
-        <Box>보유한 쿠폰이 없습니다.</Box>
+        <Center>
+          <Box fontSize={"18px"}>보유한 쿠폰이 없습니다.</Box>
+        </Center>
       )}{" "}
       <Box>
-        <Box fontWeight={"bold"} mt={10} fontSize={"lg"} mb={3} ml={3}>
+        <Box fontWeight={"bold"} mt={"60px"} fontSize={"lg"} mb={3} ml={3}>
           적립 및 사용내역
         </Box>
         {couponList.map((coupon, index) => (

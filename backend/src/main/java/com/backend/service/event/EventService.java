@@ -29,8 +29,7 @@ public class EventService {
 
     @Description("스탬프/쿠폰 발급 및 알림 추가")
     public void addStamp(Integer customerId, Integer totalCount, Integer couponCount) {
-        System.out.println("totalCount = " + totalCount);
-        System.out.println("couponCount = " + couponCount);
+
         // 쿠폰 사용
         if (couponCount != 0) {
             eventMapper.insertNotice(customerId, "coupon", "쿠폰을 " + couponCount + "개 사용하였습니다.");
@@ -43,14 +42,11 @@ public class EventService {
 
         // 총 스탬프 수 조회
         Integer stampCount = eventMapper.selectStampByCustomerId(customerId);
-        System.out.println("stampCount = " + stampCount);
 
         // 쿠폰으로 전환
         if (stampCount > 9) {
             Integer newCouponCount = stampCount / 10;
             Integer restStampCount = stampCount % 10;
-            System.out.println("newCouponCount = " + newCouponCount);
-            System.out.println("restStampCount = " + restStampCount);
 
             // 쿠폰 적립 & 스탬프 전환
             eventMapper.updateCoupon(customerId, newCouponCount);
@@ -71,5 +67,9 @@ public class EventService {
 
     public List<Notice> getAlarm(Integer customerId) {
         return eventMapper.selectAllNoticeByCustomerId(customerId);
+    }
+
+    public void modifyNotice(Integer customerId) {
+        eventMapper.updateNotice(customerId);
     }
 }

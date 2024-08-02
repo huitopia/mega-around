@@ -41,6 +41,7 @@ export const ProductDetailModal = ({
   onClose,
   productId,
   branchId,
+  branchName,
 }) => {
   const account = useContext(LoginContext);
   const [data, setData] = useState({
@@ -207,7 +208,7 @@ export const ProductDetailModal = ({
 
     directOrder.setItem({
       branchId: branchId,
-      branchName: "메가커피",
+      branchName: branchName,
       totalPrice,
       orderProduct: [
         {

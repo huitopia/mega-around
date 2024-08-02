@@ -1,22 +1,23 @@
 import {
   Box,
+  Center,
   Divider,
   Heading,
-  Tab, TabIndicator,
+  Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
 } from "@chakra-ui/react";
-import { useState } from "react";
 import { OrderListPanel } from "./component/OrderListPanel.jsx";
 
 export function OrderList() {
-
   return (
     <Box maxWidth="1000px" mx={"auto"}>
-      <Box>
-        <Heading>Order List</Heading>
+      <Box mt={"50px"} mb={"50px"}>
+        <Center>
+          <Heading>Order List</Heading>
+        </Center>
       </Box>
       <Divider border={"1px solid black"} my={4} />
       <Tabs isFitted variant="enclosed" colorScheme="#401F02">

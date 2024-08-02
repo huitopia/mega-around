@@ -28,13 +28,15 @@ export function LoginBranch() {
         account.login(res.data.token);
         successToast(res.data.name + "님! 환영합니다");
         navigate("/");
+        window.scrollTo({ top: 0, behavior: "auto" });
       })
       .catch((err) => {
         account.logout();
-        const errorMessage = err.response
-          ? err.response.data
-          : "로그인에 실패하였습니다.";
-        errorToast(errorMessage);
+        if (email.length === 0) {
+          errorToast("이메일을 입력해주세요.");
+        } else if (err.response.status === 401 || err.response.status === 403) {
+          errorToast(err.response.data);
+        } else errorToast("로그인을 실패하였습니다");
       });
   }
 
@@ -75,7 +77,7 @@ export function LoginBranch() {
               </InputGroup>
             </FormControl>
           </Box>
-          <Box mt={10}>
+          <Box mt={8}>
             <Button
               onClick={handleBranchLogin}
               bg={"#fdd000"}
@@ -83,9 +85,33 @@ export function LoginBranch() {
               width={"400px"}
               fontSize={"14px"}
               borderRadius={"40"}
+              _hover={{ backgroundColor: "gray.300" }}
             >
               지점 로그인
             </Button>
+          </Box>
+          <Box display="flex" mt={6}>
+            <Box
+              fontSize="sm"
+              ml={"auto"}
+              cursor="pointer"
+              as={"u"}
+              color={"gray.500"}
+              onClick={() => navigate("/find-branchEmail")}
+            >
+              이메일 찾기
+            </Box>
+            <Box
+              fontSize="sm"
+              ml={"auto"}
+              mr="80px"
+              cursor="pointer"
+              as={"u"}
+              color={"gray.500"}
+              onClick={() => navigate("/find-branchPassword")}
+            >
+              비밀번호 찾기
+            </Box>
           </Box>
         </Box>
       </Center>

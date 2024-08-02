@@ -28,17 +28,15 @@ export function Login() {
         account.login(res.data.token);
         successToast(`${res.data.name}님! 환영합니다.`);
         navigate("/");
+        window.scrollTo({ top: 0, behavior: "auto" });
       })
       .catch((err) => {
         account.logout();
         if (email.length === 0) {
           errorToast("이메일을 입력해주세요.");
-        } else {
-          const errorMessage = err.response
-            ? err.response.data
-            : "로그인에 실패하였습니다.";
-          errorToast(errorMessage);
-        }
+        } else if (err.response.status === 401 || err.response.status === 403) {
+          errorToast(err.response.data);
+        } else errorToast("로그인을 실패하였습니다");
       });
   }
 
@@ -79,7 +77,8 @@ export function Login() {
               </InputGroup>
             </FormControl>
           </Box>
-          <Box mt={10}>
+
+          <Box mt={8}>
             <Button
               onClick={handleCustomerLogin}
               bg={"black"}
@@ -87,21 +86,47 @@ export function Login() {
               width={"400px"}
               fontSize={"14px"}
               borderRadius={"40"}
+              _hover={{ backgroundColor: "gray.600" }}
             >
               이메일로 로그인
             </Button>
           </Box>
-          {/*<Box position="relative" padding="10" mt={5}>*/}
+
+          <Box display="flex" mt={6}>
+            <Box
+              fontSize="sm"
+              ml={"auto"}
+              cursor="pointer"
+              as={"u"}
+              color={"gray.500"}
+              onClick={() => navigate("/find-customerEmail")}
+            >
+              이메일 찾기
+            </Box>
+            <Box
+              fontSize="sm"
+              ml={"auto"}
+              mr="80px"
+              cursor="pointer"
+              as={"u"}
+              color={"gray.500"}
+              onClick={() => navigate("/find-customerPassword")}
+            >
+              비밀번호 찾기
+            </Box>
+          </Box>
+
+          {/*<Box position="relative" padding="10" mt={0}>*/}
           {/*  <Divider />*/}
           {/*  <AbsoluteCenter bg="white" px="4">*/}
           {/*    또는*/}
           {/*  </AbsoluteCenter>*/}
           {/*</Box>*/}
-          <Divider mt={10} />
+          <Divider mt={6} />
 
           <Center>
             <Button
-              mt={10}
+              mt={6}
               borderColor={"#fdd000"}
               variant={"outline"}
               bg={"white"}

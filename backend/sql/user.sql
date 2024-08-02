@@ -19,6 +19,13 @@ UPDATE stamp
 SET count = 6
 WHERE customer_id = 11;
 
+SELECT *
+FROM customer
+WHERE email = 'joo@naver.com';
+
 UPDATE coupon
 SET count = 2
 WHERE customer_id = 11;
+
+ALTER TABLE customer
+    DROP COLUMN phone;

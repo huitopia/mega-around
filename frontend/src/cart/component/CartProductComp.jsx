@@ -34,6 +34,7 @@ export function CartProductComp(props) {
     axios.get("/api/carts").then((res) => {
       setCart(res.data);
       setIsChanged(false);
+      console.log(res.data);
     });
   }, [userId, isChanged]);
 
@@ -155,8 +156,7 @@ export function CartProductComp(props) {
                         </Flex>
                       </Box>
 
-                      <Spacer />
-                      <Spacer />
+            <Spacer />
 
                       <Box>
                         <Flex justify={"right"}>

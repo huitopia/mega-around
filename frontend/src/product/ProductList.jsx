@@ -8,6 +8,7 @@ export const ProductList = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const branchId = searchParams.get("branchId");
+  const branchName = searchParams.get("branchName");
   const [mainCategory, setMainCategory] = useState("커피");
   const [subCategory, setSubCategory] = useState("에스프레소");
 
@@ -35,6 +36,7 @@ export const ProductList = () => {
       <Box maxWidth="1200px" mx={"auto"} mt={"50px"}>
         <CategoryTabComp category={category} />
         <ProductBodyComp
+          branchName={branchName}
           branchId={branchId}
           mainCategory={mainCategory}
           subCategory={subCategory}

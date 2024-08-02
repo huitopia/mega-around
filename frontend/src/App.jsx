@@ -25,6 +25,12 @@ import { MyPageBranch } from "./user/MyPageBranch.jsx";
 import { EditCustomer } from "./user/EditCustomer.jsx";
 import { EditBranch } from "./user/EditBranch.jsx";
 import { BranchList } from "./branch/BranchList.jsx";
+import { FindCustomerPassword } from "./user/FindCustomerPassword.jsx";
+import { FindCustomerEmail } from "./user/FindCustomerEmail.jsx";
+import { FindBranchPassword } from "./user/FindBranchPassword.jsx";
+import { FindBranchEmail } from "./user/FindBranchEmail.jsx";
+import { ResultCustomerEmail } from "./ResultCustomerEmail.jsx";
+import "./fonts.css";
 import { CartProductComp } from "./cart/component/CartProductComp.jsx";
 
 axios.interceptors.request.use((config) => {
@@ -57,7 +63,7 @@ const router = createBrowserRouter([
       // cart
       { path: "cart", element: <CartProductComp /> },
       // branch_order
-      { path: "branch/order", element: <BranchPage /> },
+      { path: "branch/order/:id", element: <BranchPage /> },
 
       // user
       { path: "signup", element: <SignUp /> },
@@ -69,6 +75,11 @@ const router = createBrowserRouter([
       { path: "mypage/branch/:id", element: <MyPageBranch /> },
       { path: "mypage/customer/edit/:id", element: <EditCustomer /> },
       { path: "mypage/branch/edit/:id", element: <EditBranch /> },
+      { path: "find-customerEmail", element: <FindCustomerEmail /> },
+      { path: "customer/email-result", element: <ResultCustomerEmail /> },
+      { path: "find-customerPassword", element: <FindCustomerPassword /> },
+      { path: "find-branchEmail", element: <FindBranchEmail /> },
+      { path: "find-branchPassword", element: <FindBranchPassword /> },
     ],
   },
 ]);
