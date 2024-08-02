@@ -174,6 +174,7 @@ export const ProductDetailModal = ({
       .post("/api/carts", {
         // TODO. 나중에 변경
         branchId: branchId,
+        branchName: branchName,
         totalPrice,
         cartProduct: [
           {
