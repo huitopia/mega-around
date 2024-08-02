@@ -56,7 +56,11 @@ export function Navbar({ updateAlarm }) {
           {/*</Box>*/}
           {/*{showTabs && <MyPageMenu />}*/}
           <Box>
-            <MyPageMenu setIsChanged={setIsChanged} updateAlarm={updateAlarm} />
+            <MyPageMenu
+              isChanged={isChanged}
+              setIsChanged={setIsChanged}
+              updateAlarm={updateAlarm}
+            />
           </Box>
         </>
       )}

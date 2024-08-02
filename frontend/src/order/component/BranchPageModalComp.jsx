@@ -36,7 +36,7 @@ export function BranchPageModalComp({
     }
   }, [orderId]);
 
-  if (orderItem === null || orderItem === []) {
+  if (orderItem === null || orderItem.length === 0) {
     return <Spinner />;
   }
 
@@ -107,7 +107,9 @@ export function BranchPageModalComp({
                   {item.optionList && (
                     <Box>
                       {item.optionList.map((option, idx) => (
-                        <Box key={idx} fontSize={"sm"}>{option}</Box>
+                        <Box key={idx} fontSize={"sm"}>
+                          {option}
+                        </Box>
                       ))}
                     </Box>
                   )}
@@ -120,12 +122,11 @@ export function BranchPageModalComp({
             </Box>
           ))}
           <Flex mt={6} fontWeight={"bold"} align={"center"} ml={2}>
-            <Box color={"red"}  fontSize={"lg"}>
+            <Box color={"red"} fontSize={"lg"}>
               {modifyTime(orderItem.createdAtString)}
             </Box>
-            <Box fontSize={"17px"}>
-              까지 제조가 완료되어야 합니다
-            </Box></Flex>
+            <Box fontSize={"17px"}>까지 제조가 완료되어야 합니다</Box>
+          </Flex>
         </ModalBody>
         <ModalFooter>
           <Button onClick={onClose} mr={3} colorScheme={"pink"}>
