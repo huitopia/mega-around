@@ -1,9 +1,11 @@
 import {
   Box,
   Center,
+  Heading,
   Spinner,
   Table,
   Td,
+  Text,
   Th,
   Tr,
   useDisclosure,
@@ -66,11 +68,26 @@ export function MyPageCustomer() {
 
   return (
     <>
+      <Box
+        height={"280px"}
+        backgroundColor={"#444444"}
+        textAlign={"center"}
+        display={"flex"}
+        alignItems={"center"}
+        justifyContent="center"
+      >
+        <Box>
+          <Heading size="2xl" textColor={"#FDD000"}>
+            MEGA AROUND
+          </Heading>
+          <Text textColor={"pink"}>마이페이지</Text>
+        </Box>
+      </Box>
       <Center mt={10}>
         <Box w={500}>
           {id === account.id && (
             <>
-              <Center mt={5} mb={10} fontSize={"25px"} fontWeight={"bold"}>
+              <Center mt={1} mb={8} fontSize={"25px"} fontWeight={"bold"}>
                 내 정보 확인
               </Center>
               <Center>

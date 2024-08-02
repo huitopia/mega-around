@@ -8,6 +8,7 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
+  Heading,
   Input,
   InputGroup,
   InputRightElement,
@@ -17,6 +18,7 @@ import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import { CustomToast } from "../component/CustomToast.jsx";
 import { Postcode } from "./component/Postcode.jsx";
+import { formLabel } from "../component/css/style.js";
 
 export function SignUpBranch() {
   const [email, setEmail] = useState("");
@@ -117,6 +119,21 @@ export function SignUpBranch() {
 
   return (
     <>
+      <Box
+        height={"280px"}
+        backgroundColor={"#444444"}
+        textAlign={"center"}
+        display={"flex"}
+        alignItems={"center"}
+        justifyContent="center"
+      >
+        <Box>
+          <Heading size="2xl" textColor={"#FDD000"}>
+            MEGA AROUND
+          </Heading>
+          <Text textColor={"pink"}>회원가입</Text>
+        </Box>
+      </Box>
       <Center>
         <Box w={520} mt={10}>
           <Center mt={5} mb={10} fontSize={"25px"} fontWeight={"bold"}>
@@ -125,7 +142,7 @@ export function SignUpBranch() {
           <Box>
             <Box mb={7}>
               <FormControl isRequired>
-                <FormLabel>이메일</FormLabel>
+                <FormLabel {...formLabel}>이메일</FormLabel>
                 <Flex>
                   <Input
                     type={"email"}
@@ -151,7 +168,7 @@ export function SignUpBranch() {
                   </Button>
                 </Flex>
                 {email.length > 0 && (
-                  <FormHelperText color="#dc7b84">
+                  <FormHelperText color="#dc7b84" fontSize={"12px"}>
                     {isValidEmail
                       ? isCheckedEmail || "중복확인 버튼을 눌러주세요."
                       : "유효한 이메일을 입력해주세요."}
@@ -161,7 +178,7 @@ export function SignUpBranch() {
             </Box>
             <Box mb={7}>
               <FormControl isRequired>
-                <FormLabel>비밀번호</FormLabel>
+                <FormLabel {...formLabel}>비밀번호</FormLabel>
                 <InputGroup>
                   <Input
                     onChange={(e) => setPassword(e.target.value)}
@@ -181,7 +198,7 @@ export function SignUpBranch() {
                 </InputGroup>
                 {password.length > 0 &&
                   (isValidPassword || (
-                    <FormHelperText color={"#dc7b84"}>
+                    <FormHelperText color={"#dc7b84"} fontSize={"12px"}>
                       영문 대/소문자, 숫자, 특수문자를 하나 이상 포함하여 8-20자
                       이내로 입력해 주세요.
                     </FormHelperText>
@@ -190,7 +207,7 @@ export function SignUpBranch() {
             </Box>
             <Box mb={7}>
               <FormControl isRequired>
-                <FormLabel>비밀번호 재입력</FormLabel>
+                <FormLabel {...formLabel}>비밀번호 재입력</FormLabel>
                 <InputGroup>
                   <Input
                     type="password"
@@ -209,7 +226,7 @@ export function SignUpBranch() {
                 </InputGroup>
                 {passwordCheck.length > 0 &&
                   (isCheckedPassword || (
-                    <FormHelperText color={"#dc7b84"}>
+                    <FormHelperText color={"#dc7b84"} fontSize={"12px"}>
                       비밀번호가 일치하지 않습니다
                     </FormHelperText>
                   ))}
@@ -217,7 +234,7 @@ export function SignUpBranch() {
             </Box>
             <Box mb={7}>
               <FormControl isRequired>
-                <FormLabel>지점명</FormLabel>
+                <FormLabel {...formLabel}>지점명</FormLabel>
                 <InputGroup>
                   <Input
                     value={branchName}
@@ -229,7 +246,7 @@ export function SignUpBranch() {
                   />
                 </InputGroup>
                 {isCheckedBranchName || (
-                  <FormHelperText color={"#dc7b84"}>
+                  <FormHelperText color={"#dc7b84"} fontSize={"12px"}>
                     중복된 지점명입니다.
                   </FormHelperText>
                 )}
@@ -237,7 +254,7 @@ export function SignUpBranch() {
             </Box>
             <Box mb={7}>
               <FormControl isRequired>
-                <FormLabel>주소</FormLabel>
+                <FormLabel {...formLabel}>주소</FormLabel>
                 <Flex>
                   <Input
                     value={address}
@@ -260,6 +277,7 @@ export function SignUpBranch() {
                 isLoading={isLoading}
                 // isDisabled={isDisabled}
                 onClick={handleSignup}
+                _hover={{ backgroundColor: "gray.600" }}
               >
                 가입하기
               </Button>

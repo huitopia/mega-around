@@ -79,4 +79,14 @@ public interface UserMapper {
             ORDER BY RAND() LIMIT 12;
             """)
     List<Map<String, Object>> selectRecommendList();
+
+    @Update("""
+            UPDATE customer SET password=#{password} WHERE email=#{email}
+            """)
+    int updatePasswordCustomer(Customer customer);
+
+    @Update("""
+            UPDATE branch SET password=#{password} WHERE email=#{email}
+            """)
+    int updatePasswordBranch(Branch branch);
 }
