@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,11 +121,11 @@ public class OrderService {
         Notice notice = new Notice();
         notice.setCustomerId(orderItem.getCustomerId());
         notice.setTag(orderItem.getId().toString());
-        String stateMessage = switch(orderItem.getStateId()){
+        String stateMessage = switch (orderItem.getStateId()) {
             case 1 -> "의 주문을 확인했습니다. 5분 후에 제조가 완료될 예정입니다.";
             case 2 -> "의 제조를 완료했습니다. 1시간 내에 수령해주세요.";
             default -> " 알 수 없는 상태입니다.";
-         };
+        };
         Integer productCount = orderItem.getOrderProduct().size();
         String countString = productCount > 1 ? " 외 " + (productCount - 1) + "개" : "";
         String content = orderItem.getOrderProduct().get(0).getProductName() + countString + stateMessage;

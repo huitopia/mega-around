@@ -1,6 +1,5 @@
 package com.backend.mapper.order;
 
-import com.backend.domain.event.Notice;
 import com.backend.domain.order.OrderItem;
 import com.backend.domain.order.OrderProduct;
 import org.apache.ibatis.annotations.*;
@@ -75,7 +74,7 @@ public interface OrderMapper {
 
     @Update("""
             UPDATE order_item
-            SET state_id = #{stateId}
+            SET state_id = #{stateId} + 1
             WHERE id = #{id}
             """)
     int updateOrderItemState(Integer id, Integer stateId);
