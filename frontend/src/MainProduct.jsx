@@ -129,12 +129,13 @@ export function MainProduct() {
               fontSize={"1.2rem"}
               bgColor={"pink"}
               color={"orange"}
-              width={"70%"}
+              width={"30%"}
               height={"50px"}
               alignItems={"center"}
               p={10}
               display="flex"
               justifyContent={"center"}
+              borderRadius={10}
             >
               <Box
                 display="flex"

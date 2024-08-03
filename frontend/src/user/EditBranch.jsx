@@ -160,7 +160,7 @@ export function EditBranch() {
           </Center>
           <Box>
             <Box mb={7}>
-              <FormControl>
+              <FormControl isRequired>
                 <FormLabel>이메일</FormLabel>
                 <Input value={branch.email} readOnly />
               </FormControl>
@@ -237,7 +237,7 @@ export function EditBranch() {
               </FormControl>
             </Box>
             <Box mb={7}>
-              <FormControl>
+              <FormControl isRequired>
                 <FormLabel>지점명</FormLabel>
                 <Flex>
                   <Input
@@ -269,7 +269,7 @@ export function EditBranch() {
               </FormControl>
             </Box>
             <Box mb={7}>
-              <FormControl>
+              <FormControl isRequired>
                 <FormLabel>주소</FormLabel>
                 <Flex>
                   <Input value={branch.address} readOnly />

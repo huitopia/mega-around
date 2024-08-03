@@ -237,7 +237,6 @@ public class UserService {
     }
 
     public Map<String, Object> updateCustomer(Customer customer, Authentication authentication) {
-        System.out.println("updateCustomer() customer = " + customer);
         // 입력한 비밀번호가 null이거나 공백 문자열이면 기존 비밀번호 유지
         if (customer.getPassword() == null || customer.getPassword().isBlank()) {
             Customer dbcustomer = userMapper.selectCustomerById(customer.getId());
@@ -328,11 +327,9 @@ public class UserService {
 
     public boolean checkPasswordPattern(String password) {
         if (password == null || password.isBlank()) {
-            System.out.println("null 또는 black password = " + password);
             return false;
         }
         String passwordPattern = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,20}$";
-        System.out.println("passwordPattern 일치 여부 = " + password.trim().matches(passwordPattern));
         return password.trim().matches(passwordPattern);
     }
 

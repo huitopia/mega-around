@@ -152,11 +152,11 @@ export function EditCustomer() {
       <Center>
         <Box w={520} mt={10}>
           <Center mt={1} mb={8} fontSize={"25px"} fontWeight={"bold"}>
-            <Text>개인 회원정보 수정</Text>
+            <Text>고객 회원정보 수정</Text>
           </Center>
           <Box>
             <Box mb={7}>
-              <FormControl>
+              <FormControl isRequired>
                 <FormLabel>이메일</FormLabel>
                 <Input value={customer.email} readOnly />
               </FormControl>
@@ -233,7 +233,7 @@ export function EditCustomer() {
               </FormControl>
             </Box>
             <Box mb={7}>
-              <FormControl>
+              <FormControl isRequired>
                 <FormLabel>닉네임</FormLabel>
                 <Flex>
                   <Input

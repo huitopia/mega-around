@@ -84,7 +84,7 @@ export function FindCustomerPassword() {
             </Box>
           </Center>
           <Box mt={8}>
-            <FormControl>
+            <FormControl isRequired>
               <FormLabel {...formLabel}>이메일</FormLabel>
               <InputGroup width={"450px"}>
                 <Input
