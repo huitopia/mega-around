@@ -93,7 +93,7 @@ export function Login() {
           </Box>
 
           <Box mt={3} width={"400px"}>
-            <Link to="http://localhost:8080/oauth2/kakao">
+            <Link to="http://localhost:8080/oauth2/authorization/kakao">
               <img src="/img/kakao_login_medium_wide.png" />
               {/*<img src="/img/kakao_login_large.png" width={"100px"} />*/}
             </Link>
