@@ -40,7 +40,7 @@ export function SignUpBranch() {
   function handleSignup() {
     {
       isCheckedEmail
-        ? isValidPassword || isCheckedPassword
+        ? isValidPassword && isCheckedPassword
           ? axios
               .post("/api/user/branch", {
                 email,
@@ -52,11 +52,13 @@ export function SignUpBranch() {
                 successToast("지점 가입에 성공하였습니다.");
                 navigate("/login");
               })
-              .catch((err) =>
-                err.response.status === 400
-                  ? errorToast("필수 입력사항을 확인해주세요")
-                  : errorToast("지점 가입에 실패하였습니다."),
-              )
+              .catch((err) => {
+                if (err.response.status === 400) {
+                  errorToast("필수 입력사항을 확인해주세요");
+                } else if (err.response.status === 500) {
+                  errorToast("중복된 닉네임으로 가입할 수 없습니다");
+                } else errorToast("회원 가입에 실패하였습니다.");
+              })
               .finally(() => setIsLoading(false))
           : errorToast("비밀번호를 확인해주세요.")
         : errorToast("이메일 중복확인을 진행해주세요.");
