@@ -111,26 +111,50 @@ public interface UserMapper {
     Integer updatedCoupon(Integer id);
 
     @Select("""
+            <script>
+            SELECT id, email, nick_name, created_at
+            FROM customer
+                <bind name="pattern" value="'%' + keyword + '%'" />
+            WHERE
+                (email LIKE #{pattern} OR nick_name LIKE #{pattern})
+            ORDER BY id DESC
+            LIMIT #{offset}, 10
+            </script>
+            """)
+    List<Customer> selectCustomerList(int offset, String keyword);
+
+    @Select("""
+            <script>
+            SELECT COUNT(*) FROM customer
+            <bind name="pattern" value="'%' + keyword + '%'" />
+            WHERE
+            (email LIKE #{pattern} OR nick_name LIKE #{pattern})
+            ORDER BY id DESC
+            </script>
+            """)
+    int selectTotalUserCount(String keyword);
+
+    @Select("""
                 <script>
-                SELECT id, email, nick_name, created_at
-                FROM customer
+                SELECT id, email, branch_name, created_at, address
+                FROM branch
                     <bind name="pattern" value="'%' + keyword + '%'" />
                 WHERE
-                    (email LIKE #{pattern} OR nick_name LIKE #{pattern})
+                    (email LIKE #{pattern} OR branch_name LIKE #{pattern})
                 ORDER BY id DESC
                 LIMIT #{offset}, 10
                 </script>
             """)
-    List<Customer> selectCustomerList(int offset, String type, String keyword);
+    List<Branch> selectBranchList(int offset, String keyword);
 
     @Select("""
-                    <script>
-                    SELECT COUNT(*) FROM customer
+            <script>
+            SELECT COUNT(*) FROM branch
             <bind name="pattern" value="'%' + keyword + '%'" />
-                    WHERE
-                        (email LIKE #{pattern} OR nick_name LIKE #{pattern})
-                    ORDER BY id DESC
-                    </script>
-                """)
-    int selectTotalUserCount(String type, String keyword);
+            WHERE
+            (email LIKE #{pattern} OR branch_name LIKE #{pattern})
+            ORDER BY id DESC
+            </script>
+            """)
+    int selectTotalBranchCount(String keyword);
 }

@@ -9,12 +9,26 @@ import {
   Tabs,
   Text,
 } from "@chakra-ui/react";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../component/LoginProvider.jsx";
 import { CustomerList } from "./CustomerList.jsx";
+import { BranchAdminList } from "./BranchAdminList.jsx";
 
 export function MyPageAdmin() {
   const account = useContext(LoginContext);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    if (account.hasAuth() === "admin") {
+      setIsAdmin(true);
+    } else {
+      alert("접근 권한이 없습니다");
+    }
+  }, [account]);
+
+  if (!isAdmin) {
+    return null; // 권한이 없는 경우 페이지를 렌더링하지 않음
+  }
 
   return (
     <>
@@ -47,7 +61,9 @@ export function MyPageAdmin() {
                 </p>
               </TabPanel>
               <TabPanel>
-                <p>two!</p>
+                <p>
+                  <BranchAdminList />
+                </p>
               </TabPanel>
             </TabPanels>
           </Tabs>

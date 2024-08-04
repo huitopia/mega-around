@@ -288,13 +288,20 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
-    //    @PreAuthorize("hasAuthority('SCOPE_admin')")
     @GetMapping("/user/admin/customer/list")
+    @PreAuthorize("hasAuthority('SCOPE_admin')")
     @Description("관리자 - 고객 리스트 조회")
-    public Map<String, Object> list(@RequestParam(required = false, defaultValue = "1") int page,
-                                    @RequestParam(required = false) String type,
-                                    @RequestParam(required = false, defaultValue = "") String keyword) {
-        return service.getCustomerList(page, type, keyword);
+    public Map<String, Object> customerList(@RequestParam(required = false, defaultValue = "1") int page,
+                                            @RequestParam(required = false, defaultValue = "") String keyword) {
+        return service.getCustomerList(page, keyword);
+    }
+
+    @GetMapping("/user/admin/branch/list")
+    @PreAuthorize("hasAuthority('SCOPE_admin')")
+    @Description("관리자 - 지점 리스트 조회")
+    public Map<String, Object> branchList(@RequestParam(required = false, defaultValue = "1") int page,
+                                          @RequestParam(required = false, defaultValue = "") String keyword) {
+        return service.getBranchList(page, keyword);
     }
 
 }

@@ -410,19 +410,35 @@ public class UserService {
         return result;
     }
 
-    public Map<String, Object> getCustomerList(int page, String type, String keyword) {
+    public Map<String, Object> getCustomerList(int page, String keyword) {
         int offset = (page - 1) * 10;
         Pageable pageable = PageRequest.of(page - 1, 10);
-        List<Customer> customerList = userMapper.selectCustomerList(offset, type, keyword);
+        List<Customer> customerList = userMapper.selectCustomerList(offset, keyword);
 
-        int totalUserNumber = userMapper.selectTotalUserCount(type, keyword);
+        int totalCustomerNumber = userMapper.selectTotalUserCount(keyword);
         int newId = offset + 1;
         for (int i = 0; i < customerList.size(); i++) {
             customerList.get(i).setId(newId++);
         }
-        Page<Customer> pageImpl = new PageImpl<>(customerList, pageable, totalUserNumber);
+        Page<Customer> pageImpl = new PageImpl<>(customerList, pageable, totalCustomerNumber);
         PageInfo paeInfo = new PageInfo().setting(pageImpl);
 
         return Map.of("customerList", customerList, "pageInfo", paeInfo);
+    }
+
+    public Map<String, Object> getBranchList(int page, String keyword) {
+        int offset = (page - 1) * 10;
+        Pageable pageable = PageRequest.of(page - 1, 10);
+        List<Branch> branchList = userMapper.selectBranchList(offset, keyword);
+
+        int totalBranchNumber = userMapper.selectTotalBranchCount(keyword);
+        int newId = offset + 1;
+        for (int i = 0; i < branchList.size(); i++) {
+            branchList.get(i).setId(newId++);
+        }
+        Page<Branch> pageImpl = new PageImpl<>(branchList, pageable, totalBranchNumber);
+        PageInfo paeInfo = new PageInfo().setting(pageImpl);
+
+        return Map.of("branchList", branchList, "pageInfo", paeInfo);
     }
 }

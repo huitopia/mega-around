@@ -16,8 +16,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 
-export function CustomerList() {
-  const [customerList, setCustomerList] = useState(null);
+export function BranchAdminList() {
+  const [branchList, setBranchList] = useState(null);
   const navigate = useNavigate();
   const [pageInfo, setPageInfo] = useState({});
   const [searchType, setSearchType] = useState("all");
@@ -25,8 +25,8 @@ export function CustomerList() {
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    axios.get(`/api/user/admin/customer/list?${searchParams}`).then((res) => {
-      setCustomerList(res.data.customerList);
+    axios.get(`/api/user/admin/branch/list?${searchParams}`).then((res) => {
+      setBranchList(res.data.branchList);
       setPageInfo(res.data.pageInfo);
     });
 
@@ -47,18 +47,18 @@ export function CustomerList() {
     pageNumbers.push(i);
   }
 
-  if (customerList === null) {
+  if (branchList === null) {
     return <Spinner />;
   }
 
   function handlePageButtonClick(pageNumber) {
     searchParams.set("page", pageNumber);
-    navigate(`/mypage/admin/customer/list/?${searchParams}`);
+    navigate(`/mypage/admin/branch/list/?${searchParams}`);
   }
 
   function handleSearchClick() {
     navigate(
-      `/mypage/admin/customer/list/?type=${searchType}&keyword=${searchKeyword}`,
+      `/mypage/admin/branch/list/?type=${searchType}&keyword=${searchKeyword}`,
     );
   }
 
@@ -70,17 +70,19 @@ export function CustomerList() {
             <Tr>
               <Th>No.</Th>
               <Th>이메일</Th>
-              <Th>닉네임</Th>
+              <Th>지점명</Th>
               <Th>가입일시</Th>
+              <Th>주소</Th>
             </Tr>
           </Thead>
           <Tbody>
-            {customerList.map((customer) => (
-              <Tr key={customer.id}>
-                <Td>{customer.id}</Td>
-                <Td>{customer.email}</Td>
-                <Td>{customer.nickName}</Td>
-                <Td>{customer.createdAtTime}</Td>
+            {branchList.map((branch) => (
+              <Tr key={branch.id}>
+                <Td>{branch.id}</Td>
+                <Td>{branch.email}</Td>
+                <Td>{branch.branchName}</Td>
+                <Td>{branch.createdAtTime}</Td>
+                <Td>{branch.address}</Td>
               </Tr>
             ))}
           </Tbody>
