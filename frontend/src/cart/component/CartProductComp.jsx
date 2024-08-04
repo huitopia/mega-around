@@ -180,7 +180,7 @@ export function CartProductComp(props) {
                         <Button
                           onClick={() =>
                             handleRemoveProduct(
-                              cart.cartProduct[product.productId].productId,
+                              cart.cartProduct[index].productId,
                             )
                           }
                           paddingTop={"10px"}
