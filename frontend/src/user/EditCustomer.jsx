@@ -197,7 +197,7 @@ export function EditCustomer() {
                 </InputGroup>
                 {customer.password.length === 0 ||
                   (!isValidPassword && (
-                    <FormHelperText color={"#dc7b84"}>
+                    <FormHelperText color={"#dc7b84"} fontSize={"12px"}>
                       영문 대/소문자, 숫자, 특수문자를 하나 이상 포함하여 8-20자
                       이내로 입력해 주세요.
                     </FormHelperText>
@@ -226,7 +226,7 @@ export function EditCustomer() {
                 </InputGroup>
                 {passwordCheck.length > 0 &&
                   (isCheckedPassword || (
-                    <FormHelperText color={"#dc7b84"}>
+                    <FormHelperText color={"#dc7b84"} fontSize={"12px"}>
                       비밀번호가 일치하지 않습니다
                     </FormHelperText>
                   ))}
