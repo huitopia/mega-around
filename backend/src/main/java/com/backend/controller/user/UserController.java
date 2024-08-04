@@ -185,7 +185,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("유효한 비밀번호를 입력해 주세요");
         }
         Map<String, Object> token = service.updateCustomer(customer, authentication);
-        System.out.println("ok() customer = " + customer);
         return ResponseEntity.ok(token);
     }
 
@@ -200,7 +199,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("유효한 비밀번호를 입력해 주세요");
         }
         Map<String, Object> token = service.updateBranch(branch, authentication);
-        System.out.println("ok() branch = " + branch);
         return ResponseEntity.ok(token);
     }
 
@@ -288,6 +286,15 @@ public class UserController {
             return ResponseEntity.ok().body(map);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    //    @PreAuthorize("hasAuthority('SCOPE_admin')")
+    @GetMapping("/user/admin/customer/list")
+    @Description("관리자 - 고객 리스트 조회")
+    public Map<String, Object> list(@RequestParam(required = false, defaultValue = "1") int page,
+                                    @RequestParam(required = false) String type,
+                                    @RequestParam(required = false, defaultValue = "") String keyword) {
+        return service.getCustomerList(page, type, keyword);
     }
 
 }

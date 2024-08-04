@@ -109,4 +109,28 @@ public interface UserMapper {
             GROUP BY tag
             """)
     Integer updatedCoupon(Integer id);
+
+    @Select("""
+                <script>
+                SELECT id, email, nick_name, created_at
+                FROM customer
+                    <bind name="pattern" value="'%' + keyword + '%'" />
+                WHERE
+                    (email LIKE #{pattern} OR nick_name LIKE #{pattern})
+                ORDER BY id DESC
+                LIMIT #{offset}, 10
+                </script>
+            """)
+    List<Customer> selectCustomerList(int offset, String type, String keyword);
+
+    @Select("""
+                    <script>
+                    SELECT COUNT(*) FROM customer
+            <bind name="pattern" value="'%' + keyword + '%'" />
+                    WHERE
+                        (email LIKE #{pattern} OR nick_name LIKE #{pattern})
+                    ORDER BY id DESC
+                    </script>
+                """)
+    int selectTotalUserCount(String type, String keyword);
 }

@@ -31,6 +31,7 @@ import { FindBranchPassword } from "./user/FindBranchPassword.jsx";
 import { FindBranchEmail } from "./user/FindBranchEmail.jsx";
 import "./fonts.css";
 import { CartProductComp } from "./cart/component/CartProductComp.jsx";
+import { MyPageAdmin } from "./user/MyPageAdmin.jsx";
 
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
@@ -74,6 +75,7 @@ const router = createBrowserRouter([
       { path: "mypage/branch/:id", element: <MyPageBranch /> },
       { path: "mypage/customer/edit/:id", element: <EditCustomer /> },
       { path: "mypage/branch/edit/:id", element: <EditBranch /> },
+      { path: "mypage/admin", element: <MyPageAdmin /> },
       { path: "find-customerEmail", element: <FindCustomerEmail /> },
       { path: "find-customerPassword", element: <FindCustomerPassword /> },
       { path: "find-branchEmail", element: <FindBranchEmail /> },

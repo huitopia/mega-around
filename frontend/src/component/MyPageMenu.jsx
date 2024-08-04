@@ -141,6 +141,9 @@ function MyPageMenu({ isChanged, setIsChanged, updateAlarm }) {
                 <MenuItem onClick={() => navigate(`/product`)}>
                   상품 등록
                 </MenuItem>
+                <MenuItem onClick={() => navigate(`/mypage/admin`)}>
+                  전체 회원 정보
+                </MenuItem>
               </>
             )}
             <MenuDivider />

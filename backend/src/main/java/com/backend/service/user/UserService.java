@@ -6,10 +6,15 @@ import com.backend.domain.user.Customer;
 import com.backend.mapper.event.EventMapper;
 import com.backend.mapper.user.BranchMapper;
 import com.backend.mapper.user.UserMapper;
+import com.backend.util.PageInfo;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -403,5 +408,21 @@ public class UserService {
             result.put("couponNotRead", true);
         }
         return result;
+    }
+
+    public Map<String, Object> getCustomerList(int page, String type, String keyword) {
+        int offset = (page - 1) * 10;
+        Pageable pageable = PageRequest.of(page - 1, 10);
+        List<Customer> customerList = userMapper.selectCustomerList(offset, type, keyword);
+
+        int totalUserNumber = userMapper.selectTotalUserCount(type, keyword);
+        int newId = offset + 1;
+        for (int i = 0; i < customerList.size(); i++) {
+            customerList.get(i).setId(newId++);
+        }
+        Page<Customer> pageImpl = new PageImpl<>(customerList, pageable, totalUserNumber);
+        PageInfo paeInfo = new PageInfo().setting(pageImpl);
+
+        return Map.of("customerList", customerList, "pageInfo", paeInfo);
     }
 }
