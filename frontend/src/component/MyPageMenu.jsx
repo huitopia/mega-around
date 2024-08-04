@@ -117,12 +117,12 @@ function MyPageMenu({ isChanged, setIsChanged, updateAlarm }) {
               </>
             )}
             {account.hasAuth() === "branch" && (
-              <MenuItem onClick={() => navigate(`/branch/order/${account.id}`)}>
-                주문 관리
-              </MenuItem>
-            )}
-            {account.hasAuth() === "customer" || (
               <>
+                <MenuItem
+                  onClick={() => navigate(`/branch/order/${account.id}`)}
+                >
+                  주문 관리
+                </MenuItem>
                 <MenuItem onClick={() => navigate(`/product/list`)}>
                   상품 리스트
                 </MenuItem>
@@ -134,9 +134,14 @@ function MyPageMenu({ isChanged, setIsChanged, updateAlarm }) {
               </>
             )}
             {account.hasAuth() === "admin" && (
-              <MenuItem onClick={() => navigate(`/product`)}>
-                상품 등록
-              </MenuItem>
+              <>
+                <MenuItem onClick={() => navigate(`/product/list`)}>
+                  상품 리스트
+                </MenuItem>
+                <MenuItem onClick={() => navigate(`/product`)}>
+                  상품 등록
+                </MenuItem>
+              </>
             )}
             <MenuDivider />
             <MenuItem
