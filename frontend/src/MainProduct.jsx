@@ -50,10 +50,8 @@ export function MainProduct() {
 
   useEffect(() => {
     if (account && account.id) {
-      const url = `/api/notice/updated/${account.id}`;
-      console.log("Request URL:", url);
       axios
-        .get(url)
+        .get(`/api/notice/updated/${account.id}`)
         .then((res) => setUpdateAlram(res.data))
         .catch((error) => console.error("Request failed", error));
     }

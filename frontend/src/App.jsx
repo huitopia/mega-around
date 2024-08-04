@@ -29,7 +29,6 @@ import { FindCustomerPassword } from "./user/FindCustomerPassword.jsx";
 import { FindCustomerEmail } from "./user/FindCustomerEmail.jsx";
 import { FindBranchPassword } from "./user/FindBranchPassword.jsx";
 import { FindBranchEmail } from "./user/FindBranchEmail.jsx";
-import { ResultCustomerEmail } from "./ResultCustomerEmail.jsx";
 import "./fonts.css";
 import { CartProductComp } from "./cart/component/CartProductComp.jsx";
 
@@ -76,7 +75,6 @@ const router = createBrowserRouter([
       { path: "mypage/customer/edit/:id", element: <EditCustomer /> },
       { path: "mypage/branch/edit/:id", element: <EditBranch /> },
       { path: "find-customerEmail", element: <FindCustomerEmail /> },
-      { path: "customer/email-result", element: <ResultCustomerEmail /> },
       { path: "find-customerPassword", element: <FindCustomerPassword /> },
       { path: "find-branchEmail", element: <FindBranchEmail /> },
       { path: "find-branchPassword", element: <FindBranchPassword /> },
