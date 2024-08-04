@@ -89,4 +89,22 @@ public interface UserMapper {
             UPDATE branch SET password=#{password} WHERE email=#{email}
             """)
     int updatePasswordBranch(Branch branch);
+
+    @Select("""
+            SELECT COALESCE(COUNT(*), 0)
+            FROM notice
+            WHERE customer_id = #{id}
+            GROUP BY tag, is_read
+            HAVING tag = 'stamp' AND is_read = 0;
+            """)
+    Integer notReadStamp(Integer id);
+
+    @Select("""
+            SELECT COALESCE(COUNT(*), 0)
+            FROM notice
+            WHERE customer_id = #{id}
+            GROUP BY tag, is_read
+            HAVING tag = 'coupon' AND is_read = 0;
+            """)
+    Integer notReadCoupon(Integer id);
 }

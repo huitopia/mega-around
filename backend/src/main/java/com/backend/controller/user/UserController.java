@@ -279,6 +279,15 @@ public class UserController {
         return ResponseEntity.ok().body(result);
     }
 
-    //카카오 로그인
-    
+    // 스탬프, 쿠폰 업데이트 조회
+    @GetMapping("/notice/updated/{id}")
+    public ResponseEntity getUpdatedStampCoupon(@PathVariable Integer id) {
+        Map<String, Boolean> map = service.updated(id);
+        System.out.println("map = " + map);
+        if (!map.isEmpty()) {
+            return ResponseEntity.ok().body(map);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
 }

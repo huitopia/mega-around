@@ -13,6 +13,7 @@ export function MainProduct() {
   const [couponCount, setCouponCount] = useState(0);
   const [stampCount, setStampCount] = useState(0);
   const [products, setProducts] = useState([]);
+  const [updateAlram, setUpdateAlram] = useState([]);
 
   useEffect(() => {
     axios
@@ -47,66 +48,27 @@ export function MainProduct() {
       });
   }, []);
 
+  useEffect(() => {
+    if (account && account.id) {
+      const url = `/api/notice/updated/${account.id}`;
+      console.log("Request URL:", url);
+      axios
+        .get(url)
+        .then((res) => setUpdateAlram(res.data))
+        .catch((error) => console.error("Request failed", error));
+    }
+  }, [account]);
+
+  if (!account) {
+    // account가 null이거나 undefined일 경우 로딩 표시
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <Box h="100%" w="100%" boxSizing="border-box" mx="auto" overflow="hidden">
         <SimpleSlider />
       </Box>
-      {/*{account.hasAuth() === "customer" && (*/}
-      {/*  <>*/}
-      {/*    <Center p={"140px"} flexDirection={"row"}>*/}
-      {/*      <Box flex={"2"} textAlign="center">*/}
-      {/*        <Text fontWeight={"bold"} fontSize={"1.4rem"}>*/}
-      {/*          {account.nickName}*/}
-      {/*          {account.branchName}&nbsp;님 환영합니다!*/}
-      {/*        </Text>*/}
-      {/*      </Box>*/}
-      {/*      <Box*/}
-      {/*        flex={"3"}*/}
-      {/*        textAlign={"center"}*/}
-      {/*        fontSize={"1.2rem"}*/}
-      {/*        bgColor={"pink"}*/}
-      {/*        color={"orange"}*/}
-      {/*        maxWidth={"700px"}*/}
-      {/*        height={"50px"}*/}
-      {/*        borderRadius={10}*/}
-      {/*        display="flex"*/}
-      {/*        justifyContent={"center"}*/}
-      {/*        alignItems={"center"}*/}
-      {/*        p={10}*/}
-      {/*      >*/}
-      {/*        <Box*/}
-      {/*          display="flex"*/}
-      {/*          gap={10}*/}
-      {/*          justifyContent={"center"}*/}
-      {/*          alignItems={"center"}*/}
-      {/*        >*/}
-      {/*          <Link*/}
-      {/*            to={"/stamp"}*/}
-      {/*            onClick={() => window.scrollTo({ top: 0, behavior: "auto" })}*/}
-      {/*          >*/}
-      {/*            <Box display="flex" alignItems="center" gap={2}>*/}
-      {/*              <FontAwesomeIcon icon={faStamp} />*/}
-      {/*              <Text>스탬프</Text>*/}
-      {/*              <Text>{stampCount}</Text>*/}
-      {/*            </Box>*/}
-      {/*          </Link>*/}
-      {/*          <Link*/}
-      {/*            to={"/coupon"}*/}
-      {/*            onClick={() => window.scrollTo({ top: 0, behavior: "auto" })}*/}
-      {/*          >*/}
-      {/*            <Box display="flex" alignItems="center" gap={2}>*/}
-      {/*              <FontAwesomeIcon icon={faTicket} />*/}
-      {/*              <Text>쿠폰</Text>*/}
-      {/*              <Text>{couponCount}</Text>*/}
-      {/*            </Box>*/}
-      {/*          </Link>*/}
-      {/*        </Box>*/}
-      {/*      </Box>*/}
-      {/*      /!*<Box flex={"1"} /> /!* 빈 공간을 위한 박스 *!/*!/*/}
-      {/*    </Center>*/}
-      {/*  </>*/}
-      {/*)}*/}
 
       {account.isLoggedIn() && (
         <Box textAlign="center" mt={"100px"}>
@@ -147,8 +109,24 @@ export function MainProduct() {
                   to={"/stamp"}
                   onClick={() => window.scrollTo({ top: 0, behavior: "auto" })}
                 >
-                  <Box display="flex" alignItems="center" gap={2}>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    gap={2}
+                    position="relative"
+                  >
                     <FontAwesomeIcon icon={faStamp} />
+                    {updateAlram.stampNotRead && (
+                      <Box
+                        position="absolute"
+                        top="0"
+                        left="20px"
+                        width="8px"
+                        height="8px"
+                        bgColor="red"
+                        borderRadius="50%"
+                      />
+                    )}
                     <Text>스탬프</Text>
                     <Text>{stampCount}</Text>
                   </Box>
@@ -157,8 +135,24 @@ export function MainProduct() {
                   to={"/coupon"}
                   onClick={() => window.scrollTo({ top: 0, behavior: "auto" })}
                 >
-                  <Box display="flex" alignItems="center" gap={2}>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    gap={2}
+                    position="relative"
+                  >
                     <FontAwesomeIcon icon={faTicket} />
+                    {updateAlram.couponNotRead && (
+                      <Box
+                        position="absolute"
+                        top="0"
+                        left="20px"
+                        width="8px"
+                        height="8px"
+                        bgColor="red"
+                        borderRadius="50%"
+                      />
+                    )}
                     <Text>쿠폰</Text>
                     <Text>{couponCount}</Text>
                   </Box>

@@ -310,6 +310,11 @@ public class UserService {
         // 스탬프 지우기
         eventMapper.deleteStamp(id);
 
+        // notice 지우기
+
+
+        // order-item 지우기
+
         // 고객 지우기
         userMapper.deleteCustomerById(id);
     }
@@ -382,5 +387,21 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    public Map<String, Boolean> updated(Integer id) {
+        Map<String, Boolean> result = new HashMap<>();
+
+        // null 값을 0으로 대체
+        Integer notReadStampCount = userMapper.notReadStamp(id);
+        if (notReadStampCount != null && notReadStampCount > 0) {
+            result.put("stampNotRead", true);
+        }
+
+        Integer notReadCouponCount = userMapper.notReadCoupon(id);
+        if (notReadCouponCount != null && notReadCouponCount > 0) {
+            result.put("couponNotRead", true);
+        }
+        return result;
     }
 }
