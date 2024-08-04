@@ -2,10 +2,15 @@ import { Box } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 import { Navbar } from "./component/Navbar.jsx";
 import { Footer } from "./component/Footer.jsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function Home() {
   const [updateAlarm, setUpdateAlarm] = useState(false);
+
+  useEffect(() => {
+    console.log("updateAlarm" + updateAlarm);
+  }, [updateAlarm]);
+
   return (
     <Box height={"100%"}>
       <Box>

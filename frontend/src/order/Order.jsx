@@ -127,10 +127,11 @@ export function Order() {
               },
             })
             .then((res) => {
-              navigate(`/order/${res.data}`);
               setUpdateAlarm(true);
+              navigate(`/order/${res.data}`);
             })
-            .catch(() => errorToast("결제 실패했습니다"));
+            .catch(() => errorToast("결제 실패했습니다"))
+            .finally(setUpdateAlarm(false));
         }
       },
     );

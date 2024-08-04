@@ -1,6 +1,6 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "./LoginProvider.jsx";
 import MyPageMenu from "./MyPageMenu.jsx";
 
@@ -9,6 +9,10 @@ export function Navbar({ updateAlarm }) {
   const navigate = useNavigate();
   // const [showTabs, setShowTabs] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
+
+  useEffect(() => {
+    setIsChanged(false);
+  }, [isChanged]);
 
   return (
     <Flex
