@@ -40,7 +40,7 @@ public class OrderController {
 
     // 주문 상태 변경 : 1.결제 완료 2. 제조 중 3. 제조 완료
     // id = order_id
-//    @PreAuthorize("hasAuthority('SCOPE_branch')")
+    @PreAuthorize("hasAuthority('SCOPE_branch')")
     @PutMapping("/orders")
     @Description("주문 상태 변경")
     public ResponseEntity modifyOrderItemState(@RequestBody OrderItem orderItem) {
