@@ -10,6 +10,7 @@ import com.backend.service.event.EventService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,7 @@ public class OrderService {
     private final EventService eventService;
     private final EventMapper eventMapper;
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private final SimpMessagingTemplate messagingTemplate;
 
     public Integer addOrderItem(OrderItem orderItem, Integer customerId) throws JsonProcessingException {
         // 포장 옵션
@@ -113,8 +115,13 @@ public class OrderService {
         return orderItem;
     }
 
-    public boolean modifyOrderItemState(Integer id, Integer stateId) {
-        return orderMapper.updateOrderItemState(id, stateId) == 1;
+    public boolean modifyOrderItemState(OrderItem orderItem) {
+        if (orderMapper.updateOrderItemState(orderItem.getId(), orderItem.getStateId()) == 1) {
+            List<Notice> noticeList = addStateNotice(orderItem);
+            messagingTemplate.convertAndSend(STR."/sub/\{orderItem.getCustomerId()}", noticeList);
+            return true;
+        }
+        return false;
     }
 
     public List<Notice> addStateNotice(OrderItem orderItem) {
