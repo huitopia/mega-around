@@ -27,8 +27,9 @@ export function ProductBodyComp({
   const { successToast, errorToast } = CustomToast();
   const navigate = useNavigate();
   useEffect(() => {
+    const encodedSubCategory = encodeURIComponent(subCategory);
     axios
-      .get(`/api/products/list?main=${mainCategory}&sub=${subCategory}`)
+      .get(`/api/products/list?main=${mainCategory}&sub=${encodedSubCategory}`)
       .then((response) => {
         if (response.data != null) {
           setData(response.data);
