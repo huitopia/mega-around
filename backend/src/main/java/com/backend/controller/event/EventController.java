@@ -47,7 +47,6 @@ public class EventController {
     @PutMapping("/event/notice")
     @Description("알림 읽음으로 변경")
     public void modifyNotice(@RequestBody Notice notice) {
-        System.out.println("notice.getCustomerId() = " + notice.getCustomerId());
         eventService.modifyNotice(notice.getCustomerId());
     }
 }

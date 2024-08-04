@@ -59,7 +59,6 @@ public class OrderService {
             // 포장 옵션 리스트 변환
             List<Boolean> option = objectMapper.readValue(orderItem.getOptions(), List.class);
             orderItem.setOption(option);
-            // TODO. 필요없는 데이터 주석 처리
             for (OrderProduct orderProduct : orderProductList) {
                 List<Integer> optionList = objectMapper.readValue(orderProduct.getOptions(), List.class);
                 List<String> optionListString = new ArrayList<>();
