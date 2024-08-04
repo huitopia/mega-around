@@ -19,4 +19,10 @@ public class Branch {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return createdAt.format(formatter);
     }
+
+    public String getCreatedAtAll() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return createdAt.format(formatter);
+    }
+
 }

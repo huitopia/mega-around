@@ -20,9 +20,8 @@ export function CustomerList() {
   const [customerList, setCustomerList] = useState(null);
   const navigate = useNavigate();
   const [pageInfo, setPageInfo] = useState({});
-  const [searchType, setSearchType] = useState("all");
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     axios.get(`/api/user/admin/customer/list?${searchParams}`).then((res) => {
@@ -30,13 +29,8 @@ export function CustomerList() {
       setPageInfo(res.data.pageInfo);
     });
 
-    setSearchType("all");
     setSearchKeyword("");
-    const typeParam = searchParams.get("type");
     const keywordParam = searchParams.get("keyword");
-    if (typeParam) {
-      setSearchType(typeParam);
-    }
     if (keywordParam) {
       setSearchKeyword(keywordParam);
     }
@@ -52,14 +46,11 @@ export function CustomerList() {
   }
 
   function handlePageButtonClick(pageNumber) {
-    searchParams.set("page", pageNumber);
-    navigate(`/mypage/admin/customer/list/?${searchParams}`);
+    setSearchParams({ ...Object.fromEntries(searchParams), page: pageNumber });
   }
 
   function handleSearchClick() {
-    navigate(
-      `/mypage/admin/customer/list/?type=${searchType}&keyword=${searchKeyword}`,
-    );
+    setSearchParams({ keyword: searchKeyword, page: 1 });
   }
 
   return (
@@ -106,12 +97,9 @@ export function CustomerList() {
         {pageNumbers.map((pageNumber) => (
           <Button
             key={pageNumber}
-            borderWidth={2}
-            _selected={"teal"}
             colorScheme={
               pageNumber - 1 === pageInfo.currentPageNumber ? "orange" : "pink"
             }
-            variant="outline"
             onClick={() => handlePageButtonClick(pageNumber)}
           >
             {pageNumber}
