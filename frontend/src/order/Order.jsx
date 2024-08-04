@@ -267,12 +267,12 @@ export function Order() {
                   </Radio>
                 </RadioGroup>
               </Box>
-              <Box>
-                <Box fontWeight={"bold"} mt={"30px"}>
-                  포장옵션
-                </Box>
-                <Box mt={"10px"}>
-                  {isTakeOut === "1" && (
+              {isTakeOut === "1" && (
+                <Box>
+                  <Box fontWeight={"bold"} mt={"30px"}>
+                    포장옵션
+                  </Box>
+                  <Box mt={"10px"}>
                     <CheckboxGroup>
                       <Checkbox
                         size="md"
@@ -296,9 +296,9 @@ export function Order() {
                         빨대/스틱 필요해요
                       </Checkbox>
                     </CheckboxGroup>
-                  )}
+                  </Box>
                 </Box>
-              </Box>
+              )}
             </Box>
             <Box mt={"30px"}>
               <Accordion allowMultiple>

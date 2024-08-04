@@ -22,25 +22,27 @@ function Stamp(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
+    let count = 0;
     axios.get("/api/event/stamp").then((res) => {
       setStampCount(res.data);
-    });
-    axios.get("/api/notice/stamp").then((res) => {
-      function createDate(data) {
-        const result = [];
-        for (let i = data.length - 1; i >= 0; i--) {
-          const item = data[i];
-          const arr = item.content.split(" ");
-          const count = parseInt(arr[1].replace("개", ""));
-          for (let j = 0; j < count; j++) {
-            result.push(item.createdAtString);
+      const count = res.data;
+      axios.get("/api/notice/stamp").then((res) => {
+        function createDate(data) {
+          const result = [];
+          for (let i = count - 1; i >= 0; i--) {
+            const item = data[i];
+            const arr = item.content.split(" ");
+            const count = parseInt(arr[1].replace("개", ""));
+            for (let j = 0; j < count; j++) {
+              result.push(item.createdAtString);
+            }
           }
+          return result;
         }
-        return result;
-      }
 
-      const date = createDate(res.data);
-      setStampDate(date);
+        const date = createDate(res.data);
+        setStampDate(date);
+      });
     });
   }, []);
 
