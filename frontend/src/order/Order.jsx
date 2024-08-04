@@ -154,7 +154,7 @@ export function Order() {
   function plusCouponCount() {
     const newCouponCount =
       useCouponCount < couponCount &&
-      calculateTotalPrice(orderItem.orderProduct) > (useCouponCount + 1) * 2000
+      calculateTotalPrice(orderItem.orderProduct) >= (useCouponCount + 1) * 2000
         ? useCouponCount + 1
         : useCouponCount;
     setUseCouponCount(newCouponCount);

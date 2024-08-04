@@ -80,12 +80,10 @@ export function OrderManageComp({
   const settings = {
     dots: false,
     infinite: false,
-    arrows: true,
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 2,
     draggable: false,
-    overflow : "hidden",
     prevArrow: <CustomPrevArrow />,
     nextArrow: <CustomNextArrow />,
   };
@@ -93,7 +91,9 @@ export function OrderManageComp({
   useEffect(() => {
     setIsChanged(false);
     axios
-      .get(`/api/orders/list?stateId=${stateId}&branchId=${branchId}&date=${date}&startTime=${startTime}&endTime=${endTime}`)
+      .get(
+        `/api/orders/list?stateId=${stateId}&branchId=${branchId}&date=${date}&startTime=${startTime}&endTime=${endTime}`,
+      )
       .then((res) => setOrderList(res.data));
   }, [isChanged]);
 
@@ -107,9 +107,14 @@ export function OrderManageComp({
         <Box fontWeight={"bold"} fontSize={"20px"}>
           {text}(
         </Box>
-        <Flex fontSize={"20px"} fontWeight={"bold"}><Box color={"red"}>{orderList.length}</Box><Box fontWeight={"bold"} fontSize={"20px"}>)</Box></Flex>
+        <Flex fontSize={"20px"} fontWeight={"bold"}>
+          <Box color={"red"}>{orderList.length}</Box>
+          <Box fontWeight={"bold"} fontSize={"20px"}>
+            )
+          </Box>
+        </Flex>
       </Center>
-      <Box w={"1100px"}>
+      <Box w={"1100px"} ml={"70px"}>
         <Slider {...settings}>
           {orderList.map((order, index) => (
             <Card
