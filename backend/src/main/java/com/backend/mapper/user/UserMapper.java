@@ -94,17 +94,19 @@ public interface UserMapper {
             SELECT COALESCE(COUNT(*), 0)
             FROM notice
             WHERE customer_id = #{id}
-            GROUP BY tag, is_read
-            HAVING tag = 'stamp' AND is_read = 0;
+              AND tag = 'stamp'
+              AND created_at > NOW() - INTERVAL 1 HOUR
+            GROUP BY tag
             """)
-    Integer notReadStamp(Integer id);
+    Integer updatedStamp(Integer id);
 
     @Select("""
             SELECT COALESCE(COUNT(*), 0)
             FROM notice
             WHERE customer_id = #{id}
-            GROUP BY tag, is_read
-            HAVING tag = 'coupon' AND is_read = 0;
+              AND tag = 'coupon'
+              AND created_at > NOW() - INTERVAL 1 HOUR
+            GROUP BY tag
             """)
-    Integer notReadCoupon(Integer id);
+    Integer updatedCoupon(Integer id);
 }

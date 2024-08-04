@@ -59,3 +59,10 @@ WHERE customer_id = 21
 GROUP BY tag, is_read
 HAVING tag = 'coupon'
    AND is_read = 1;
+
+SELECT COALESCE(COUNT(*), 0)
+FROM notice
+WHERE customer_id = 21
+  AND tag = 'stamp'
+  AND created_at > NOW() - INTERVAL 6 HOUR
+GROUP BY tag;

@@ -4,6 +4,7 @@ import com.backend.domain.user.Branch;
 import com.backend.domain.user.Customer;
 import com.backend.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Description;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -279,11 +280,10 @@ public class UserController {
         return ResponseEntity.ok().body(result);
     }
 
-    // 스탬프, 쿠폰 업데이트 조회
     @GetMapping("/notice/updated/{id}")
+    @Description("스탬프, 쿠폰 업데이트 되면 메인페이지에서 화면에 표시")
     public ResponseEntity getUpdatedStampCoupon(@PathVariable Integer id) {
         Map<String, Boolean> map = service.updated(id);
-        System.out.println("map = " + map);
         if (!map.isEmpty()) {
             return ResponseEntity.ok().body(map);
         }

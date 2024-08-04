@@ -393,13 +393,13 @@ public class UserService {
         Map<String, Boolean> result = new HashMap<>();
 
         // null 값을 0으로 대체
-        Integer notReadStampCount = userMapper.notReadStamp(id);
-        if (notReadStampCount != null && notReadStampCount > 0) {
+        Integer updatedStampCount = userMapper.updatedStamp(id);
+        if (updatedStampCount != null && updatedStampCount > 0) {
             result.put("stampNotRead", true);
         }
 
-        Integer notReadCouponCount = userMapper.notReadCoupon(id);
-        if (notReadCouponCount != null && notReadCouponCount > 0) {
+        Integer updatedCouponCount = userMapper.updatedCoupon(id);
+        if (updatedCouponCount != null && updatedCouponCount > 0) {
             result.put("couponNotRead", true);
         }
         return result;
