@@ -1,9 +1,11 @@
 import {
   Box,
+  Button,
   Divider,
   Modal,
   ModalBody,
   ModalContent,
+  ModalFooter,
   ModalHeader,
   Spinner,
 } from "@chakra-ui/react";
@@ -23,23 +25,48 @@ export function StampModal({ isOpen, onClose }) {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalContent>
+      <ModalContent mt={"200px"}>
         <ModalHeader>적립 내역</ModalHeader>
         <ModalBody>
-          {isLoading ? (
-            <Spinner />
-          ) : (
-            stampList.map((stamp, index) => (
-              <Box key={index}>
-                <Box>{stamp.content}</Box>
-                <Box>{stamp.createdAtString}</Box>
-                {index < stampList.length - 1 && (
-                  <Divider borderColor="gray.200" my={4} />
-                )}
-              </Box>
-            ))
-          )}
+          <Box
+            h={"400px"}
+            overflowY={"scroll"}
+            css={{
+              "&::-webkit-scrollbar": {
+                width: "8px",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                background: "#888",
+                borderRadius: "4px",
+              },
+              "&::-webkit-scrollbar-thumb:hover": {
+                background: "#555",
+              },
+              "&::-webkit-scrollbar-track": {
+                background: "#f1f1f1",
+              },
+            }}
+          >
+            {isLoading ? (
+              <Spinner />
+            ) : (
+              stampList.map((stamp, index) => (
+                <Box key={index}>
+                  <Box>{stamp.content}</Box>
+                  <Box>{stamp.createdAtString}</Box>
+                  {index < stampList.length - 1 && (
+                    <Divider borderColor="gray.200" my={4} />
+                  )}
+                </Box>
+              ))
+            )}
+          </Box>
         </ModalBody>
+        <ModalFooter>
+          <Button colorScheme={"pink"} onClick={onClose}>
+            닫기
+          </Button>
+        </ModalFooter>
       </ModalContent>
     </Modal>
   );
