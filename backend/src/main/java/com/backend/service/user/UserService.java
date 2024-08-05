@@ -408,11 +408,15 @@ public class UserService {
         Integer updatedStampCount = userMapper.updatedStamp(id);
         if (updatedStampCount != null && updatedStampCount > 0) {
             result.put("stampNotRead", true);
+        } else {
+            result.put("stampNotRead", false);
         }
 
         Integer updatedCouponCount = userMapper.updatedCoupon(id);
         if (updatedCouponCount != null && updatedCouponCount > 0) {
             result.put("couponNotRead", true);
+        } else {
+            result.put("couponNotRead", false);
         }
         return result;
     }
