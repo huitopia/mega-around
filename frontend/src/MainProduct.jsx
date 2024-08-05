@@ -1,4 +1,4 @@
-import { Box, Center, Spinner, Text } from "@chakra-ui/react";
+import { Box, Center, Text } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "./component/LoginProvider.jsx";
 import SimpleSlider from "./component/SimpleSlider.jsx";
@@ -58,10 +58,6 @@ export function MainProduct() {
         });
     }
   }, [account]);
-
-  if (account.hasAuth() === null) {
-    return <Spinner />;
-  }
 
   return (
     <>
