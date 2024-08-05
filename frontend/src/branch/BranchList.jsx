@@ -218,16 +218,14 @@ export const BranchList = () => {
               width={"100%"}
               height="400px"
               border="1px solid #e8e4e0"
-              zIndex={-1}
             />
             <Box
               mt={"40px"}
               width={"100%"}
-              height="50%"
+              height="450px"
               overflowY="auto"
               pt={"10px"}
             >
-              {/*<SimpleGrid spacing={4} columns={2}>*/}
               <Center>
                 <SimpleGrid templateColumns="repeat(2, 1fr)" gap={6}>
                   {branches.map((branch) => (
