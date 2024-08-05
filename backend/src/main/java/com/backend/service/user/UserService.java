@@ -314,7 +314,7 @@ public class UserService {
         eventMapper.deleteStamp(id);
 
         // cart_product 지우기
-        userMapper.deleteCartProduct(id);
+//        userMapper.deleteCartProduct(id);
 
         // cart 지우기
         userMapper.deleteCart(id);
