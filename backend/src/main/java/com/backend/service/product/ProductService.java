@@ -38,11 +38,14 @@ public class ProductService {
     String imageSrcPrefix;
 
 
-    public void insertProduct(Product product, MultipartFile[] files) throws Exception {
+    public Boolean insertProduct(Product product, MultipartFile[] files) throws Exception {
         // List<Integer> -> String
         product.setOptions(objectMapper.writeValueAsString(product.getOption()));
         // 상품 저장
-        mapper.insertProduct(product);
+        int insertProductSuccess = mapper.insertProduct(product);
+        if (insertProductSuccess <= 0) {
+            return false;
+        }
 
         if (files != null && product.getId() != null) {
             ProductFile productFile = new ProductFile();
@@ -65,6 +68,7 @@ public class ProductService {
                             files[0].getInputStream(), files[0].getSize()
                     ));
         }
+        return true;
     }
 
 
