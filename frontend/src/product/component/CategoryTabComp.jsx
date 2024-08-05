@@ -1,4 +1,4 @@
-import { Button, Tab, TabList, Tabs } from "@chakra-ui/react";
+import { Box, Button, Tab, TabList, Tabs } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 export function CategoryTabComp(props) {
@@ -99,7 +99,7 @@ export function CategoryTabComp(props) {
           </Button>
         ))
       ) : (
-        <p>서브 카테고리를 선택해주세요.</p>
+        <Box>서브 카테고리를 선택해주세요.</Box>
       )}
     </Tabs>
   );
