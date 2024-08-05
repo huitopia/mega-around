@@ -313,6 +313,12 @@ public class UserService {
         // 스탬프 지우기
         eventMapper.deleteStamp(id);
 
+        // cart_product 지우기
+        userMapper.deleteCartProduct(id);
+
+        // cart 지우기
+        userMapper.deleteCart(id);
+
         // notice 지우기
 
 
@@ -323,6 +329,9 @@ public class UserService {
     }
 
     public void deleteBranch(Integer id) {
+
+        // branch_geocode 지우기
+        userMapper.deleteBranchByGeocode(id);
 
         // 지점 지우기
         userMapper.deleteBranchById(id);

@@ -157,4 +157,21 @@ public interface UserMapper {
             </script>
             """)
     int selectTotalBranchCount(String keyword);
+
+    @Delete("""
+            DELETE FROM branch_geocode WHERE branch_id=#{id}
+            """)
+    void deleteBranchByGeocode(Integer id);
+
+//    @Delete("""
+//            DELETE cp FROM cart_product cp JOIN cart c ON cp.cart_id = c.id WHERE c.id = #{id};
+//            """)
+//    void deleteCartProduct(Integer id);
+
+    @Delete("""
+            DELETE FROM cart WHERE customer_id=#{id}
+            """)
+    void deleteCart(Integer id);
+
+
 }

@@ -66,3 +66,5 @@ WHERE customer_id = 21
   AND tag = 'stamp'
   AND created_at > NOW() - INTERVAL 6 HOUR
 GROUP BY tag;
+
+DELETE cp FROM cart_product cp JOIN cart c ON cp.cart_id = c.id WHERE c.id = #{id};
