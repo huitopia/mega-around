@@ -64,15 +64,35 @@ export function Coupon() {
           <Box fontWeight={"bold"} mt={"60px"} fontSize={"lg"} mb={3} ml={3}>
             적립 및 사용내역
           </Box>
-          {couponList.map((coupon, index) => (
-            <Box key={index} ml={5}>
-              <Box>{coupon.content}</Box>
-              <Box fontSize={"sm"}>{coupon.createdAtString}</Box>
-              {index < couponList.length - 1 && (
-                <Divider borderColor="gray.200" my={4} />
-              )}
-            </Box>
-          ))}
+          <Box
+            overflowY={"scroll"}
+            h={"500px"}
+            css={{
+              "&::-webkit-scrollbar": {
+                width: "8px",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                background: "#888",
+                borderRadius: "4px",
+              },
+              "&::-webkit-scrollbar-thumb:hover": {
+                background: "#555",
+              },
+              "&::-webkit-scrollbar-track": {
+                background: "#f1f1f1",
+              },
+            }}
+          >
+            {couponList.map((coupon, index) => (
+              <Box key={index} ml={5}>
+                <Box>{coupon.content}</Box>
+                <Box fontSize={"sm"}>{coupon.createdAtString}</Box>
+                {index < couponList.length - 1 && (
+                  <Divider borderColor="gray.200" my={4} />
+                )}
+              </Box>
+            ))}
+          </Box>
         </Box>
       </Box>
     </Box>

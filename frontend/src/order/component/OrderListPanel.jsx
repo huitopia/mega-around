@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-export function OrderListPanel({period}) {
+export function OrderListPanel({ period }) {
   const [orderList, setOrderList] = useState(null);
   const navigate = useNavigate();
 
@@ -31,15 +31,37 @@ export function OrderListPanel({period}) {
 
   return (
     <Box>
-      <Box>
+      <Box
+        height="800px"
+        overflowY={"scroll"}
+        css={{
+          "&::-webkit-scrollbar": {
+            width: "8px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "#888",
+            borderRadius: "4px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            background: "#555",
+          },
+          "&::-webkit-scrollbar-track": {
+            background: "#f1f1f1",
+          },
+        }}
+      >
         {orderList.map((order, index) => (
           <Box
             key={index}
             onClick={() => navigate(`/order/${order.id}`)}
             cursor={"pointer"}
           >
-            <Box fontWeight={"bold"} color={"#5b5859"}>{getStateMessage(order.stateId)}</Box>
-            <Box fontWeight={"bold"} fontSize={"lg"}>{order.branchName}</Box>
+            <Box fontWeight={"bold"} color={"#5b5859"}>
+              {getStateMessage(order.stateId)}
+            </Box>
+            <Box fontWeight={"bold"} fontSize={"lg"}>
+              {order.branchName}
+            </Box>
             <Flex gap={3} fontSize={"sm"}>
               <Box>
                 {order.orderProduct[0].productName}
@@ -52,7 +74,7 @@ export function OrderListPanel({period}) {
               <Box>{order.createdAtString.substring(0, 13)}</Box>
             </Flex>
             {orderList.length - 1 > index && (
-              <Divider border={"1px solid gray.200"} my={4} />
+              <Divider border={"1px solid gray.200"} my={4} w={"950px"} />
             )}
           </Box>
         ))}
