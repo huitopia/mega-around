@@ -50,7 +50,6 @@ function MyPageMenu({ isChanged, setIsChanged, updateAlarm }) {
           setNoticeList(newNotice);
           setUnreadNoticeCount(getUnreadNoticeCount(newNotice));
           setIsChanged(true);
-          setIsChanged(false);
         });
       },
       onStompError: (frame) => {
@@ -84,9 +83,10 @@ function MyPageMenu({ isChanged, setIsChanged, updateAlarm }) {
   }
 
   function handleReadNotice() {
-    axios
-      .put("/api/event/notice", { customerId: account.id })
-      .then(() => setIsChanged(true));
+    console.log(isChanged);
+    axios.put("/api/event/notice", { customerId: account.id }).then(() => {
+      setIsChanged(true);
+    });
   }
 
   return (

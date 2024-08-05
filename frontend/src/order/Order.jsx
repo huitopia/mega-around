@@ -127,10 +127,11 @@ export function Order() {
               },
             })
             .then((res) => {
-              navigate(`/order/${res.data}`);
               setUpdateAlarm(true);
+              navigate(`/order/${res.data}`);
             })
-            .catch(() => errorToast("결제 실패했습니다"));
+            .catch(() => errorToast("결제 실패했습니다"))
+            .finally(setUpdateAlarm(false));
         }
       },
     );
@@ -154,7 +155,7 @@ export function Order() {
   function plusCouponCount() {
     const newCouponCount =
       useCouponCount < couponCount &&
-      calculateTotalPrice(orderItem.orderProduct) > (useCouponCount + 1) * 2000
+      calculateTotalPrice(orderItem.orderProduct) >= (useCouponCount + 1) * 2000
         ? useCouponCount + 1
         : useCouponCount;
     setUseCouponCount(newCouponCount);
@@ -267,12 +268,12 @@ export function Order() {
                   </Radio>
                 </RadioGroup>
               </Box>
-              <Box>
-                <Box fontWeight={"bold"} mt={"30px"}>
-                  포장옵션
-                </Box>
-                <Box mt={"10px"}>
-                  {isTakeOut === "1" && (
+              {isTakeOut === "1" && (
+                <Box>
+                  <Box fontWeight={"bold"} mt={"30px"}>
+                    포장옵션
+                  </Box>
+                  <Box mt={"10px"}>
                     <CheckboxGroup>
                       <Checkbox
                         size="md"
@@ -296,9 +297,9 @@ export function Order() {
                         빨대/스틱 필요해요
                       </Checkbox>
                     </CheckboxGroup>
-                  )}
+                  </Box>
                 </Box>
-              </Box>
+              )}
             </Box>
             <Box mt={"30px"}>
               <Accordion allowMultiple>

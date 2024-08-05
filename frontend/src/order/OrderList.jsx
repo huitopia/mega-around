@@ -7,19 +7,28 @@ import {
   TabList,
   TabPanel,
   TabPanels,
-  Tabs,
+  Tabs, Text,
 } from "@chakra-ui/react";
 import { OrderListPanel } from "./component/OrderListPanel.jsx";
 
 export function OrderList() {
   return (
-    <Box maxWidth="1000px" mx={"auto"}>
-      <Box mt={"50px"} mb={"50px"}>
-        <Center>
-          <Heading>Order List</Heading>
-        </Center>
+    <Box>
+      <Box
+        height={"280px"}
+        backgroundColor={"#444444"}
+        textAlign={"center"}
+        display={"flex"}
+        alignItems={"center"}
+        justifyContent="center"
+      >
+        <Box>
+          <Heading size="2xl" textColor={"#FDD000"}>
+            ORDER LIST
+          </Heading>
+        </Box>
       </Box>
-      <Divider border={"1px solid black"} my={4} />
+      <Box  maxWidth="1000px" mx={"auto"} mt={10}>
       <Tabs isFitted variant="enclosed" colorScheme="#401F02">
         <TabList mb="1em">
           <Tab>1주일</Tab>
@@ -34,6 +43,7 @@ export function OrderList() {
           <TabPanel>{<OrderListPanel period={"all"} />}</TabPanel>
         </TabPanels>
       </Tabs>
+      </Box>
     </Box>
   );
 }

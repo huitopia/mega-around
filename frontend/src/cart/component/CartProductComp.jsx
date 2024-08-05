@@ -4,11 +4,13 @@ import {
   Center,
   Divider,
   Flex,
+  Grid,
   Heading,
+  HStack,
   Image,
-  Spacer,
   Spinner,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
@@ -16,10 +18,6 @@ import { LoginContext } from "../../component/LoginProvider.jsx";
 import { CustomToast } from "../../component/CustomToast.jsx";
 import { useNavigate } from "react-router-dom";
 import { OrderContext } from "../../order/component/OrderProvider.jsx";
-import {
-  RoundBlackButtonStyle,
-  RoundGrayButtonStyle,
-} from "../../component/css/style.js";
 
 export function CartProductComp(props) {
   const account = useContext(LoginContext);
@@ -39,7 +37,29 @@ export function CartProductComp(props) {
   }, [userId, isChanged]);
 
   if (cart === "" || cart === null) {
-    return <Box>장바구니에 상품이 없어요</Box>;
+    return (
+      <Box>
+        <Box
+          height={"280px"}
+          backgroundColor={"#444444"}
+          textAlign={"center"}
+          display={"flex"}
+          alignItems={"center"}
+          justifyContent="center"
+        >
+          <Box>
+            <Heading size="2xl" textColor={"#FDD000"}>
+              CART LIST
+            </Heading>
+          </Box>
+        </Box>
+        <Box mt={"30px"}>
+          <Center>
+            <Heading size={"md"}>빈 바구니</Heading>
+          </Center>
+        </Box>
+      </Box>
+    );
   }
 
   function handleRemoveProduct(productId) {
@@ -105,42 +125,84 @@ export function CartProductComp(props) {
             {cart.branchName}
           </Text>
         </Box>
-        <Box
-          border={"1px solid blue"}
-          maxWidth={"1200px"}
-          mx={"auto"}
-          mt={"50px"}
-        >
-          <Box textAlign={"center"}>
-            <Heading size={"lg"}>PRODUCT LIST</Heading>
-          </Box>
-          <Box border={"1px solid black"} mt={"20px"}>
-            <Flex>
-              <Box width={"60%"}>
-                {cart.cartProduct.map((product, index) => (
-                  <Box key={index} ml={"10%"} border={"1px solid red"}>
-                    <Flex>
+      </Box>
+      <Box maxWidth={"1200px"} mx={"auto"} mt={"50px"}>
+        <Box>
+          <Center>
+            <Heading size={"lg"}>장바구니 상품</Heading>
+          </Center>
+        </Box>
+        <Box>
+          <Box marginTop={"50px"}>
+            <VStack>
+              {cart.cartProduct.map((product, index) => (
+                // 상품 박스
+                <Box
+                  borderBottom={"2px solid #444444"}
+                  width={"70%"}
+                  key={product.productId}
+                  height={"180px"}
+                  marginBottom={"20px"}
+                >
+                  <Flex>
+                    <Box
+                      display={"flex"}
+                      alignItems={"center"}
+                      justifyContent={"center"}
+                      height={"180px"}
+                    >
                       <Image
-                        w="150px"
-                        h={"150px"}
+                        width="170px"
                         src={
                           "https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/" +
                           product.filePath
                         }
                       />
-                      <Box ml={4} mt={5}>
-                        <Box fontWeight={"bold"} fontSize={"23px"} mb={2}>
+                    </Box>
+                    <Box width={"80%"} paddingLeft={"10px"}>
+                      <Box height={"40%"} paddingTop={"30px"}>
+                        <Text fontWeight={"bold"} fontSize={"2xl"}>
                           {product.productName}
-                        </Box>
-                        {product.optionList.map((item, index) => (
-                          <Text fontSize={"sm"} key={index} mt={1}>
-                            {item}
+                        </Text>
+                      </Box>
+                      <Box height={"40%"} paddingLeft={"10px"}>
+                        <Grid templateColumns="repeat(3, 1fr)">
+                          {product.optionList.map((item, index) => (
+                            <Text key={index} fontSize={"md"} marginTop={"5px"}>
+                              {item}
+                            </Text>
+                          ))}
+                        </Grid>
+                      </Box>
+                    </Box>
+                    <Box width={"20%"}>
+                      <VStack>
+                        <Button
+                          onClick={() =>
+                            handleRemoveProduct(
+                              cart.cartProduct[index].productId,
+                            )
+                          }
+                          paddingTop={"10px"}
+                          paddingLeft={"60%"}
+                          size={"lg"}
+                          variant="link"
+                          colorScheme={"gray"}
+                        >
+                          {/*{...RoundGrayButtonStyle}*/}X
+                        </Button>
+                        <Box paddingTop={"30px"}>
+                          <Text fontWeight={"bold"} fontSize={"xl"}>
+                            {(
+                              product.totalPrice * product.count
+                            ).toLocaleString("ko-KR")}
+                            원
                           </Text>
-                        ))}
-                        <Flex alignItems="center" mt={7} mr={12} gap={8}>
+                        </Box>
+                        <HStack alignItems="center" paddingTop={"10px"}>
                           <Button
                             onClick={() => handleReduceCount(index)}
-                            {...RoundBlackButtonStyle}
+                            size={"sm"}
                           >
                             -
                           </Button>
@@ -149,88 +211,77 @@ export function CartProductComp(props) {
                           </Box>
                           <Button
                             onClick={() => handlePlusCount(index)}
-                            {...RoundBlackButtonStyle}
+                            size={"sm"}
                           >
-                            +
+                            {/*{...RoundBlackButtonStyle}*/}+
                           </Button>
-                        </Flex>
-                      </Box>
-
-            <Spacer />
-
-                      <Box>
-                        <Flex justify={"right"}>
-                          <Button
-                            onClick={() =>
-                              handleRemoveProduct(
-                                cart.cartProduct[index].productId,
-                              )
-                            }
-                            {...RoundGrayButtonStyle}
-                            mt={5}
-                          >
-                            X
-                          </Button>
-                        </Flex>
-                        <Box fontSize={"35px"} fontWeight={"bold"} mt={10}>
-                          {(product.totalPrice * product.count).toLocaleString(
-                            "ko-KR",
-                          )}
-                          원
-                        </Box>
-                      </Box>
-                    </Flex>
-                    {cart.cartProduct.length - 1 > index && (
-                      <Divider
-                        border={"1px solid gray.200"}
-                        my={4}
-                        ml={3}
-                        mr={6}
-                        mt={9}
-                      />
-                    )}
-                  </Box>
-                ))}
-              </Box>
-              <Box width={"30%"} ml={"5%"} border={"1px solid yellow"}>
-                <Flex mt={"60px"} align={"center"}>
-                  <Box fontSize={"20px"}>상품금액</Box>
-                  <Spacer />
+                        </HStack>
+                      </VStack>
+                    </Box>
+                  </Flex>
+                  {cart.cartProduct.length - 1 > product.productId && (
+                    <Divider
+                      border={"1px solid gray.200"}
+                      my={4}
+                      ml={3}
+                      mr={6}
+                      mt={9}
+                    />
+                  )}
+                </Box>
+              ))}
+            </VStack>
+          </Box>
+          <Box>
+            <VStack>
+              <Box width={"70%"} justifyContent={"right"} display={"flex"}>
+                <HStack paddingTop={"50px"} gap={20}>
+                  <Box fontSize={"20px"}>총 결제 금액</Box>
                   <Box fontSize={"25px"} color={"red"} fontWeight={"bold"}>
                     {calculateTotalPrice(cart.cartProduct).toLocaleString(
                       "ko-KR",
                     )}
                     원
                   </Box>
-                </Flex>
-                {cart && (
-                  <Center mt={"100px"} mb={"100px"}>
-                    <Button
-                      colorScheme={"orange"}
-                      w={"650px"}
-                      h={"60px"}
-                      fontSize={"19px"}
-                      onClick={() =>
-                        axios
-                          .put("/api/carts", cart)
-                          .then(() => navigate("/order?type=cart"))
-                          .catch(() =>
-                            errorToast(
-                              "주문하기 실패했습니다. 다시 시도해주십시오.",
-                            ),
-                          )
-                      }
-                    >
-                      주문하기
-                    </Button>
-                  </Center>
-                )}
+                </HStack>
               </Box>
-            </Flex>
+            </VStack>
+            {cart && (
+              <VStack marginTop={"50px"}>
+                <HStack gap={10}>
+                  <Button
+                    width={"200px"}
+                    colorScheme={"pink"}
+                    onClick={() =>
+                      navigate(
+                        `/product/list?branchId=${cart.branchId}&branchName=${cart.branchName}`,
+                      )
+                    }
+                  >
+                    쇼핑 계속하기
+                  </Button>
+                  <Button
+                    width={"200px"}
+                    colorScheme={"orange"}
+                    onClick={() =>
+                      axios
+                        .put("/api/carts", cart)
+                        .then(() => navigate("/order?type=cart"))
+                        .catch(() =>
+                          errorToast(
+                            "주문하기 실패했습니다. 다시 시도해주십시오.",
+                          ),
+                        )
+                    }
+                  >
+                    주문하기
+                  </Button>
+                </HStack>
+              </VStack>
+            )}
           </Box>
-          <Box bg={"#f8f9fa"} h={"30px"} w={"100%"} />
-          {/* 옆으로*/}
         </Box>
+        {/* 옆으로*/}
       </Box>
     </Box>
   );

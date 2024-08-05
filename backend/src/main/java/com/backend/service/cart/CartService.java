@@ -34,7 +34,6 @@ public class CartService {
             cartProduct.setCartId(cart.getId());
             cartProduct.setOptions(objectMapper.writeValueAsString(cartProduct.getOption()));
             CartProduct existProduct = cartMapper.selectCartByProductId(cartProduct.getCartId(), cartProduct.getProductId());
-            System.out.println(existProduct == null);
             if (existProduct == null) {
                 cartMapper.insertCartProduct(cartProduct);
             } else {
