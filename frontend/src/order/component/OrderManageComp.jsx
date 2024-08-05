@@ -50,7 +50,7 @@ function CustomNextArrow(props) {
       style={{
         position: "absolute",
         top: "50%",
-        left: "1200px",
+        left: "900px",
         transform: "translateY(-50%)",
         color: "#401F02",
         fontSize: "24px",
@@ -81,7 +81,7 @@ export function OrderManageComp({
     dots: false,
     infinite: false,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 3,
     slidesToScroll: 2,
     draggable: false,
     prevArrow: <CustomPrevArrow />,
@@ -102,7 +102,7 @@ export function OrderManageComp({
   }
 
   return (
-    <Flex h={"240px"} borderBottom="1px solid #e9ecef">
+    <Flex h={"250px"} borderBottom="1px solid #e9ecef">
       <Center w={"150px"} mr={"50px"}>
         <Box fontWeight={"bold"} fontSize={"20px"}>
           {text}(
@@ -114,69 +114,73 @@ export function OrderManageComp({
           </Box>
         </Flex>
       </Center>
-      <Box w={"1100px"} ml={"70px"}>
+      <Box w={"800px"} ml={"70px"}>
         <Slider {...settings}>
-          {orderList.map((order, index) => (
-            <Card
-              variant={"outline"}
-              border="1px solid #e9ecef"
-              key={index}
-              onClick={() => {
-                onOpen();
-                setOrderId(order.id);
-              }}
-              zIndex={1}
-              w={"220px"}
-              h={"240px"}
-              mx={1}
-            >
-              <CardBody>
-                <Flex direction="column" h="100%" justify="space-between">
-                  <Flex direction="column" align="center">
-                    <Box>
-                      {order.orderProduct[0].productName}{" "}
-                      {order.orderProduct[0].count}개
-                      {order.orderProduct.length > 1 && (
-                        <Badge bg={"#DBC54B"} ml={3}>
-                          외 {order.orderProduct.length - 1}개
-                        </Badge>
-                      )}
-                    </Box>
-                    <Image
-                      w={"110px"}
-                      h={"110px"}
-                      src={
-                        "https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/" +
-                        order.orderProduct[0].filePath
-                      }
-                    />
-                    <Flex direction={"column"} gap={3} alignItems={"center"}>
-                      <Flex direction="row" align="center" gap={1}>
-                        {order.isTakeOut == 1 ? (
-                          <Badge bg={"orange"} color="white">
-                            포장
-                          </Badge>
-                        ) : (
-                          <Badge bg={"yellow"}>매장</Badge>
-                        )}
-                        {order.orderProduct[0].optionList.length > 0 && (
-                          <Badge bg={"pink"}>옵션</Badge>
-                        )}
-                      </Flex>
+          {orderList.length > 0 ? (
+            orderList.map((order, index) => (
+              <Card
+                variant={"outline"}
+                border="1px solid #e9ecef"
+                key={index}
+                onClick={() => {
+                  onOpen();
+                  setOrderId(order.id);
+                }}
+                zIndex={1}
+                w={"220px"}
+                h={"250px"}
+                mx={1}
+              >
+                <CardBody>
+                  <Flex direction="column" h="100%" justify="space-between">
+                    <Flex direction="column" align="center">
                       <Box>
-                        {order.option[0] && (
-                          <Box fontSize={"xs"}>- 포장해주세요</Box>
-                        )}
-                        {order.option[1] && (
-                          <Box fontSize={"xs"}>- 캐리어/봉투 필요해요</Box>
+                        {order.orderProduct[0].productName}{" "}
+                        {order.orderProduct[0].count}개
+                        {order.orderProduct.length > 1 && (
+                          <Badge bg={"#DBC54B"} ml={3}>
+                            외 {order.orderProduct.length - 1}개
+                          </Badge>
                         )}
                       </Box>
+                      <Image
+                        w={"110px"}
+                        h={"110px"}
+                        src={
+                          "https://huistudybucket01.s3.ap-northeast-2.amazonaws.com/" +
+                          order.orderProduct[0].filePath
+                        }
+                      />
+                      <Flex direction={"column"} gap={3} alignItems={"center"}>
+                        <Flex direction="row" align="center" gap={1}>
+                          {order.isTakeOut == 1 ? (
+                            <Badge bg={"orange"} color="white">
+                              포장
+                            </Badge>
+                          ) : (
+                            <Badge bg={"yellow"}>매장</Badge>
+                          )}
+                          {order.orderProduct[0].optionList.length > 0 && (
+                            <Badge bg={"pink"}>옵션</Badge>
+                          )}
+                        </Flex>
+                        <Box>
+                          {order.option[0] && (
+                            <Box fontSize={"xs"}>- 포장해주세요</Box>
+                          )}
+                          {order.option[1] && (
+                            <Box fontSize={"xs"}>- 캐리어/봉투 필요해요</Box>
+                          )}
+                        </Box>
+                      </Flex>
                     </Flex>
                   </Flex>
-                </Flex>
-              </CardBody>
-            </Card>
-          ))}
+                </CardBody>
+              </Card>
+            ))
+          ) : (
+            <Box h={"250px"}></Box> // 빈 상태일 때 높이 유지
+          )}
         </Slider>
       </Box>
       <BranchPageModalComp
