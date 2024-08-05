@@ -50,7 +50,6 @@ function MyPageMenu({ isChanged, setIsChanged, updateAlarm }) {
           setNoticeList(newNotice);
           setUnreadNoticeCount(getUnreadNoticeCount(newNotice));
           setIsChanged(true);
-          setIsChanged(false);
         });
       },
       onStompError: (frame) => {
@@ -84,9 +83,10 @@ function MyPageMenu({ isChanged, setIsChanged, updateAlarm }) {
   }
 
   function handleReadNotice() {
-    axios
-      .put("/api/event/notice", { customerId: account.id })
-      .then(() => setIsChanged(true));
+    console.log(isChanged);
+    axios.put("/api/event/notice", { customerId: account.id }).then(() => {
+      setIsChanged(true);
+    });
   }
 
   return (
@@ -118,25 +118,33 @@ function MyPageMenu({ isChanged, setIsChanged, updateAlarm }) {
             )}
             {account.hasAuth() === "branch" && (
               <>
-              <MenuItem
-                onClick={() => navigate(`/mypage/branch/${account.id}`)}
-              >
-                내 정보(지점)
-              </MenuItem>
-              <MenuItem onClick={() => navigate(`/branch/order/${account.id}`)}>
-              주문 관리
-              </MenuItem>
+                <MenuItem
+                  onClick={() => navigate(`/branch/order/${account.id}`)}
+                >
+                  주문 관리
+                </MenuItem>
+                <MenuItem onClick={() => navigate(`/product/list`)}>
+                  상품 리스트
+                </MenuItem>
+                <MenuItem
+                  onClick={() => navigate(`/mypage/branch/${account.id}`)}
+                >
+                  내 정보(지점)
+                </MenuItem>
               </>
             )}
-            {account.hasAuth() === "customer" || (
-              <MenuItem onClick={() => navigate(`/product/list`)}>
-                상품 리스트
-              </MenuItem>
-            )}
             {account.hasAuth() === "admin" && (
-              <MenuItem onClick={() => navigate(`/product`)}>
-                상품 등록
-              </MenuItem>
+              <>
+                <MenuItem onClick={() => navigate(`/product/list`)}>
+                  상품 리스트
+                </MenuItem>
+                <MenuItem onClick={() => navigate(`/product`)}>
+                  상품 등록
+                </MenuItem>
+                <MenuItem onClick={() => navigate(`/mypage/admin`)}>
+                  전체 회원 정보
+                </MenuItem>
+              </>
             )}
             <MenuDivider />
             <MenuItem
@@ -151,27 +159,33 @@ function MyPageMenu({ isChanged, setIsChanged, updateAlarm }) {
         </Menu>
         <Popover>
           <PopoverTrigger>
-            <Flex alignItems={"center"} cursor={"pointer"} onClick={handleReadNotice}>
+            <Flex
+              alignItems={"center"}
+              cursor={"pointer"}
+              onClick={handleReadNotice}
+            >
               {account.hasAuth() === "customer" && (
                 <>
-              <Box>
-                <FontAwesomeIcon
-                  color={unreadNoticeCount > 0 ? "#FDD000" : "rgba(0,0,0,0.5)"}
-                  icon={faBell}
-                />
-              </Box>
-              <Box
-                color={"#444444"}
-                w="20px"
-                h={"50px"}
-                fontSize={"sm"}
-                textAlign={"center"}
-                as={"b"}
-                hidden={unreadNoticeCount === 0}
-              >
-                {unreadNoticeCount}
-              </Box>
-              </>
+                  <Box>
+                    <FontAwesomeIcon
+                      color={
+                        unreadNoticeCount > 0 ? "#FDD000" : "rgba(0,0,0,0.5)"
+                      }
+                      icon={faBell}
+                    />
+                  </Box>
+                  <Box
+                    color={"#444444"}
+                    w="20px"
+                    h={"50px"}
+                    fontSize={"sm"}
+                    textAlign={"center"}
+                    as={"b"}
+                    hidden={unreadNoticeCount === 0}
+                  >
+                    {unreadNoticeCount}
+                  </Box>
+                </>
               )}
             </Flex>
           </PopoverTrigger>

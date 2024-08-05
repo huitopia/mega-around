@@ -135,7 +135,7 @@ export function CartProductComp(props) {
         <Box>
           <Box marginTop={"50px"}>
             <VStack>
-              {cart.cartProduct.map((product) => (
+              {cart.cartProduct.map((product, index) => (
                 // 상품 박스
                 <Box
                   borderBottom={"2px solid #444444"}
@@ -180,7 +180,7 @@ export function CartProductComp(props) {
                         <Button
                           onClick={() =>
                             handleRemoveProduct(
-                              cart.cartProduct[product.productId].productId,
+                              cart.cartProduct[index].productId,
                             )
                           }
                           paddingTop={"10px"}
@@ -201,7 +201,7 @@ export function CartProductComp(props) {
                         </Box>
                         <HStack alignItems="center" paddingTop={"10px"}>
                           <Button
-                            onClick={() => handleReduceCount(product.productId)}
+                            onClick={() => handleReduceCount(index)}
                             size={"sm"}
                           >
                             -
@@ -210,7 +210,7 @@ export function CartProductComp(props) {
                             {product.count}
                           </Box>
                           <Button
-                            onClick={() => handlePlusCount(product.productId)}
+                            onClick={() => handlePlusCount(index)}
                             size={"sm"}
                           >
                             {/*{...RoundBlackButtonStyle}*/}+
@@ -249,7 +249,15 @@ export function CartProductComp(props) {
             {cart && (
               <VStack marginTop={"50px"}>
                 <HStack gap={10}>
-                  <Button width={"200px"} colorScheme={"pink"}>
+                  <Button
+                    width={"200px"}
+                    colorScheme={"pink"}
+                    onClick={() =>
+                      navigate(
+                        `/product/list?branchId=${cart.branchId}&branchName=${cart.branchName}`,
+                      )
+                    }
+                  >
                     쇼핑 계속하기
                   </Button>
                   <Button

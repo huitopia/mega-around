@@ -21,6 +21,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { CustomToast } from "../component/CustomToast.jsx";
 import { formLabel } from "../component/css/style.js";
+import { useNavigate } from "react-router-dom";
 
 export function FindCustomerEmail() {
   const [email, setEmail] = useState("");
@@ -28,6 +29,7 @@ export function FindCustomerEmail() {
   const [password, setPassword] = useState("");
   const { onOpen, onClose, isOpen } = useDisclosure();
   const { successToast, errorToast, infoToast } = CustomToast();
+  const navigate = useNavigate();
 
   function handleCustomerEmail() {
     axios
@@ -132,7 +134,10 @@ export function FindCustomerEmail() {
           <ModalFooter>
             <Button
               mr={2}
-              onClick={onClose}
+              onClick={() => {
+                onClose();
+                navigate("/login");
+              }}
               colorScheme="orange"
               width={"100px"}
             >

@@ -1,25 +1,20 @@
 package com.backend.controller.order;
 
-import com.backend.domain.event.Notice;
 import com.backend.domain.order.OrderItem;
 import com.backend.service.order.OrderService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Description;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class OrderController {
     private final OrderService orderService;
-    private final SimpMessagingTemplate messagingTemplate;
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/orders")
@@ -32,8 +27,7 @@ public class OrderController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/orders/list")
     @Description("주문 리스트 조회")
-    public ResponseEntity getOrderItemList(Authentication authentication, String period, Integer stateId, Integer branchId, @RequestParam(required = false) String date, @RequestParam(required = false)String startTime, @RequestParam(required = false)String endTime) throws JsonProcessingException {
-        System.out.println("a = " + authentication.getName());
+    public ResponseEntity getOrderItemList(Authentication authentication, String period, Integer stateId, Integer branchId, @RequestParam(required = false) String date, @RequestParam(required = false) String startTime, @RequestParam(required = false) String endTime) throws JsonProcessingException {
         return ResponseEntity.ok(orderService.getOrderItemList(Integer.valueOf(authentication.getName()), period, stateId, branchId, date, startTime, endTime));
     }
 
@@ -46,14 +40,11 @@ public class OrderController {
 
     // 주문 상태 변경 : 1.결제 완료 2. 제조 중 3. 제조 완료
     // id = order_id
-//    @PreAuthorize("hasAuthority('SCOPE_branch')")
+    @PreAuthorize("hasAuthority('SCOPE_branch')")
     @PutMapping("/orders")
     @Description("주문 상태 변경")
     public ResponseEntity modifyOrderItemState(@RequestBody OrderItem orderItem) {
-        if (orderService.modifyOrderItemState(orderItem.getId(), Integer.valueOf(orderItem.getStateId()))) {
-            // TODO. 수정
-            List<Notice> noticeList = orderService.addStateNotice(orderItem);
-            messagingTemplate.convertAndSend(STR."/sub/\{orderItem.getCustomerId()}", noticeList);
+        if (orderService.modifyOrderItemState(orderItem)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.internalServerError().build();

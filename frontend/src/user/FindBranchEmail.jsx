@@ -21,17 +21,19 @@ import axios from "axios";
 import React, { useState } from "react";
 import { CustomToast } from "../component/CustomToast.jsx";
 import { formLabel } from "../component/css/style.js";
+import { useNavigate } from "react-router-dom";
 
 export function FindBranchEmail() {
   const [email, setEmail] = useState("");
-  const [nickName, setNickName] = useState("");
+  const [branchName, setBranchName] = useState("");
   const [password, setPassword] = useState("");
   const { onOpen, onClose, isOpen } = useDisclosure();
   const { successToast, errorToast, infoToast } = CustomToast();
+  const navigate = useNavigate();
 
   function handleBranchEmail() {
     axios
-      .post(`/api/user/branch/email`, { nickName, password })
+      .post(`/api/user/branch/email`, { branchName, password })
       .then((res) => {
         window.scrollTo({ top: 0, behavior: "auto" });
         setEmail(res.data.email);
@@ -77,7 +79,7 @@ export function FindBranchEmail() {
                 <Input
                   placeholder={"닉네임을 입력하세요"}
                   sx={{ "::placeholder": { fontSize: "sm" } }}
-                  onChange={(e) => setNickName(e.target.value)}
+                  onChange={(e) => setBranchName(e.target.value)}
                 />
               </InputGroup>
             </FormControl>
@@ -132,7 +134,10 @@ export function FindBranchEmail() {
           <ModalFooter>
             <Button
               mr={2}
-              onClick={onClose}
+              onClick={() => {
+                onClose();
+                navigate("/login/branch");
+              }}
               colorScheme="orange"
               width={"100px"}
             >

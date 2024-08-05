@@ -46,14 +46,19 @@ const ConfirmationModal = ({
         </ModalBody>
         <Center>
           <ModalFooter display={"flex"}>
-            <Button onClick={onClose} width={"100px"} mr={3}>
+            <Button
+              onClick={onClose}
+              width={"100px"}
+              mr={3}
+              colorScheme={"pink"}
+            >
               취소
             </Button>
             <Button
               mr={2}
               onClick={onConfirm}
               isLoading={isLoading}
-              colorScheme="green"
+              colorScheme="orange"
               width={"100px"}
             >
               확인
