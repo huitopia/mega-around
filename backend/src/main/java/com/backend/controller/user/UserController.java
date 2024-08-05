@@ -21,14 +21,14 @@ import java.util.Map;
 public class UserController {
     private final UserService service;
 
-    // 메인페이지
     @GetMapping("/")
+    @Description("메인페이지")
     public List<Map<String, Object>> list() {
         return service.getList();
     }
 
-    // 고객 회원가입
     @PostMapping("/user/customer")
+    @Description("고객 회원가입")
     public ResponseEntity<Object> signupCustomer(@RequestBody Customer customer) {
         if (service.validate(customer.getEmail(), customer.getPassword(), customer.getNickName())) {
             service.addCustomer(customer);
@@ -37,8 +37,8 @@ public class UserController {
         return ResponseEntity.badRequest().build();
     }
 
-    // 지점 회원가입
     @PostMapping("/user/branch")
+    @Description("지점 회원가입")
     public ResponseEntity<Object> signupBranch(@RequestBody Branch branch) throws Exception {
         if (service.validate(branch.getEmail(), branch.getPassword(), branch.getBranchName()) &&
                 service.validateAddress(branch.getAddress())) {
@@ -51,8 +51,8 @@ public class UserController {
         return ResponseEntity.badRequest().build();
     }
 
-    // 고객 이메일 중복확인
     @GetMapping("/user/customer/email/{email}")
+    @Description("고객 이메일 중복확인")
     public ResponseEntity<Object> getCustomer(@PathVariable String email) {
         Customer customer = service.getCustomerByEmail(email);
         if (customer == null) {
@@ -61,8 +61,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatusCode.valueOf(409)).build();
     }
 
-    // 지점 이메일 중복확인
     @GetMapping("/user/branch/email/{email}")
+    @Description("지점 이메일 중복확인")
     public ResponseEntity<Object> getBranch(@PathVariable String email) {
         Branch branch = service.getBranchByEmail(email);
         if (branch == null) {
@@ -71,8 +71,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatusCode.valueOf(409)).build();
     }
 
-    // 고객 닉네임 중복확인
     @GetMapping("/user/customer/nickName/{nickName}")
+    @Description("고객 닉네임 중복확인")
     public ResponseEntity<Object> getNameCustomer(@PathVariable String nickName) {
         Customer customer = service.getCustomerByNickName(nickName);
         if (customer == null) {
@@ -81,8 +81,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatusCode.valueOf(409)).build();
     }
 
-    // 지점명 중복확인
     @GetMapping("/user/branch/branchName/{branchName}")
+    @Description("지점명 중복확인")
     public ResponseEntity<Object> getNameBranch(@PathVariable String branchName) {
         Branch branch = service.getBranchByBranchName(branchName);
         if (branch == null) {
@@ -91,8 +91,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatusCode.valueOf(409)).build();
     }
 
-    // 고객 로그인
     @PostMapping("/login/customer")
+    @Description("고객 로그인")
     public ResponseEntity<Object> tokenCustomer(@RequestBody Customer customer) {
         Map<String, Object> map = service.getToken(customer);
         if (map.containsKey("token")) {
@@ -104,8 +104,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(map.get("forbidden"));
     }
 
-    // 지점 로그인
     @PostMapping("/login/branch")
+    @Description("지점 로그인")
     public ResponseEntity<Object> tokenBranch(@RequestBody Branch branch) {
         Map<String, Object> map = service.getTokenBranch(branch);
         // email,password 모두 맞을 때 (토큰이 생성되었을 때)
@@ -120,9 +120,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(map.get("forbidden"));
     }
 
-    // 고객 정보 읽기
     @GetMapping("/user/customer/{id}")
     @PreAuthorize("hasAuthority('SCOPE_customer')")
+    @Description("고객 정보 읽기")
     public ResponseEntity<Object> getCustomerById(@PathVariable Integer id, Authentication authentication) {
         if (!service.hasAccess(id, authentication)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -134,9 +134,9 @@ public class UserController {
         return ResponseEntity.ok(customer);
     }
 
-    // 지점 정보 읽기
     @GetMapping("/user/branch/{id}")
     @PreAuthorize("hasAuthority('SCOPE_branch')")
+    @Description("지점 정보 읽기")
     public ResponseEntity<Object> getBranchById(@PathVariable Integer id, Authentication authentication) {
         if (!service.hasAccess(id, authentication)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -148,9 +148,9 @@ public class UserController {
         return ResponseEntity.ok(branch);
     }
 
-    // 고객 비밀번호 확인
     @PostMapping("/user/customer/password/{id}")
     @PreAuthorize("isAuthenticated()")
+    @Description("고객 비밀번호 확인")
     public ResponseEntity<Object> getCustomerPasswordById(@PathVariable Integer id, @RequestBody Map<String, String> requestBody, Authentication authentication) {
         if (!service.hasAccess(id, authentication)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -161,9 +161,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    // 지점 비밀번호 확인
     @PostMapping("/user/branch/password/{id}")
     @PreAuthorize("isAuthenticated()")
+    @Description("지점 비밀번호 확인")
     public ResponseEntity<Object> getBranchPasswordById(@PathVariable Integer id, @RequestBody Map<String, String> requestBody, Authentication authentication) {
         if (!service.hasAccess(id, authentication)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -174,9 +174,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    // 고객 정보 수정
     @PutMapping("/user/customer/{id}")
     @PreAuthorize("hasAuthority('SCOPE_customer')")
+    @Description("고객 정보 수정")
     public ResponseEntity<Object> updateCustomer(@RequestBody Customer customer, Authentication authentication) {
         if (service.isNameEmpty(customer.getNickName())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("닉네임을 입력해 주세요");
@@ -188,9 +188,9 @@ public class UserController {
         return ResponseEntity.ok(token);
     }
 
-    // 지점 정보 수정
     @PutMapping("/user/branch/{id}")
     @PreAuthorize("hasAuthority('SCOPE_branch')")
+    @Description("지점 정보 수정")
     public ResponseEntity<Object> updateBranch(@RequestBody Branch branch, Authentication authentication) {
         if (service.isNameEmpty(branch.getBranchName())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("닉네임을 입력해 주세요");
@@ -202,9 +202,9 @@ public class UserController {
         return ResponseEntity.ok(token);
     }
 
-    // 고객 회원 탈퇴
     @DeleteMapping("/user/customer/{id}")
     @PreAuthorize("hasAuthority('SCOPE_customer')")
+    @Description("고객 회원 탈퇴")
     public ResponseEntity<Object> deleteCustomer(@PathVariable Integer id, Authentication authentication) {
         if (service.hasAccess(id, authentication)) {
             service.deleteCustomer(id);
@@ -213,9 +213,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
-    // 지점 회원 탈퇴
     @DeleteMapping("/user/branch/{id}")
     @PreAuthorize("hasAuthority('SCOPE_branch')")
+    @Description("지점 회원 탈퇴")
     public ResponseEntity<Object> deleteBranch(@PathVariable Integer id, Authentication authentication) {
         if (service.hasAccess(id, authentication)) {
             service.deleteBranch(id);
@@ -224,8 +224,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
-    // 고객 비밀번호 재설정
     @PutMapping("/user/customer/password")
+    @Description("고객 비밀번호 재설정")
     public ResponseEntity modifyPasswordCustomer(@RequestBody Customer customer) {
         if (!service.checkPasswordPattern(customer.getPassword())) {
             return ResponseEntity.badRequest().build();
@@ -236,8 +236,8 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
-    // 지점 비밀번호 재설정
     @PutMapping("/user/branch/password")
+    @Description("지점 비밀번호 재설정")
     public ResponseEntity modifyPasswordBranch(@RequestBody Branch branch) {
         if (!service.checkPasswordPattern(branch.getPassword())) {
             return ResponseEntity.badRequest().build();
@@ -248,8 +248,8 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
-    // 고객 이메일 찾기
     @PostMapping("/user/customer/email")
+    @Description("고객 이메일 찾기")
     public ResponseEntity findCustomerEmail(@RequestBody Customer customer) {
         // 등록되지 않은 닉네임인지 확인
         if (!service.isNameRegistered(customer.getNickName())) {
@@ -263,8 +263,8 @@ public class UserController {
         return ResponseEntity.ok().body(result);
     }
 
-    // 지점 이메일 찾기
     @PostMapping("/user/branch/email")
+    @Description("지점 이메일 찾기")
     public ResponseEntity findBranchEmail(@RequestBody Branch branch) {
         // 등록되지 않은 닉네임인지 확인
         if (!service.isNameRegisteredBranch(branch.getBranchName())) {
