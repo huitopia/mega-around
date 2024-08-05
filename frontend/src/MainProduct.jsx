@@ -16,28 +16,26 @@ export function MainProduct() {
   const [updateAlram, setUpdateAlram] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("/api/event/coupon")
-      .then((res) => {
-        setCouponCount(res.data || 0);
-      })
-      .catch(() => {
-        setCouponCount(0); // 에러 발생 시 0으로 설정
-      });
-  }, []);
+    if (account.hasAuth() === "customer") {
+      axios
+        .get("/api/event/stamp")
+        .then((res) => {
+          setStampCount(res.data || 0);
+        })
+        .catch(() => {
+          setStampCount(0); // 에러 발생 시 0으로 설정
+        });
 
-  useEffect(() => {
-    axios
-      .get("/api/event/stamp")
-      .then((res) => {
-        setStampCount(res.data || 0);
-      })
-      .catch(() => {
-        setStampCount(0); // 에러 발생 시 0으로 설정
-      });
-  }, []);
+      axios
+        .get("/api/event/coupon")
+        .then((res) => {
+          setCouponCount(res.data || 0);
+        })
+        .catch(() => {
+          setCouponCount(0); // 에러 발생 시 0으로 설정
+        });
+    }
 
-  useEffect(() => {
     axios
       .get("/api/")
       .then((res) => {
@@ -56,11 +54,6 @@ export function MainProduct() {
         .catch((error) => console.error("Request failed", error));
     }
   }, [account]);
-
-  if (!account) {
-    // account가 null이거나 undefined일 경우 로딩 표시
-    return <div>Loading...</div>;
-  }
 
   return (
     <>
