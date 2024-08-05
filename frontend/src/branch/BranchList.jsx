@@ -218,7 +218,7 @@ export const BranchList = () => {
               width={"100%"}
               height="400px"
               border="1px solid #e8e4e0"
-              zIndex={-1}
+              // zIndex={-1}
             />
             <Box
               mt={"40px"}
