@@ -277,9 +277,7 @@ public class UserService {
         }
         // 패스워드가 비어 있지 않으면 유효성 검사
         else {
-            System.out.println("empty()가 아니면 password = " + password);
             String passwordPattern = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,20}$";
-            System.out.println(password.trim().matches(passwordPattern));
             return password.trim().matches(passwordPattern);
         }
     }

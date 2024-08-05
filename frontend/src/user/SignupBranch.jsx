@@ -50,7 +50,7 @@ export function SignUpBranch() {
               })
               .then(() => {
                 successToast("지점 가입에 성공하였습니다.");
-                navigate("/login");
+                navigate("/login/branch");
               })
               .catch((err) => {
                 if (err.response.status === 400) {

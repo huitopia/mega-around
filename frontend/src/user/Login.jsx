@@ -50,7 +50,7 @@ export function Login() {
                 mega-around
               </Heading>
               <Center mt={5} fontSize={"lg"} fontWeight={"bold"}>
-                <Text>회원 로그인</Text>
+                <Text>고객 로그인</Text>
               </Center>
             </Box>
           </Center>
