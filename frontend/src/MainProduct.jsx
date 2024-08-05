@@ -1,4 +1,4 @@
-import { Box, Center, Text } from "@chakra-ui/react";
+import { Box, Center, Spinner, Text } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "./component/LoginProvider.jsx";
 import SimpleSlider from "./component/SimpleSlider.jsx";
@@ -44,16 +44,24 @@ export function MainProduct() {
       .catch(() => {
         setProducts([]); // 에러 발생 시 빈 배열로 설정
       });
-  }, []);
+  }, [account]);
 
   useEffect(() => {
-    if (account && account.id) {
+    if (account.hasAuth() === "customer") {
       axios
         .get(`/api/notice/updated/${account.id}`)
-        .then((res) => setUpdateAlram(res.data))
-        .catch((error) => console.error("Request failed", error));
+        .then((res) => {
+          setUpdateAlram(res.data);
+        })
+        .catch((error) => {
+          console.error("Request failed", error);
+        });
     }
   }, [account]);
+
+  if (account.hasAuth() === null) {
+    return <Spinner />;
+  }
 
   return (
     <>
