@@ -89,4 +89,89 @@ public interface UserMapper {
             UPDATE branch SET password=#{password} WHERE email=#{email}
             """)
     int updatePasswordBranch(Branch branch);
+
+    @Select("""
+            SELECT COALESCE(COUNT(*), 0)
+            FROM notice
+            WHERE customer_id = #{id}
+              AND tag = 'stamp'
+              AND created_at > NOW() - INTERVAL 1 HOUR
+            GROUP BY tag
+            """)
+    Integer updatedStamp(Integer id);
+
+    @Select("""
+            SELECT COALESCE(COUNT(*), 0)
+            FROM notice
+            WHERE customer_id = #{id}
+              AND tag = 'coupon'
+              AND created_at > NOW() - INTERVAL 1 HOUR
+            GROUP BY tag
+            """)
+    Integer updatedCoupon(Integer id);
+
+    @Select("""
+            <script>
+            SELECT id, email, nick_name, created_at
+            FROM customer
+                <bind name="pattern" value="'%' + keyword + '%'" />
+            WHERE
+                (email LIKE #{pattern} OR nick_name LIKE #{pattern})
+            ORDER BY id DESC
+            LIMIT #{offset}, 10
+            </script>
+            """)
+    List<Customer> selectCustomerList(int offset, String keyword);
+
+    @Select("""
+            <script>
+            SELECT COUNT(*) FROM customer
+            <bind name="pattern" value="'%' + keyword + '%'" />
+            WHERE
+            (email LIKE #{pattern} OR nick_name LIKE #{pattern})
+            ORDER BY id DESC
+            </script>
+            """)
+    int selectTotalUserCount(String keyword);
+
+    @Select("""
+                <script>
+                SELECT id, email, branch_name, created_at, address
+                FROM branch
+                    <bind name="pattern" value="'%' + keyword + '%'" />
+                WHERE
+                    (email LIKE #{pattern} OR branch_name LIKE #{pattern})
+                ORDER BY id DESC
+                LIMIT #{offset}, 10
+                </script>
+            """)
+    List<Branch> selectBranchList(int offset, String keyword);
+
+    @Select("""
+            <script>
+            SELECT COUNT(*) FROM branch
+            <bind name="pattern" value="'%' + keyword + '%'" />
+            WHERE
+            (email LIKE #{pattern} OR branch_name LIKE #{pattern})
+            ORDER BY id DESC
+            </script>
+            """)
+    int selectTotalBranchCount(String keyword);
+
+    @Delete("""
+            DELETE FROM branch_geocode WHERE branch_id=#{id}
+            """)
+    void deleteBranchByGeocode(Integer id);
+
+//    @Delete("""
+//            DELETE cp FROM cart_product cp JOIN cart c ON cp.cart_id = c.id WHERE c.id = #{id};
+//            """)
+//    void deleteCartProduct(Integer id);
+
+    @Delete("""
+            DELETE FROM cart WHERE customer_id=#{id}
+            """)
+    void deleteCart(Integer id);
+
+
 }

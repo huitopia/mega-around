@@ -6,10 +6,15 @@ import com.backend.domain.user.Customer;
 import com.backend.mapper.event.EventMapper;
 import com.backend.mapper.user.BranchMapper;
 import com.backend.mapper.user.UserMapper;
+import com.backend.util.PageInfo;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -237,7 +242,6 @@ public class UserService {
     }
 
     public Map<String, Object> updateCustomer(Customer customer, Authentication authentication) {
-        System.out.println("updateCustomer() customer = " + customer);
         // 입력한 비밀번호가 null이거나 공백 문자열이면 기존 비밀번호 유지
         if (customer.getPassword() == null || customer.getPassword().isBlank()) {
             Customer dbcustomer = userMapper.selectCustomerById(customer.getId());
@@ -273,9 +277,7 @@ public class UserService {
         }
         // 패스워드가 비어 있지 않으면 유효성 검사
         else {
-            System.out.println("empty()가 아니면 password = " + password);
             String passwordPattern = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,20}$";
-            System.out.println(password.trim().matches(passwordPattern));
             return password.trim().matches(passwordPattern);
         }
     }
@@ -311,11 +313,25 @@ public class UserService {
         // 스탬프 지우기
         eventMapper.deleteStamp(id);
 
+        // cart_product 지우기
+//        userMapper.deleteCartProduct(id);
+
+        // cart 지우기
+        userMapper.deleteCart(id);
+
+        // notice 지우기
+
+
+        // order-item 지우기
+
         // 고객 지우기
         userMapper.deleteCustomerById(id);
     }
 
     public void deleteBranch(Integer id) {
+
+        // branch_geocode 지우기
+        userMapper.deleteBranchByGeocode(id);
 
         // 지점 지우기
         userMapper.deleteBranchById(id);
@@ -328,11 +344,9 @@ public class UserService {
 
     public boolean checkPasswordPattern(String password) {
         if (password == null || password.isBlank()) {
-            System.out.println("null 또는 black password = " + password);
             return false;
         }
         String passwordPattern = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,20}$";
-        System.out.println("passwordPattern 일치 여부 = " + password.trim().matches(passwordPattern));
         return password.trim().matches(passwordPattern);
     }
 
@@ -370,5 +384,68 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    public boolean isNameRegisteredBranch(String branchName) {
+        if (userMapper.selectBranchByBranchName(branchName) != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isPasswordMatchBranch(Branch branch) {
+        Branch dbBranch = userMapper.selectBranchByBranchName(branch.getBranchName());
+        if (passwordEncoder.matches(branch.getPassword(), dbBranch.getPassword())) {
+            return true;
+        }
+        return false;
+    }
+
+    public Map<String, Boolean> updated(Integer id) {
+        Map<String, Boolean> result = new HashMap<>();
+
+        // null 값을 0으로 대체
+        Integer updatedStampCount = userMapper.updatedStamp(id);
+        if (updatedStampCount != null && updatedStampCount > 0) {
+            result.put("stampNotRead", true);
+        }
+
+        Integer updatedCouponCount = userMapper.updatedCoupon(id);
+        if (updatedCouponCount != null && updatedCouponCount > 0) {
+            result.put("couponNotRead", true);
+        }
+        return result;
+    }
+
+    public Map<String, Object> getCustomerList(int page, String keyword) {
+        int offset = (page - 1) * 10;
+        Pageable pageable = PageRequest.of(page - 1, 10);
+        List<Customer> customerList = userMapper.selectCustomerList(offset, keyword);
+
+        int totalCustomerNumber = userMapper.selectTotalUserCount(keyword);
+        int newId = offset + 1;
+        for (int i = 0; i < customerList.size(); i++) {
+            customerList.get(i).setId(newId++);
+        }
+        Page<Customer> pageImpl = new PageImpl<>(customerList, pageable, totalCustomerNumber);
+        PageInfo paeInfo = new PageInfo().setting(pageImpl);
+
+        return Map.of("customerList", customerList, "pageInfo", paeInfo);
+    }
+
+    public Map<String, Object> getBranchList(int page, String keyword) {
+        int offset = (page - 1) * 10;
+        Pageable pageable = PageRequest.of(page - 1, 10);
+        List<Branch> branchList = userMapper.selectBranchList(offset, keyword);
+
+        int totalBranchNumber = userMapper.selectTotalBranchCount(keyword);
+        int newId = offset + 1;
+        for (int i = 0; i < branchList.size(); i++) {
+            branchList.get(i).setId(newId++);
+        }
+        Page<Branch> pageImpl = new PageImpl<>(branchList, pageable, totalBranchNumber);
+        PageInfo paeInfo = new PageInfo().setting(pageImpl);
+
+        return Map.of("branchList", branchList, "pageInfo", paeInfo);
     }
 }

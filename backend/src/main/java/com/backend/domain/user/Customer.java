@@ -11,7 +11,6 @@ public class Customer {
     private String email;
     private String password;
     private String nickName;
-    private String phone;
     private LocalDateTime createdAt;
     private Integer coupon;
     private Integer stamp;

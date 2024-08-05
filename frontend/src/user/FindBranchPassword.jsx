@@ -30,7 +30,7 @@ export function FindBranchPassword() {
       .put(`/api/user/branch/password`, { email, password })
       .then(() => {
         successToast(`비밀번호가 재설정 되었습니다`);
-        navigate("/login");
+        navigate("/login/branch");
         window.scrollTo({ top: 0, behavior: "auto" });
       })
       .catch((err) => {
@@ -84,7 +84,7 @@ export function FindBranchPassword() {
             </Box>
           </Center>
           <Box mt={8}>
-            <FormControl>
+            <FormControl isRequired>
               <FormLabel {...formLabel}>이메일</FormLabel>
               <InputGroup width={"450px"}>
                 <Input
