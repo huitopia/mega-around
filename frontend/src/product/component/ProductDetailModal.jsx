@@ -172,7 +172,6 @@ export const ProductDetailModal = ({
   function handleAddCart() {
     axios
       .post("/api/carts", {
-        // TODO. 나중에 변경
         branchId: branchId,
         branchName: branchName,
         totalPrice,
@@ -328,14 +327,22 @@ export const ProductDetailModal = ({
           </Flex>
         </ModalBody>
         <ModalFooter justifyContent="center">
-          <Button colorScheme={"pink"} onClick={handleOrder} width={"30%"}>
-            바로 주문
-          </Button>
-          <Spacer />
-          <Button colorScheme={"orange"} onClick={handleAddCart} width={"30%"}>
-            장바구니 담기
-          </Button>
-          <Spacer />
+          {account.hasAuth() === "customer" && (
+            <>
+              <Button colorScheme={"pink"} onClick={handleOrder} width={"30%"}>
+                바로 주문
+              </Button>
+              <Spacer />
+              <Button
+                colorScheme={"orange"}
+                onClick={handleAddCart}
+                width={"30%"}
+              >
+                장바구니 담기
+              </Button>
+              <Spacer />
+            </>
+          )}
           <Button onClick={onClose} width={"30%"}>
             닫기
           </Button>
