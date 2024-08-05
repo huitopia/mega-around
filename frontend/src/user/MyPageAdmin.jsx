@@ -20,26 +20,25 @@ export function MyPageAdmin() {
   const account = useContext(LoginContext);
   const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
+  const [isCustomer, setIsCustomer] = useState(true);
+  const [isBranch, setIsBranch] = useState(false);
 
   useEffect(() => {
     if (account.hasAuth() === "admin") {
       setIsAdmin(true);
+    } else {
+      alert("접근 권한이 없습니다");
+      navigate("/"); // 권한이 없는 경우 메인 페이지로 리디렉션
     }
-  }, [account]);
+  }, [account, isAdmin]);
 
-  if (isAdmin === null) {
+  if (account === null) {
     // 권한 확인 중일 때 로딩 상태를 표시합니다.
     return (
       <Center height="100vh">
         <Spinner size="xl" />
       </Center>
     );
-  }
-
-  if (!isAdmin) {
-    alert("접근 권한이 없습니다");
-    navigate("/"); // 권한이 없는 경우 메인 페이지로 리디렉션
-    return null; // 권한이 없는 경우 페이지를 렌더링하지 않음
   }
 
   return (
@@ -60,7 +59,7 @@ export function MyPageAdmin() {
         </Box>
       </Box>
       <Center mt={10}>
-        <Box w={700}>
+        <Box w={900}>
           <Tabs>
             <TabList>
               <Tab>고객</Tab>
@@ -68,14 +67,14 @@ export function MyPageAdmin() {
             </TabList>
             <TabPanels>
               <TabPanel>
-                <p>
+                <Box>
                   <CustomerList />
-                </p>
+                </Box>
               </TabPanel>
               <TabPanel>
-                <p>
+                <Box>
                   <BranchAdminList />
-                </p>
+                </Box>
               </TabPanel>
             </TabPanels>
           </Tabs>

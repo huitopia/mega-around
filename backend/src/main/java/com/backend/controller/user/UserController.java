@@ -289,7 +289,6 @@ public class UserController {
     }
 
     @GetMapping("/user/admin/customer/list")
-    @PreAuthorize("hasAuthority('SCOPE_admin')")
     @Description("관리자 - 고객 리스트 조회")
     public Map<String, Object> customerList(@RequestParam(required = false, defaultValue = "1") int page,
                                             @RequestParam(required = false, defaultValue = "") String keyword) {
@@ -297,7 +296,6 @@ public class UserController {
     }
 
     @GetMapping("/user/admin/branch/list")
-    @PreAuthorize("hasAuthority('SCOPE_admin')")
     @Description("관리자 - 지점 리스트 조회")
     public Map<String, Object> branchList(@RequestParam(required = false, defaultValue = "1") int page,
                                           @RequestParam(required = false, defaultValue = "") String keyword) {
