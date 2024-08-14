@@ -1,5 +1,6 @@
  <div align="center">
    <img src="https://github.com/user-attachments/assets/b357c403-8bc5-4841-ac07-578cd70fd776"/>
+   <img height="500px" src="https://github.com/user-attachments/assets/b262faee-e000-48fb-99f8-defcce709f1e"/>
     <br />
     <br />
     <h2> 위치 기반 매장 검색과 실시간 주문을 제공하는 커피 주문 서비스 </h2>
